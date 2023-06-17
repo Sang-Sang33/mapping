@@ -2,6 +2,7 @@ import { Result, Button } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { FC } from 'react'
+import '@packages/i18n'
 
 const NotFound: FC = () => {
   const navigate = useNavigate()
