@@ -1,0 +1,13 @@
+// 覆盖表格loading样式, 防止轮询更新数据时出现闪烁现象
+.ant-spin {
+  &.ant-spin-spinning {
+    display: none !important;
+  }
+}
+
+.ant-spin-blur {
+  opacity: 1 !important;
+  &::after {
+    opacity: 0 !important;
+  }
+}
