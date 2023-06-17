@@ -1,6 +1,2 @@
-// utils
-export { setupCounter } from "./utils/counter";
-
-// components
-export { Header } from "./components/header";
-export { Counter } from "./components/counter";
+export { default as NotFound } from './components/404'
+export { default as Loading } from './components/loading'
