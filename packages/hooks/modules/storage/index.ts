@@ -118,10 +118,9 @@ export default function useStorage(config: Partial<StorageConfig> = {}) {
     for (let i = 0; i < storage.length; i++) {
       const key = storage.key(i)!.replace(prefix, '')
       const storageKey = Object.entries(EStorage).find(([_, v]) => v === key)?.[0]
-      if (!storageKey) return
+      if (!storageKey) continue
       allItem[key] = getItem(storageKey as TAppStorageKey)
     }
-
     return allItem
   }
 
