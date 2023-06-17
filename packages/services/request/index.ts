@@ -4,7 +4,7 @@ import { message } from 'antd'
 import NProgress from '../config/nprogress'
 import { checkStatus } from '../helper/checkStatus'
 import type { MWAxiosRequestConfig, MwInternalAxiosRequestConfig } from './typings'
-import { getTenantIdIC, getTokenIC, getWarehouseIdIC } from 'utils'
+import { getTenantIdIC, getTokenIC, getWarehouseIdIC } from '@packages/utils'
 
 class MWRequest {
   protected instance: AxiosInstance | null = null

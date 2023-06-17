@@ -11,17 +11,17 @@
   },
   "dependencies": {
     "antd": "^4.24.7",
-    "eslint-config-custom": "workspace:*",
-    "i18n": "workspace:*",
+    "@packages/eslint-config-custom": "workspace:*",
+    "@packages/i18n": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.13.0",
-    "services": "workspace:^",
-    "tailwind-config": "workspace:*",
-    "tsconfig": "workspace:*",
-    "ui": "workspace:*",
-    "utils": "workspace:*",
-    "hooks": "workspace:*"
+    "@packages/services": "workspace:^",
+    "@packages/tailwind-config": "workspace:*",
+    "@packages/tsconfig": "workspace:*",
+    "@packages/ui": "workspace:*",
+    "@packages/utils": "workspace:*",
+    "@packages/hooks": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

@@ -1,5 +1,5 @@
 {
-  "name": "utils",
+  "name": "@packages/utils",
   "version": "0.0.0",
   "main": "index.ts",
   "types": "./index.ts",
@@ -10,10 +10,10 @@
   "dependencies": {
     "antd": "^5.6.1",
     "dayjs": "^1.11.8",
-    "enum": "workspace:*",
-    "eslint-config-custom": "workspace:*",
+    "@packages/enum": "workspace:*",
+    "@packages/eslint-config-custom": "workspace:*",
     "js-cookie": "^3.0.5",
-    "tsconfig": "workspace:*"
+    "@packages/tsconfig": "workspace:*"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.3",

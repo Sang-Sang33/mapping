@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { ECookie } from 'enum'
+import { ECookie } from '@packages/enum'
 
 export * from './external'
 

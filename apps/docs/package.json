@@ -10,12 +10,12 @@
     "lint": "eslint \"src/**/*.ts\""
   },
   "dependencies": {
-    "ui": "workspace:*"
+    "@packages/ui": "workspace:*"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*",
+    "@packages/eslint-config-custom": "workspace:*",
+    "@packages/tsconfig": "workspace:*",
     "typescript": "^4.9.4",
     "vite": "^4.0.3"
   }

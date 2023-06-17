@@ -8,9 +8,9 @@ import {
   getTokenIC,
   getWarehouseIdIC,
   redirectToSSO
-} from 'utils'
+} from '@packages/utils'
 import { useNavigate } from 'react-router-dom'
-import { Loading } from 'ui'
+import { Loading } from '@packages/ui'
 import { Button } from 'antd'
 import './style.css'
 

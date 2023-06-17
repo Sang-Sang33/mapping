@@ -1,5 +1,5 @@
 {
-  "name": "hooks",
+  "name": "@packages/hooks",
   "version": "0.0.0",
   "main": "index.ts",
   "scripts": {
@@ -9,9 +9,9 @@
   "dependencies": {
     "antd": "^5.6.1",
     "crypto-js": "^4.1.1",
-    "enum": "workspace:*",
-    "eslint-config-custom": "workspace:*",
-    "tsconfig": "workspace:*"
+    "@packages/enum": "workspace:*",
+    "@packages/eslint-config-custom": "workspace:*",
+    "@packages/tsconfig": "workspace:*"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",

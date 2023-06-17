@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js'
 import { StorageConfig, storageConfig } from './storage-config'
-import { EStorage } from 'enum'
+import { EStorage } from '@packages/enum'
 console.log('🚀 ~ file: index.ts ~ line 4 ~ EStorage', EStorage)
 
 export type TAppStorageKey = keyof typeof EStorage

@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import { redirectToSSO } from 'utils'
+import { redirectToSSO } from '@packages/utils'
 
 /**
  * @description: 校验网络请求状态码

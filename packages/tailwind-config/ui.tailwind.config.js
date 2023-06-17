@@ -2,7 +2,7 @@
 import baseTailwindConfig from './tailwind.config'
 export default {
   presets: [baseTailwindConfig],
-  content: ['node_modules/ui/components/**/*.{js,ts,jsx,tsx}'],
+  content: ['node_modules/@packages/ui/components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     keyframes: {
       load: {

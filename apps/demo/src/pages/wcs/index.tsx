@@ -1,8 +1,8 @@
 import { Button, Switch } from 'antd'
-import { useStorage } from 'hooks'
+import { useStorage } from '@packages/hooks'
 import { memo, useEffect, useState } from 'react'
 import type { FC } from 'react'
-// import { useWcsRequest } from 'services'
+// import { useWcsRequest } from '@packages/services'
 
 const colorList = [
   {
