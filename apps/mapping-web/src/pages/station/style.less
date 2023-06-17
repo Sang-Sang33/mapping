@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+#preview {
+  position: absolute;
+  top: 66px;
+  left: 2px;
+  border: 1px solid grey;
+  background-color: lightgrey;
+}
+
+#root {
+  width: 100%;
+}
+
+.rect-menu {
+  position: fixed;
+  border-radius: 2px;
+  background: rgb(56, 55, 55);
+  z-index: 10;
+  color: #fff;
+  text-align: center;
+  min-width: 70px;
+  padding: 10px;
+  .rect-menu-item {
+    line-height: 25px;
+    cursor: pointer;
+  }
+}
+
+.header{
+  color: #fff;
+}
+
+.legend-wrap {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+}
+.legend-item {
+  margin-right: 5px;
+  color: rgb(105, 105, 105);
+  font-size: 14px;
+}
+.legend-item-color {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+}
