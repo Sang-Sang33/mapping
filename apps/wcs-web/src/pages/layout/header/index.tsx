@@ -12,23 +12,17 @@ import user from '@/assets/icons/user.svg'
 import { getLanguage, getTenant, getWarehouseInCookie, setLanguage, setWarehouseToCookie } from '@/utils/token'
 
 import { redirectToSso, setTenant } from '@/utils/token'
-import { get } from '@/http/request/index'
 import useOptions from '@/hooks/useOptions'
+import { useMappingRequest } from '@packages/services'
 
 interface IHeaderProps {
   width: number
 }
 
-const MAPPING_API = window.__MAPPING_API__ || import.meta.env.VITE_APP_MAPPING_API
-const url = {
-  login: '/connect/token',
-  customer: MAPPING_API + '/api/mapping/customer/whole-or-self',
-  warehouse: MAPPING_API + '/api/mapping/warehouse'
-}
-
 function HeaderNav({ width }: IHeaderProps) {
+  const { getTenantList, getWarehouseList } = useMappingRequest()
   const [customer, setCustomer] = useState('')
-  const { options: customerOpts } = useOptions(() => get(url.customer), {
+  const { options: customerOpts } = useOptions(getTenantList, {
     transform: {
       value: 'id',
       label: 'displayName'
@@ -60,7 +54,7 @@ function HeaderNav({ width }: IHeaderProps) {
   }, [customerOpts])
 
   const getWarehouseOptions = async (tenantId: string) => {
-    const warehoustList = await get<{ id: string; name: string }[]>(url.warehouse, { tenantId })
+    const warehoustList = await getWarehouseList()
     return warehoustList.map((x) => ({
       label: x.name,
       value: x.id
