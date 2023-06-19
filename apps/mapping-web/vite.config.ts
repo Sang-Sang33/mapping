@@ -67,7 +67,7 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
       }
     },
     build: {
-      outDir: '../../dist/mapping-web',
+      // outDir: '../../dist/mapping-web',
       minify: 'terser',
       terserOptions: {
         // delete console/debugger

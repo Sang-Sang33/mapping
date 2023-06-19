@@ -78,7 +78,7 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
       }
     },
     build: {
-      outDir: '../../dist/wcs-web',
+      // outDir: '../../dist/wcs-web',
       sourcemap: true,
       minify: 'terser',
       terserOptions: {

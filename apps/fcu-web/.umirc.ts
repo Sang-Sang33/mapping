@@ -2,7 +2,7 @@ import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
   publicPath: '/fcu-web/',
-  outputPath: '../../dist/fcu-web',
+  // outputPath: '../../dist/fcu-web',
   history: { type: 'hash' },
   antd: {},
   access: {},
