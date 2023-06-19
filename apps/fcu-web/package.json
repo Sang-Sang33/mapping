@@ -8,7 +8,6 @@
     "format": "prettier --cache --write .",
     "postinstall": "max setup",
     "openapi": "ts-node openapi.config.ts",
-    "prepare": "husky install",
     "setup": "max setup",
     "start": "npm run dev"
   },
