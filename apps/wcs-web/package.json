@@ -10,8 +10,7 @@
     "build:prd": "vite build --mode production",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "lint-staged",
-    "prepare": "husky install"
+    "lint": "lint-staged"
   },
   "lint-staged": {
     "*.{js,tsx,ts,jsx}": [
@@ -25,6 +24,7 @@
     "@react-three/fiber": "^8.9.1",
     "@react-three/postprocessing": "^2.7.0",
     "@reduxjs/toolkit": "^1.9.1",
+    "@packages/services": "workspace:^",
     "ahooks": "^3.7.2",
     "antd": "4.24.7",
     "antd-colorpicker": "^1.0.0",
