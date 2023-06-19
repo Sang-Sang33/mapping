@@ -24,4 +24,5 @@ const useWcsMissionProcessRequest = (mwRequest: MWRequest) => {
   }
 }
 
+export * from './typings'
 export default useWcsMissionProcessRequest

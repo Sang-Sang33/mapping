@@ -45,4 +45,5 @@ const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
   }
 }
 
+export * from './typings'
 export default useWcsWmsMissionRequest
