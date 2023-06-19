@@ -5,16 +5,14 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { observer } from 'mobx-react-lite'
 import { AnyKeyProps, MwSearchTableField, MwSearchTable } from 'multiway'
 import { IMwTableRef } from '@/multiway'
-import moment from 'moment'
-import { getWmsMissionList, getWmsMissionPage } from '@/http'
-import { WMS_MISSION_STATUS_ENUM } from './interface.d'
-import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
-import WmsSubMission from './WmsSubMission'
-import useTableFocusRow from '@/hooks/useTableFocusRow'
-import { IListParams } from '@/http/common'
-import { IWmsItem } from '@/http/modules/wmsMission/interface.d'
-import './index.less'
 import { useTranslation } from 'react-i18next'
+import moment from 'moment'
+import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
+import useTableFocusRow from '@/hooks/useTableFocusRow'
+import { type IListParams, type IWmsItem, useWcsRequest } from '@packages/services'
+import WmsSubMission from './WmsSubMission'
+import { WMS_MISSION_STATUS_ENUM } from './interface.d'
+import './index.less'
 
 const ColorBox = ['green', 'red', 'blue', 'cyan', 'gold', 'red']
 
@@ -31,6 +29,7 @@ const WmsMissionColorStrategy = {
 const WmsMission: FC = () => {
   const [missionId, setMissionId] = useState<string>('')
   const wmsMissionTableRef = useRef<ElementRef<typeof MwSearchTable> & IMwTableRef<IWmsItem>>(null)
+  const { getWmsMissionList, getWmsMissionPage } = useWcsRequest()
 
   useTableAutoRefresh(wmsMissionTableRef)
   const { t } = useTranslation()
@@ -211,18 +210,8 @@ const WmsMission: FC = () => {
       key: 'extraProperties',
       align: 'center',
       render: (extraProperties: any) => {
-        const entries = Object.entries<any>(extraProperties)
-        return entries.length > 0 ? (
-          <Descriptions column={1}>
-            {entries.map(([label, value]: [string, any]) => (
-              <Descriptions.Item label={label} key={label}>
-                {value}
-              </Descriptions.Item>
-            ))}
-          </Descriptions>
-        ) : (
-          '无'
-        )
+        const keys = Object.keys(extraProperties)
+        return keys.length > 0 ? keys.concat(keys).map((label) => <p key={label}>{label}</p>) : '无'
       }
     }
   ]

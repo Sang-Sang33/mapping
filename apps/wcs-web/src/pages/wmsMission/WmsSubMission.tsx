@@ -1,14 +1,13 @@
 import React, { ElementRef, memo, useRef } from 'react'
 import type { FC } from 'react'
-import { getWmsSubMissionList } from '@/http'
 import { MwSearchTable, MwSearchTableField } from 'multiway'
-import { Badge, Descriptions, List, Tooltip } from 'antd'
+import { Badge, List, Tooltip } from 'antd'
 import { WMS_SUB_MISSION_STATUS_ENUM } from './interface.d'
 import moment from 'moment'
 import { IMwTableRef } from '@/multiway'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
-import { IWmsItem } from '@/http/modules/wmsMission/interface.d'
+import { type IWmsItem, useWcsRequest } from '@packages/services'
 
 const WmsSubMissionColorStrategy = {
   [WMS_SUB_MISSION_STATUS_ENUM.Received]: '#2196F3',
@@ -25,6 +24,7 @@ const ColorBox = ['green', 'red', 'blue', 'cyan', 'gold', 'red']
 const itemHeight = 113
 const WmsSubMission: FC<{ wmsMissionId: string }> = (props) => {
   const { wmsMissionId } = props
+  const { getWmsSubMissionList } = useWcsRequest()
   const wmsSubMissionTableRef = useRef<ElementRef<typeof MwSearchTable> & IMwTableRef<IWmsItem>>(null)
   useTableAutoRefresh(wmsSubMissionTableRef)
   const fields: Array<MwSearchTableField> = [
@@ -157,18 +157,8 @@ const WmsSubMission: FC<{ wmsMissionId: string }> = (props) => {
       key: 'extraProperties',
       align: 'center',
       render: (extraProperties: any) => {
-        const entries = Object.entries<any>(extraProperties)
-        return entries.length > 0 ? (
-          <Descriptions column={1}>
-            {entries.map(([label, value]: [string, any]) => (
-              <Descriptions.Item label={label} key={label}>
-                {value}
-              </Descriptions.Item>
-            ))}
-          </Descriptions>
-        ) : (
-          '无'
-        )
+        const keys = Object.keys(extraProperties)
+        return keys.length > 0 ? keys.concat(keys).map((label) => <p key={label}>{label}</p>) : '无'
       }
     }
   ]

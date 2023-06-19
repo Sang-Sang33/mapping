@@ -3,9 +3,10 @@ import type { ElementRef, FC } from 'react'
 import { MwSearchTable, type MwSearchTableField } from 'multiway'
 import { Badge } from 'antd'
 import moment from 'moment'
-import { fetchDeviceStatus } from '@/http'
-import type { TDeviceStatusLevel } from '@/http/modules/device/interface'
+// import { fetchDeviceStatus } from '@/http'
+// import type { TDeviceStatusLevel } from '@/http/modules/device/interface'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
+import { type TDeviceStatusLevel, useWcsRequest } from '@packages/services'
 import './index.less'
 
 const fields: Array<MwSearchTableField> = [
@@ -43,6 +44,7 @@ const colorMap: Record<TDeviceStatusLevel, string> = {
   Unknown: '#34495e'
 }
 const Status: FC = () => {
+  const { fetchDeviceStatus } = useWcsRequest()
   const tableRef = useRef<ElementRef<typeof MwSearchTable>>(null)
   useTableAutoRefresh(tableRef)
   const [expandedRowKey, setExpandedRowKey] = useState('')

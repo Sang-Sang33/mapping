@@ -1,19 +1,17 @@
-import React, { ElementRef, useMemo, useRef, useState } from 'react'
+import React, { ElementRef, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { Badge, Descriptions, List, Tooltip } from 'antd'
 import { observer } from 'mobx-react-lite'
 import { AnyKeyProps, MwSearchTableField, MwSearchTable } from 'multiway'
-import { getRcsMissionList, getRcsMissionPage } from '@/http'
-import moment from 'moment'
-import { RCS_MISSION_STATUS_ENUM } from './interface.d'
-import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
-import './index.less'
-import RcsSubMission from './RcsSubMission'
-import useTableFocusRow from '@/hooks/useTableFocusRow'
 import { IMwTableRef } from '@/multiway'
-import { IRcsItem } from '@/http/modules/rcsMission/interface'
-import { IListParams } from '@/http/common'
 import { useTranslation } from 'react-i18next'
+import moment from 'moment'
+import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
+import useTableFocusRow from '@/hooks/useTableFocusRow'
+import { type IRcsItem, type IListParams, useWcsRequest } from '@packages/services'
+import RcsSubMission from './RcsSubMission'
+import { RCS_MISSION_STATUS_ENUM } from './interface.d'
+import './index.less'
 
 const ColorBox = ['green', 'red', 'blue', 'cyan', 'gold', 'red']
 
@@ -28,6 +26,7 @@ const RcsMissionColorStrategy = {
 }
 
 const RcsMission: FC = () => {
+  const { getRcsMissionList, getRcsMissionPage } = useWcsRequest()
   const [missionId, setMissionId] = useState<string>('')
   const rcsMissionTableRef = useRef<ElementRef<typeof MwSearchTable> & IMwTableRef<IRcsItem>>(null)
 
@@ -106,7 +105,8 @@ const RcsMission: FC = () => {
       width: 150,
       key: 'vehicles',
       align: 'center',
-      render: (values: string[]) => (values.length > 0 ? values.map((v) => <span className="block">{v}</span>) : '无')
+      render: (_, record) =>
+        record.vehicles.length > 0 ? record.vehicles.map((v: any) => <p className="block">{v.tag}</p>) : '无'
     },
     {
       title: t('rcsMission.creationTime'),
@@ -139,18 +139,8 @@ const RcsMission: FC = () => {
       key: 'extraProperties',
       align: 'center',
       render: (extraProperties: any) => {
-        const entries = Object.entries<any>(extraProperties)
-        return entries.length > 0 ? (
-          <Descriptions column={1}>
-            {entries.map(([label, value]: [string, any]) => (
-              <Descriptions.Item label={label} key={label}>
-                {value}
-              </Descriptions.Item>
-            ))}
-          </Descriptions>
-        ) : (
-          '无'
-        )
+        const keys = Object.keys(extraProperties)
+        return keys.length > 0 ? keys.concat(keys).map((label) => <p key={label}>{label}</p>) : '无'
       }
     }
   ]

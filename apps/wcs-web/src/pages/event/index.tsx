@@ -1,19 +1,20 @@
-import WorkflowEngine, { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn } from '@/components/workflow-engine'
 import React, { memo } from 'react'
 import type { FC } from 'react'
-import { fetchEvent, deleteEvent, createEvent, fetchEventWorkflowDefinition, updateEvent } from '@/http/'
-import fields from './config/formFields'
-import workflowApi from './config/workflowApi'
+import { useWcsRequest } from '@packages/services'
+import WorkflowEngine, { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn } from '@/components/workflow-engine'
 import { IMenuItem } from '@/components/workflow-engine/components/aside'
 import { WorkflowTypeEnum } from '@/components/workflow-engine/common'
 import i18n from '@/i18n'
 import { IconFont } from '@/components/Icon'
+import fields from './config/formFields'
+import workflowApi from './config/workflowApi'
 
 interface FormData {
   name: string
 }
 
 const Event: FC = () => {
+  const { fetchEvent, deleteEvent, createEvent, fetchEventWorkflowDefinition, updateEvent } = useWcsRequest()
   // 获取事件工作流数据
   const fetchData: FetchDataFn = () =>
     fetchEvent().then((res) =>

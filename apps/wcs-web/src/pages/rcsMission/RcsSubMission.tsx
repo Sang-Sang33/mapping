@@ -1,14 +1,13 @@
 import React, { ElementRef, memo, useRef } from 'react'
 import type { FC } from 'react'
-import { getRcsSubMissionList } from '@/http'
 import { MwSearchTable, MwSearchTableField } from 'multiway'
 import { Badge, Descriptions, List, Tooltip } from 'antd'
 import { RCS_SUB_MISSION_STATUS_ENUM } from './interface.d'
 import moment from 'moment'
 import { IMwTableRef } from '@/multiway'
-import { IRcsSubItem } from '@/http/modules/rcsMission/interface'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
+import { type IRcsSubItem, useWcsRequest } from '@packages/services'
 
 const RcsSubMissionColorStrategy = {
   [RCS_SUB_MISSION_STATUS_ENUM.Sent]: '#2196F3',
@@ -25,6 +24,7 @@ const ColorBox = ['green', 'red', 'blue', 'cyan', 'gold', 'red']
 const itemHeight = 113
 const RcsSubMission: FC<{ rcsSubMissionId: string }> = (props) => {
   const { rcsSubMissionId } = props
+  const { getRcsSubMissionList } = useWcsRequest()
   const rcsSubMissionTableRef = useRef<ElementRef<typeof MwSearchTable> & IMwTableRef<IRcsSubItem>>(null)
   useTableAutoRefresh(rcsSubMissionTableRef)
   const fields: Array<MwSearchTableField> = [
@@ -146,18 +146,8 @@ const RcsSubMission: FC<{ rcsSubMissionId: string }> = (props) => {
       key: 'extraProperties',
       align: 'center',
       render: (extraProperties: any) => {
-        const entries = Object.entries<any>(extraProperties)
-        return entries.length > 0 ? (
-          <Descriptions column={1}>
-            {entries.map(([label, value]: [string, any]) => (
-              <Descriptions.Item label={label} key={label}>
-                {value}
-              </Descriptions.Item>
-            ))}
-          </Descriptions>
-        ) : (
-          '无'
-        )
+        const keys = Object.keys(extraProperties)
+        return keys.length > 0 ? keys.concat(keys).map((label) => <p key={label}>{label}</p>) : '无'
       }
     }
   ]

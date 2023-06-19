@@ -1,7 +1,6 @@
 import React, { memo, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { message } from 'antd'
-import { BranchesOutlined } from '@ant-design/icons'
 import { MwDialogForm, MwDialogFormField } from 'multiway'
 import WorkflowEngine, {
   CreateDataFn,
@@ -12,21 +11,13 @@ import WorkflowEngine, {
   OnNotEditWorkflow,
   UpdateDataFn
 } from '@/components/workflow-engine'
-import {
-  fetchDevice,
-  deleteDeviceFunction,
-  createDeviceFunction,
-  deleteDevice,
-  updateDeviceFunction,
-  updateDevice,
-  fetchDeviceFunction
-} from '@/http/'
-import workflowApi from './config/workflowApi'
-import fields from './config/formFields'
+import { useWcsRequest } from '@packages/services'
 import { IDefaultDialogFormProps, WorkflowTypeEnum, defaultDialogProps } from '@/components/workflow-engine/common'
 import { IMenuItem } from '@/components/workflow-engine/components/aside'
 import { IconFont } from '@/components/Icon'
 import { useTranslation } from 'react-i18next'
+import workflowApi from './config/workflowApi'
+import fields from './config/formFields'
 
 interface FormData {
   deviceName: string
@@ -36,6 +27,15 @@ interface FormData {
 
 const Feature: FC = () => {
   const { t } = useTranslation()
+  const {
+    fetchDevice,
+    deleteDeviceFunction,
+    createDeviceFunction,
+    deleteDevice,
+    updateDeviceFunction,
+    updateDevice,
+    fetchDeviceFunction
+  } = useWcsRequest()
   // 获取数据
   const fetchData: FetchDataFn = () =>
     fetchDevice().then((res) =>
