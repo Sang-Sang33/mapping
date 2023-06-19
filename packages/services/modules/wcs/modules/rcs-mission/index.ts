@@ -12,7 +12,7 @@ const useWcsRcsMissionRequest = (mwRequest: MWRequest) => {
       ).join(',') || ''
 
     return get<IListResult<IRcsItem>>(
-      `/api/wcs/rcs-mission?Sorting=${Sorting}`,
+      `/rcs-mission?Sorting=${Sorting}`,
       { PageNumber: params.PageNumber, PageSize: params.PageSize },
       {
         showProgress
@@ -22,7 +22,7 @@ const useWcsRcsMissionRequest = (mwRequest: MWRequest) => {
 
   const getRcsSubMissionList = (missionId: string, showProgress = false) =>
     get<IRcsSubItem[]>(
-      '/api/wcs/rcs-sub-mission/of-mission/' + missionId,
+      '/rcs-sub-mission/of-mission/' + missionId,
       {},
       {
         showProgress
@@ -31,7 +31,7 @@ const useWcsRcsMissionRequest = (mwRequest: MWRequest) => {
 
   const getRcsMissionPage = (params: IListParams & { Id: string }, showProgress = false) =>
     get<any>(
-      '/api/wcs/rcs-mission/page-of',
+      '/rcs-mission/page-of',
       {
         ...params
       },

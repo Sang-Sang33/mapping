@@ -12,7 +12,7 @@ const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
       ).join(',') || ''
 
     return get<IListResult<IWmsItem>>(
-      `/api/wcs/wms-mission?Sorting=${Sorting}`,
+      `/wms-mission?Sorting=${Sorting}`,
       { PageNumber: params.PageNumber, PageSize: params.PageSize },
       {
         showProgress
@@ -22,7 +22,7 @@ const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
 
   const getWmsSubMissionList = (missionId: string, showProgress = false) =>
     get<IWmsSubItem[]>(
-      '/api/wcs/wms-sub-mission/of-mission/' + missionId,
+      '/wms-sub-mission/of-mission/' + missionId,
       {},
       {
         showProgress
@@ -31,7 +31,7 @@ const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
 
   const getWmsMissionPage = (params: IListParams & { Id: string }, showProgress = false) =>
     get<any>(
-      '/api/wcs/wms-mission/page-of',
+      '/wms-mission/page-of',
       {
         ...params
       },
