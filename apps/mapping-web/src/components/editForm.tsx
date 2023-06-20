@@ -4,18 +4,18 @@ import { observer } from "mobx-react-lite";
 import { getUniqueId } from '../utils'
 import { useEffect, useRef, useState } from 'react';
 import CustomSelect from './customSelect';
+import EditHeightTable from './editHeightTable';
 
 const { Option } = Select;
 
 function EditForm() {
     const [form] = Form.useForm();
     const { EditorStore } = useStore()
-    const { selectRect, checkedMenu, editColor, editingRectName, selectedRectList } = EditorStore
+    const { selectRect, checkedMenu, editColor, editingRectName, selectedRectList, drawerOpen } = EditorStore
     const vehicleTypesRef = useRef()
-    const highListRef = useRef()
-    const lowListRef = useRef()
     const stagingPointsRef = useRef()
     const transferLocationRef = useRef()
+    const editHeightTableRef = useRef()
     const [initialValues, setInitialValues] = useState<Record<string, any>>({
         areaNumber: undefined,
         tunnelNumber: undefined,
@@ -34,26 +34,33 @@ function EditForm() {
     useEffect(() => {
         if (!editingRectName) {
             setInitialValues({})
+            form.setFieldsValue({})
         } else {
             const editingRect = selectedRectList.find((item) => item.name === editingRectName)
             setInitialValues({ ...editingRect })
+            form.setFieldsValue({ ...editingRect })
+            if (checkedMenu === 'tier') {
+                editHeightTableRef.current.setValues({ high: [undefined, ...editingRect.highList], low: [undefined, ...editingRect.lowList] })
+            }
         }
-        setTimeout(() => {
+    }, [editingRectName, drawerOpen])
+
+    useEffect(() => {
+        if (!drawerOpen) {
             form.resetFields();
-        }, 0);
-    }, [editingRectName])
+            setTierNumber(0)
+            editHeightTableRef?.current?.reset()
+        }
+    }, [drawerOpen])
 
     const handleConfirm = (values: any) => {
         const data: Record<string, any> = { ...values }
         if (checkedMenu === 'location') {
             data.vehicleTypes = vehicleTypesRef.current.state.value
         } else if (checkedMenu === 'tier') {
-            const highList = highListRef.current.state.value
-            const lowList = lowListRef.current.state.value
-            if (highList.length !== data.tierNumber) return message.error('每层最高高度数量应与层数保持一致！')
-            if (lowList.length !== data.tierNumber) return message.error('每层最低高度数量应与层数保持一致！')
-            data.highList = highList
-            data.lowList = lowList
+            const height = editHeightTableRef.current.getValues()
+            data.highList = height.high.slice(1)
+            data.lowList = height.low.slice(1)
         } else if (checkedMenu === 'stagingPoints') {
             data.stagingPointsList = stagingPointsRef.current.state.value
         } else if (checkedMenu === 'transferLocation') {
@@ -67,9 +74,11 @@ function EditForm() {
         } else {
             EditorStore.pushSelectedRect({ ...selectRect, name: getUniqueId(), type: checkedMenu, strokeColor: editColor[checkedMenu], ...data })
         }
-
         EditorStore.setDrawerOpen(false)
-        form.resetFields();
+    }
+    const [tierNumber, setTierNumber] = useState(0)
+    const handleLayerChange = (e) => {
+        setTierNumber(e.target.value)
     }
     return <Form
         form={form}
@@ -120,14 +129,9 @@ function EditForm() {
         {
             checkedMenu === 'tier' && <>
                 <Form.Item label="层数" name="tierNumber" rules={[{ required: true, message: '层数必填' }]}>
-                    <InputNumber min={1} />
+                    <InputNumber min={1} onBlur={(e) => handleLayerChange(e)} />
                 </Form.Item>
-                <Form.Item label="每层最高高度" name="highList">
-                    <CustomSelect ref={highListRef} defaultValues={initialValues.highList}></CustomSelect>
-                </Form.Item>
-                <Form.Item label="每层最低高度" name="lowList">
-                    <CustomSelect ref={lowListRef} defaultValues={initialValues.lowList}></CustomSelect>
-                </Form.Item>
+                <EditHeightTable layer={tierNumber || initialValues.tierNumber} ref={editHeightTableRef} />
             </>
         }
         {

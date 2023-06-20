@@ -27,3 +27,14 @@ export function isRectOverlap(rect1: IRect, rect2: IRect) {
     const rt2Pos = getPointsFromRect(rect2)
     return !(rt1Pos.x2 < rt2Pos.x1 || rt2Pos.x2 < rt1Pos.x1 || rt1Pos.y2 < rt2Pos.y1 || rt2Pos.y2 < rt1Pos.y1)
   }
+
+
+export function isJsonString(str: string) {
+    try {
+        if (typeof JSON.parse(str) == "object") {
+            return true;
+        }
+    } catch(e) {
+    }
+    return false;
+}

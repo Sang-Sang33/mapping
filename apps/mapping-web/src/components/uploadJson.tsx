@@ -5,6 +5,7 @@ import { useStore } from '../store/index'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { saveRcspoint } from '@/services'
+import {isJsonString} from '@/utils'
 
 function UploadJson() {
   const { EditorStore } = useStore()
@@ -18,7 +19,9 @@ function UploadJson() {
         const reader = new FileReader()
         reader.readAsText(file, 'UTF-8')
         reader.onload = function (e) {
+          if(!isJsonString(e.target?.result)) return message.error('文件格式不正确！')
           const res = JSON.parse(e.target?.result as string)
+          if(!res.Border || !res.Points) return message.error('文件格式不正确！')
           // const {
           //   Border: { DownLeft, UpRight },
           //   Points

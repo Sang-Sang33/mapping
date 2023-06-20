@@ -1,4 +1,4 @@
-import { Layout, Menu, Col, Row, Button, Space, Select, message } from 'antd'
+import { Layout, Menu, Col, Row, Button, Space, Select, message, Dropdown, Avatar } from 'antd'
 import { useStore } from '../store/index'
 import { observer } from 'mobx-react-lite'
 import type { MenuProps } from 'antd'
@@ -10,7 +10,14 @@ import { useRequest } from 'ahooks'
 import { saveSlot, saveTransferPosition, saveTempSlot, getTempSlot, getRcspoint } from '@/services'
 import type { IEditedShapeItem, ISelectedRect, menuType, shapeItem } from '@/types'
 import { getTenant } from '@/utils/auth'
+import { PoweroffOutlined, ImportOutlined } from '@ant-design/icons';
+import { redirectToSso } from '@/utils/auth'
+import { clearAccessToken, getCookieByName, setCookie, removeCookieByName } from '@/utils/auth'
+import user from "@/assets/icons/user.svg";
+
 const { Header } = Layout
+const TANENT_COOKIE = 'tanentId'
+const WAREHOUSE_COOKIE = 'warehouseId'
 
 function EditHeader() {
   const [userList, setUserList] = useState<Record<string, string>[]>([])
@@ -37,12 +44,15 @@ function EditHeader() {
 
   useRequest(getCustomerList, {
     onSuccess(res) {
-      const list = res.map((item: Record<string, string>) => ({ label: item.name, value: item.id }))
+      const list = res.map((item: Record<string, string>) => ({ label: item.displayName, value: item.id }))
       setUserList(list)
       const tanent = getTenant()
-      const user = list.find((item) => item.label === tanent)
+      const user = res.find((item) => item.name === tanent)
       if (user) {
-        EditorStore.setTenantId(user.value)
+        EditorStore.setTenantId(user.id)
+      } else {
+        const val = getCookieByName(TANENT_COOKIE) || list[0].value
+        list.length && EditorStore.setTenantId(val)
       }
     }
   })
@@ -77,6 +87,7 @@ function EditHeader() {
   }, [stageWidth, stageHeight])
 
   const getLocalRectList = (rectListInRcs: ISelectedRect[], rcsData: any) => {
+    if(!rcsData) return []
     const {
       Border: { DownLeft, UpRight }
     } = rcsData
@@ -84,8 +95,8 @@ function EditHeader() {
     const CADHeight = Math.abs(DownLeft.Y - UpRight.Y)
     const localRectList = rectListInRcs.map((item: any) => ({
       ...item,
-      x: Math.abs(item.x - Math.min(DownLeft.X, UpRight.X)) * (stageWidth / CADWidth),
-      y: Math.abs(item.y - Math.min(UpRight.Y, DownLeft.Y)) * (stageHeight / CADHeight),
+      x: (item.x - Math.min(DownLeft.X, UpRight.X)) * (stageWidth / CADWidth),
+      y: (item.y - Math.min(UpRight.Y, DownLeft.Y)) * (stageHeight / CADHeight),
       width: item.width * (stageWidth / CADWidth),
       height: item.height * (stageHeight / CADHeight)
     }))
@@ -113,11 +124,20 @@ function EditHeader() {
     const res = await getWarehouseList({ tenantId })
     const list = res.map((item: Record<string, string>) => ({ label: item.name, value: item.id }))
     setWarehouseList(list)
+    const val = getCookieByName(WAREHOUSE_COOKIE) || (list.length && list[0].value) || undefined
+    EditorStore.setWarehouseId(val)
+  }
+
+  function handleWarehouseChange(val: any) {
+    EditorStore.setWarehouseId(val)
+    setCookie(WAREHOUSE_COOKIE, val)
   }
 
   function handleUserChange(val: string) {
     EditorStore.setWarehouseId(undefined)
     EditorStore.setTenantId(val)
+    setCookie(TANENT_COOKIE, val)
+    removeCookieByName(WAREHOUSE_COOKIE)
   }
 
   function saveSelectedRectData() {
@@ -279,17 +299,28 @@ function EditHeader() {
     link.click()
   }
 
+  const handleLogout = () => {
+    clearAccessToken()
+    removeCookieByName(WAREHOUSE_COOKIE)
+    removeCookieByName(TANENT_COOKIE)
+    redirectToSso()
+  }
+
+  const userMenu = (
+    <Menu onClick={handleLogout} items={[{ label: "退出登录", key: "logout", icon: <ImportOutlined /> }]}></Menu>
+  );
+
   return (
     <Header className="header">
       <Row>
         <Col span={7}>
           <Space>
-            <Select value={tenantId} style={{ width: 80 }} options={userList} onChange={handleUserChange} />
+            <Select value={tenantId} options={userList} onChange={handleUserChange} />
             <Select
               value={warehouseId}
               style={{ width: 130 }}
               options={warehouseList}
-              onChange={(val) => EditorStore.setWarehouseId(val)}
+              onChange={(val) => handleWarehouseChange(val)}
             />
             {tenantId && <Button onClick={() => EditorStore.setEditWarehouseShow(true)}>仓库操作</Button>}
           </Space>
@@ -298,9 +329,9 @@ function EditHeader() {
           <Menu theme="dark" mode="horizontal" selectedKeys={[checkedMenu]} items={menuConfig} onClick={onClick} />
         </Col>
         <Col span={4} offset={1}>
-          <div>
+          <Space>
             {warehouseId && (
-              <Space>
+              <>
                 <UploadJson></UploadJson>
                 <Button type="primary" onClick={handleSave}>
                   保存
@@ -308,9 +339,16 @@ function EditHeader() {
                 <Button type="primary" onClick={handleExport}>
                   导出
                 </Button>
-              </Space>
+              </>
+
             )}
-          </div>
+            {/* 用户信息  */}
+            <Dropdown overlay={userMenu} placement="bottomRight">
+              <div className="w-14 text-center cursor-pointer hover:bg-gray-100">
+                <Avatar src={user} />
+              </div>
+            </Dropdown>
+          </Space>
         </Col>
       </Row>
     </Header>
