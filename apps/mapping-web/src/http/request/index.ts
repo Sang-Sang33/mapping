@@ -4,7 +4,7 @@ import ErrorHandle from "./errorHandler";
 import { message } from "antd";
 import { ResponseCode, ResponseKey } from "./enum";
 import { getToken, clearToken } from '@/utils/token'
-import { redirectToSso, getAccessToken } from '@/utils/auth'
+import {redirectToSso, getAccessToken} from '@/utils/auth'
 
 class NRequest {
 	protected instance: AxiosInstance | null = null;
@@ -131,6 +131,6 @@ const authRequest = new NRequest({
 	baseURL: USER_BASE_URL
 });
 
-export { get, post, del, put, authRequest };
+export { get, post, del, put, authRequest};
 
 export default NRequest;

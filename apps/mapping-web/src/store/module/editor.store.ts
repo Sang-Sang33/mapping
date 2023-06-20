@@ -110,7 +110,7 @@ class EditorStore {
     })
   }
   drawerOpen = false
-  checkedMenu: menuType = 'all'
+  checkedMenu: menuType = 'area'
   menuConfig = menuConfig
   get currentMenu() {
     return this.menuConfig
@@ -142,7 +142,7 @@ class EditorStore {
       },
       canvasPosition: {
         x: Math.abs(item.Position.X - Math.min(DownLeft.X, UpRight.X)) * (this.stageWidth / CADWidth),
-        y: this.stageHeight - Math.abs(item.Position.Y - Math.min(UpRight.Y, DownLeft.X)) * (this.stageHeight / CADHeight)
+        y: Math.abs(item.Position.Y - Math.min(UpRight.Y, DownLeft.X)) * (this.stageHeight / CADHeight)
       }
     }))
 
