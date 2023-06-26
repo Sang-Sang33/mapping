@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useLocation, type RouteObject } from 'react-router-dom'
-import type { TLayoutRoutes, TLayoutRouteObject } from '@packages/ui'
+import type { TLayoutRoutes, TLayoutRouteObject } from '@packages/types'
 
 const useRoute = (routes: TLayoutRoutes) => {
   const location = useLocation()

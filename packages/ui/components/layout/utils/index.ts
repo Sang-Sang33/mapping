@@ -1,5 +1,5 @@
 import type { MenuProps } from 'antd'
-import type { TLayoutRoutes, TLayoutPermission, TLayoutRouteObject } from '../typings'
+import type { TLayoutRoutes, TLayoutPermission, TLayoutRouteObject } from '@packages/types'
 
 /**
  * @description: 根据权限点获取路由

@@ -4,7 +4,7 @@ import { Layout as AntdLayout, ConfigProvider, Drawer, type MenuProps } from 'an
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { useRoute } from '@packages/hooks'
 import { getRouteById, getRouteIdPath, mapPermissionToRoutes, mapRoutesToMenu } from './utils'
-import type { TLayoutRoutes, TLayoutPermission } from './typings'
+import type { TLayoutRoutes, TLayoutPermission } from '@packages/types'
 import useLayoutStore from './store'
 import SiderMenu from './sider/index'
 import HeaderNav from './header/index'

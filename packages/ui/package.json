@@ -13,6 +13,7 @@
     "@packages/tsconfig": "workspace:*",
     "@packages/utils": "workspace:*",
     "@packages/hooks": "workspace:*",
+    "@packages/types": "workspace:*",
     "@types/node": "^20.3.1",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",

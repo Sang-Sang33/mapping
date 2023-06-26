@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { useStorage } from '@packages/hooks'
 import { generateUUID } from '@packages/utils'
-import { TLayoutRoutes } from '../typings'
+import { TLayoutRoutes } from '@packages/types'
 
 export type TTheme = 'dark' | 'light'
 
