@@ -15,7 +15,7 @@ const { Header: AntdHeader, Content: AntdContent, Sider: AntdSider } = AntdLayou
 
 interface ILayoutProps {
   routes: TLayoutRoutes
-  permission: TLayoutPermission
+  permission?: TLayoutPermission
 }
 
 const Layout: FC<ILayoutProps> = (props) => {
@@ -38,7 +38,7 @@ const Layout: FC<ILayoutProps> = (props) => {
     updatePermissionRoutes: state.updatePermissionRoutes
   }))
   const permissionRoutes = useMemo(() => {
-    const permissionRoutes = mapPermissionToRoutes(permission, routes)
+    const permissionRoutes = permission ? mapPermissionToRoutes(permission, routes) : routes
     updatePermissionRoutes(permissionRoutes)
     return permissionRoutes
   }, [routes, permission])
