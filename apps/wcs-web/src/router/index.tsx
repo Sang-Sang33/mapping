@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import routes from './routes'
-import Loading from '@packages/ui/components/loading'
+import { Loading } from '@packages/ui'
 import Auth from '@/components/auth'
 import lazyLoad from '@/router/utils/lazyLoad'
 import { getNewToken, redirectToSso } from '@/utils/token'

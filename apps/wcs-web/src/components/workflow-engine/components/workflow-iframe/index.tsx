@@ -1,7 +1,7 @@
 import React, { memo, useContext, useEffect, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { WorkflowConfigContext } from '../../context'
-import Loading from '@packages/ui/components/loading'
+import { Loading } from '@packages/ui'
 import { AxiosRequestConfig } from 'axios'
 
 interface IProps {
