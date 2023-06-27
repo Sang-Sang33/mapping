@@ -8,13 +8,15 @@ export interface ILayoutData {
   order?: number
 }
 
-export interface ILayoutIndexRouteObject extends ILayoutData, Omit<IndexRouteObject, 'children' | 'id'> {
+export interface ILayoutIndexRouteObject extends ILayoutData, Omit<IndexRouteObject, 'children' | 'id' | 'index'> {
   children?: undefined
 }
-export interface ILayoutNonIndexRouteObject extends ILayoutData, Omit<NonIndexRouteObject, 'children' | 'id'> {
+export interface ILayoutNonIndexRouteObject
+  extends ILayoutData,
+    Omit<NonIndexRouteObject, 'children' | 'id' | 'index'> {
   children?: ILayoutNonIndexRouteObject[]
 }
 
 export type TLayoutRouteObject = ILayoutIndexRouteObject | ILayoutNonIndexRouteObject
-export type TLayoutRoutes = ILayoutIndexRouteObject[] | ILayoutNonIndexRouteObject[]
+export type TLayoutRoutes = TLayoutRouteObject[]
 export type TLayoutPermission = TLayoutRouteObject['id'][]
