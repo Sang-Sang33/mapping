@@ -23,6 +23,7 @@ function Home() {
     }, 1000)
   }, [])
   const navigate = useNavigate()
+
   const [isLoading, setIsLoading] = useState(false)
 
   return (

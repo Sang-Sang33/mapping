@@ -1,26 +1,54 @@
 import { lazy } from 'react'
-import { Navigate, RouteObject } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { type TLayoutRoutes } from '@packages/types'
+import { Layout } from '@packages/ui'
 
 const Home = lazy(() => import('../pages/home'))
-const NotFound = lazy(() => import('@packages/ui/components/404'))
+const NotFound = lazy(() => import('@packages/ui/components/404/NotFound'))
 const Wcs = lazy(() => import('../pages/wcs'))
 
-const routes: RouteObject[] = [
-  {
-    path: '/',
-    element: <Navigate to={'/home'} />
-  },
+const permission = ['home', 'sys']
+const defineRoutes: TLayoutRoutes = [
   {
     path: '/home',
-    element: <Home />
+    element: <Home />,
+    name: '首页',
+    id: 'home'
   },
   {
-    path: '/wcs',
-    element: <Wcs />
+    path: '/sys',
+    name: '系统',
+    id: 'sys',
+    children: [
+      {
+        path: 'wcs',
+        name: 'WCS',
+        id: 'wcs',
+        element: <Wcs />
+      }
+    ]
+  }
+]
+
+const routes: TLayoutRoutes = [
+  {
+    path: '/',
+    element: <Navigate to={'/home'} />,
+    name: '重定向',
+    id: 'redirect'
   },
   {
-    path: '/404',
-    element: <NotFound />
+    element: <Layout permission={permission} routes={defineRoutes} />,
+    id: 'layout',
+    name: '布局',
+    children: defineRoutes
+  },
+
+  {
+    path: '*',
+    element: <NotFound />,
+    name: '404',
+    id: 'notfound'
   }
 ]
 
