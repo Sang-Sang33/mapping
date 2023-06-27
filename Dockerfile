@@ -1,5 +1,5 @@
 
-FROM node:16.15.0 as builder
+FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/node:16.15.0 as builder
 
 WORKDIR /source
 
@@ -13,7 +13,7 @@ COPY . /source
 
 
 # 选择更小体积的基础镜像
-FROM cym1102/nginxwebui:latest
+FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/nginxwebui:latest
 
 COPY --from=builder /source/apps/fcu-web/dist/ /usr/share/nginx/html/fcu-web/
 COPY --from=builder /source/apps/mapping-web/dist/ /usr/share/nginx/html/mapping-web/
