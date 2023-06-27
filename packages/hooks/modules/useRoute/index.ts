@@ -6,19 +6,18 @@ const useRoute = (routes: TLayoutRoutes) => {
   const location = useLocation()
 
   const findRoute = (routes: TLayoutRoutes, pathname: Required<RouteObject>['path']): TLayoutRouteObject | null => {
-    for (const route of routes) {
-      const pathnameKeys = pathname.split('/').filter(Boolean)
-      const currentRoutePathnameKeys = route.path!.split('/').filter(Boolean)
-      if (route.path === pathname && pathnameKeys.length === currentRoutePathnameKeys.length) {
-        return route
-      } else if (route.children) {
-        const childRoute = findRoute(route.children, pathname)
-        if (childRoute) {
-          return childRoute
-        }
-      }
+    let targetSet = [...routes]
+    const pathnameKeys = pathname.split('/').filter(Boolean) // 当前路径的keys
+    const length = pathnameKeys.length
+    let pointer = 0 // 当前指针
+    let target: TLayoutRouteObject | null | undefined = null
+    while (pointer !== length) {
+      target = targetSet.find((x) => x.path === pathnameKeys[pointer])
+      if (!target) return null
+      targetSet = target.children!
+      pointer++
     }
-    return null
+    return target
   }
 
   const currentRoute = useMemo(() => findRoute(routes, location.pathname), [location])

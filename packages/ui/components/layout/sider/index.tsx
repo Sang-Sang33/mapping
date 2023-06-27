@@ -1,4 +1,4 @@
-import { type FC, memo } from 'react'
+import { type FC, memo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Menu } from 'antd'
 import type { MenuProps } from 'antd'
@@ -11,7 +11,8 @@ import './index.less'
 interface ISiderMenu {
   menus: MenuProps['items']
   collapsed?: boolean
-  onMenuItemClick?: (menuItem: any) => void
+  onMenuItemClick?: (info: any) => void
+  onOpenChange?: (openKeys: string[]) => void
 }
 const SiderMenu: FC<ISiderMenu> = (props) => {
   const { collapsed, menus, onMenuItemClick } = props
@@ -23,6 +24,12 @@ const SiderMenu: FC<ISiderMenu> = (props) => {
     shallow
   )
   const navigate = useNavigate()
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [openKeys, setOpenKeys] = useState<string[]>([])
+  useEffect(() => {
+    setSelectedKeys([routeIdPath[routeIdPath.length - 1]])
+    setOpenKeys([...new Set([...openKeys, ...routeIdPath.slice(0, -1)])])
+  }, [routeIdPath])
 
   // 返回首页
   const backHome = () => {
@@ -48,10 +55,11 @@ const SiderMenu: FC<ISiderMenu> = (props) => {
         inlineIndent={16}
         theme={theme}
         mode="inline"
-        selectedKeys={[routeIdPath[routeIdPath.length - 1]]}
-        onClick={handleClickItem}
         items={menus}
-        openKeys={routeIdPath.slice(0, -1)}
+        selectedKeys={selectedKeys}
+        openKeys={openKeys}
+        onClick={handleClickItem}
+        onOpenChange={(openKeys) => setOpenKeys(openKeys)}
       ></Menu>
     </>
   )
