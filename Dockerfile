@@ -6,7 +6,7 @@ WORKDIR /source
 COPY . .
 # ADD package.json /source
 
-RUN rm -rf node_modules && npm install pnpm -g && pnpm install && pnpm build:web
+RUN rm -rf node_modules && npm config set registry https://registry.npmmirror.com && npm install pnpm -g &&  pnpm config set registry https://registry.npmmirror.com && pnpm install && pnpm build:web
 RUN pnpm build:elsa
 
 COPY . /source
