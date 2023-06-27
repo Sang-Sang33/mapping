@@ -96,7 +96,6 @@
     "cssnano": "^5.1.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.11.0",
-    "husky": "^7.0.0",
     "postcss": "^8.4.8",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^7.4.2",
