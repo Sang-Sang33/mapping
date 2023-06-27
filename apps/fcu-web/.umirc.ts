@@ -1,7 +1,7 @@
 import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
-  publicPath: '/fcu-web/',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   // outputPath: '../../dist/fcu-web',
   history: { type: 'hash' },
   antd: {},
