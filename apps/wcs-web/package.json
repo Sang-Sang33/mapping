@@ -25,6 +25,8 @@
     "@react-three/postprocessing": "^2.7.0",
     "@reduxjs/toolkit": "^1.9.1",
     "@packages/services": "workspace:^",
+    "@packages/ui": "workspace:^",
+    "@packages/utils": "workspace:^",
     "ahooks": "^3.7.2",
     "antd": "4.24.7",
     "antd-colorpicker": "^1.0.0",
@@ -53,7 +55,6 @@
     "react-router-dom": "^6.3.0",
     "react-transition-group": "^4.4.5",
     "three": "^0.147.0",
-    "@packages/ui": "workspace:^",
     "vite-plugin-compression": "^0.5.1"
   },
   "devDependencies": {
@@ -67,6 +68,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "@vitejs/plugin-react": "^1.3.0",
+    "@packages/types": "workspace:^",
     "autoprefixer": "^9.8.8",
     "consola": "^2.15.3",
     "dotenv": "^16.0.3",

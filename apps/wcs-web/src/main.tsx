@@ -6,5 +6,6 @@ import '@/styles/global.less'
 import 'antd/dist/antd.variable.min.css'
 // 引入国际化
 import '@/i18n/index'
+import '@/multiway'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<App />)

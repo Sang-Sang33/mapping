@@ -9,6 +9,7 @@ import { getLanguage, lanDict } from './utils/token'
 import moment from 'moment'
 import 'moment/dist/locale/zh-cn'
 import 'moment/dist/locale/ja'
+import { HashRouter } from 'react-router-dom'
 
 const App: FC = () => {
   const { configStore } = useStore()
@@ -23,7 +24,9 @@ const App: FC = () => {
 
   return (
     <ConfigProvider locale={lanDict.antd[nowLan]}>
-      <RouterConfig />
+      <HashRouter>
+        <RouterConfig />
+      </HashRouter>
     </ConfigProvider>
   )
 }
