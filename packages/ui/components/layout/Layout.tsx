@@ -118,7 +118,7 @@ const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
             bodyStyle={{ padding: 0 }}
           >
             <AntdSider collapsedWidth={0} theme={theme} trigger={null} className="cs-aside !w-full h-full !max-w-none">
-              <SiderMenu menus={menus} onMenuItemClick={onClose} />
+              <SiderMenu menus={menus} onMenuItemClick={handleMenuClick} />
             </AntdSider>
           </Drawer>
         ) : (
