@@ -28,8 +28,8 @@ const useLayoutStore = create<TLayoutState & TLayoutAction>((set) => {
 
   return {
     collapsed: getItem('COLLAPSED'),
-    theme: getItem('THEME'),
-    primaryColor: getItem('PRIMARY_COLOR'),
+    theme: getItem('THEME') ?? 'dark',
+    primaryColor: getItem('PRIMARY_COLOR') ?? '#13C2C2',
     layoutContentKey: generateUUID(),
     permissionRoutes: [],
     routeIdPath: [],
