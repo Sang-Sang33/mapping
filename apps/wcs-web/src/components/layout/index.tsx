@@ -5,10 +5,12 @@ import { type ILayoutProps, Layout as UILayout } from '@packages/ui'
 import { useMappingRequest } from '@packages/services'
 import { getTenantIdIC, setTenantIdIC, getWarehouseIdIC, setWarehouseIdIC } from '@packages/utils'
 import useOptions from '@/hooks/useOptions'
+import { useTranslation } from 'react-i18next'
 
 const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   const { routes, permission } = props
   const { getTenantList, getWarehouseList } = useMappingRequest()
+  const { t } = useTranslation()
   const uiLayoutRef = useRef<ElementRef<typeof UILayout>>(null)
   const [tenantId, setTenantId] = useState(getTenantIdIC())
   const [warehouseId, setWarehouseId] = useState(getWarehouseIdIC())
@@ -80,6 +82,7 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   return (
     <UILayout
       ref={uiLayoutRef}
+      systemName={t('system')}
       routes={routes}
       permission={permission}
       headerToolBarRender={(defaultDom) => [renderSelect(), ...Object.values(defaultDom)]}
