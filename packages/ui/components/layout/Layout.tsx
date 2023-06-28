@@ -86,7 +86,9 @@ const Layout: FC<ILayoutProps> = (props) => {
   const handleMenuClick: MenuProps['onClick'] = (item) => {
     const { key, keyPath } = item
     const route = getRouteById(routes, key)
-    if (route?.path) {
+    if (route?.url) {
+      window.open(route.url)
+    } else if (route?.path) {
       navigate('/' + keyPath.reverse().join('/'))
     }
     isMobile && setDrawerVisible(false)

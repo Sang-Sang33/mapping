@@ -6,6 +6,7 @@ export interface ILayoutData {
   id: string
   icon?: ReactNode
   order?: number
+  url?: string // 点击不是跳转路由,而是打开链接
 }
 
 export interface ILayoutIndexRouteObject extends ILayoutData, Omit<IndexRouteObject, 'children' | 'id' | 'index'> {
