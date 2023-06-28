@@ -8,10 +8,12 @@ export const removeTokenIC = () => AppCookie.remove('ACCESS_TOKEN')
 
 /** tenant  */
 export const getTenantIdIC = () => AppCookie.get('TENANT_ID')
+export const setTenantIdIC = (tenantId: string) => AppCookie.set('TENANT_ID', tenantId)
 export const removeTenantIdIC = () => AppCookie.remove('TENANT_ID')
 
 /** warehouse */
 export const getWarehouseIdIC = () => AppCookie.get('WAREHOUSE_ID')
+export const setWarehouseIdIC = (warehouseId: string) => AppCookie.set('WAREHOUSE_ID', warehouseId)
 export const removeWarehouseIdIC = () => AppCookie.remove('WAREHOUSE_ID')
 
 /** culture */
