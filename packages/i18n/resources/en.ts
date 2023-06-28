@@ -5,7 +5,6 @@ const en = {
   },
   layout: {
     header: {
-      system: 'WCS intelligent warehouse control system',
       setting: {
         pageStyle: 'Page Style Setting',
         themeColor: 'Theme Color'

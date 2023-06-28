@@ -15,7 +15,7 @@ import './style.less'
 const { Header: AntdHeader, Content: AntdContent, Sider: AntdSider } = AntdLayout
 
 const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
-  const { routes, permission, headerToolBarRender } = props
+  const { routes, permission, headerToolBarRender, systemName } = props
   const {
     collapsed,
     theme,
@@ -148,7 +148,7 @@ const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
               onClick: () => (isMobile ? setDrawerVisible(!drawerVisible) : updateCollapsed(!collapsed))
             })}
             <I18nextPackagesProvider>
-              <HeaderNav headerToolBarRender={headerToolBarRender} />
+              <HeaderNav systemName={systemName} headerToolBarRender={headerToolBarRender} />
             </I18nextPackagesProvider>
           </AntdHeader>
           {/* {configStore.multyTab ? (

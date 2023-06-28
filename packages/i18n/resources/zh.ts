@@ -5,7 +5,6 @@ const zh = {
   },
   layout: {
     header: {
-      system: 'WCS仓库控制系统',
       setting: {
         pageStyle: '整体风格设置',
         themeColor: '主题色'

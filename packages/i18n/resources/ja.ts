@@ -5,7 +5,6 @@ const ja = {
   },
   layout: {
     header: {
-      system: 'WCSインテリジェント倉庫制御システム',
       setting: {
         pageStyle: 'ページスタイルの設定',
         themeColor: 'テーマカラー'

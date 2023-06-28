@@ -5,7 +5,6 @@ const ko = {
   },
   layout: {
     header: {
-      system: 'WCS 지능형 창고 제어 시스템',
       setting: {
         pageStyle: '페이지 스타일 설정',
         themeColor: '테마 색상'

@@ -1,6 +1,5 @@
-import { memo, FC, ReactNode } from 'react'
+import { memo, FC } from 'react'
 import { Breadcrumb } from 'antd'
-import { useTranslation } from 'react-i18next'
 import useLayoutStore from '../store'
 import { getRouteById } from '../utils'
 import Locale from './locale'
@@ -9,8 +8,7 @@ import User from './user'
 import { IHeaderNavProps } from '../typings'
 
 const HeaderNav: FC<IHeaderNavProps> = (props) => {
-  const { headerToolBarRender } = props
-  const { t } = useTranslation(['layout']) // 国际化
+  const { systemName, headerToolBarRender } = props
   const { routeIdPath, permissionRoutes } = useLayoutStore((state) => ({
     routeIdPath: state.routeIdPath,
     permissionRoutes: state.permissionRoutes
@@ -32,7 +30,7 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
     <div className="flex justify-between items-center relative w-full text-black text-opacity-60 shadow-box z-10">
       <div className="flex flex-col text-left">
         <p className="text-lg font-bold m-0" style={{ color: '#001529' }}>
-          {t('header.system')}
+          {systemName}
         </p>
         {/* 面包屑导航 */}
         <Breadcrumb>
