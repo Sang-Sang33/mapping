@@ -10,7 +10,7 @@ import { IHeaderNavProps } from '../typings'
 
 const HeaderNav: FC<IHeaderNavProps> = (props) => {
   const { headerToolBarRender } = props
-  const { t } = useTranslation() // 国际化
+  const { t } = useTranslation(['layout']) // 国际化
   const { routeIdPath, permissionRoutes } = useLayoutStore((state) => ({
     routeIdPath: state.routeIdPath,
     permissionRoutes: state.permissionRoutes
@@ -32,7 +32,7 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
     <div className="flex justify-between items-center relative w-full text-black text-opacity-60 shadow-box z-10">
       <div className="flex flex-col text-left">
         <p className="text-lg font-bold m-0" style={{ color: '#001529' }}>
-          {t('system')}
+          {t('header.system')}
         </p>
         {/* 面包屑导航 */}
         <Breadcrumb>

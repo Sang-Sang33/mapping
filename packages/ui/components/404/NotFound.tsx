@@ -1,8 +1,8 @@
-import { Result, Button } from 'antd'
+import type { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { FC } from 'react'
-import '@packages/i18n'
+import { Result, Button } from 'antd'
+import { I18nextPackagesProvider } from '@packages/i18n'
 
 const NotFound: FC = () => {
   const navigate = useNavigate()
@@ -11,16 +11,18 @@ const NotFound: FC = () => {
     navigate('/', { replace: true })
   }
   return (
-    <Result
-      status="404"
-      title="404"
-      subTitle={t('subTitle')}
-      extra={
-        <Button type="primary" onClick={backHome}>
-          {t('backHome')}
-        </Button>
-      }
-    />
+    <I18nextPackagesProvider>
+      <Result
+        status="404"
+        title="404"
+        subTitle={t('subTitle')}
+        extra={
+          <Button type="primary" onClick={backHome}>
+            {t('backHome')}
+          </Button>
+        }
+      />
+    </I18nextPackagesProvider>
   )
 }
 export default NotFound

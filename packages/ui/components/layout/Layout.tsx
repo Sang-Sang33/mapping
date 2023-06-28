@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout as AntdLayout, ConfigProvider, Drawer, type MenuProps } from 'antd'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import { useRoute } from '@packages/hooks'
+import { I18nextPackagesProvider } from '@packages/i18n'
 import { getRouteById, getRouteIdPath, mapPermissionToRoutes, mapRoutesToMenu } from './utils'
 import useLayoutStore from './store'
 import SiderMenu from './sider/index'
@@ -146,7 +147,9 @@ const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
                 '!flex items-center h-full py-0 px-6 cursor-pointer transition-color duration-300 text-gray-500 mr-2.5 text-base hover:bg-gray-100',
               onClick: () => (isMobile ? setDrawerVisible(!drawerVisible) : updateCollapsed(!collapsed))
             })}
-            <HeaderNav headerToolBarRender={headerToolBarRender} />
+            <I18nextPackagesProvider>
+              <HeaderNav headerToolBarRender={headerToolBarRender} />
+            </I18nextPackagesProvider>
           </AntdHeader>
           {/* {configStore.multyTab ? (
           <TabPanes defaultActiveKey="home" panesItem={panesItem} tabActiveKey={tabActiveKey} />

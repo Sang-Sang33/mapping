@@ -7,7 +7,7 @@ import { redirectToSSO } from '@packages/utils'
 import user from '../../assets/icons/user.svg'
 
 const User: FC = () => {
-  const { t } = useTranslation() // 国际化
+  const { t } = useTranslation('layout') // 国际化
   // 用户下拉菜单
   const userMenuItems = [{ label: t('header.logout'), key: 'logout', icon: <ImportOutlined /> }]
   // 退出登录
