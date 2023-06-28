@@ -42,7 +42,7 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
           })}
         </Breadcrumb>
       </div>
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         {headerToolBarRender
           ? headerToolBarRender({ locale: <Locale />, setting: <Setting />, user: <User /> })
           : headerToolBarDefaultRender()}

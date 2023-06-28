@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect, memo, FC, useMemo } from 'react'
+import React, { useState, Suspense, useEffect, memo, useMemo, forwardRef, useImperativeHandle } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout as AntdLayout, ConfigProvider, Drawer, type MenuProps } from 'antd'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
@@ -7,13 +7,13 @@ import { getRouteById, getRouteIdPath, mapPermissionToRoutes, mapRoutesToMenu } 
 import useLayoutStore from './store'
 import SiderMenu from './sider/index'
 import HeaderNav from './header/index'
-import type { ILayoutProps } from './typings'
+import type { ILayoutProps, ILayoutRef } from './typings'
 import logoMini from './assets/logo.png'
 import './style.less'
 
 const { Header: AntdHeader, Content: AntdContent, Sider: AntdSider } = AntdLayout
 
-const Layout: FC<ILayoutProps> = (props) => {
+const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
   const { routes, permission, headerToolBarRender } = props
   const {
     collapsed,
@@ -22,7 +22,8 @@ const Layout: FC<ILayoutProps> = (props) => {
     layoutContentKey,
     updateCollapsed,
     updateRouteIdPath,
-    updatePermissionRoutes
+    updatePermissionRoutes,
+    updateLayoutContentKey
   } = useLayoutStore((state) => ({
     collapsed: state.collapsed,
     theme: state.theme,
@@ -30,7 +31,11 @@ const Layout: FC<ILayoutProps> = (props) => {
     layoutContentKey: state.layoutContentKey,
     updateCollapsed: state.updateCollapsed,
     updateRouteIdPath: state.updateRouteIdPath,
-    updatePermissionRoutes: state.updatePermissionRoutes
+    updatePermissionRoutes: state.updatePermissionRoutes,
+    updateLayoutContentKey: state.updateLayoutContentKey
+  }))
+  useImperativeHandle(ref, () => ({
+    updateLayoutContentKey
   }))
   const permissionRoutes = useMemo(() => {
     const permissionRoutes = permission ? mapPermissionToRoutes(permission, routes) : routes
@@ -165,6 +170,6 @@ const Layout: FC<ILayoutProps> = (props) => {
       </AntdLayout>
     </ConfigProvider>
   )
-}
+})
 
 export default memo(Layout)

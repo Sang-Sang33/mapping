@@ -5,7 +5,7 @@ import { TLayoutRoutes } from '@packages/types'
 
 export type TTheme = 'dark' | 'light'
 
-type TLayoutState = {
+export type TLayoutState = {
   collapsed: boolean
   theme: TTheme
   primaryColor: string
@@ -14,11 +14,11 @@ type TLayoutState = {
   routeIdPath: string[]
 }
 
-type TLayoutAction = {
+export type TLayoutAction = {
   updateCollapsed: (collapsed: TLayoutState['collapsed']) => void
   updateTheme: (theme: TLayoutState['theme']) => void
   updatePrimaryColor: (primaryColor: TLayoutState['primaryColor']) => void
-  updateLayoutContentKey: (layoutContentKey: TLayoutState['layoutContentKey']) => void
+  updateLayoutContentKey: () => void
   updatePermissionRoutes: (permissionRoutes: TLayoutState['permissionRoutes']) => void
   updateRouteIdPath: (routeIdPath: TLayoutState['routeIdPath']) => void
 }
@@ -45,7 +45,7 @@ const useLayoutStore = create<TLayoutState & TLayoutAction>((set) => {
       set(() => ({ primaryColor }))
       setItem('PRIMARY_COLOR', primaryColor)
     },
-    updateLayoutContentKey: (layoutContentKey) => set(() => ({ layoutContentKey })),
+    updateLayoutContentKey: () => set(() => ({ layoutContentKey: generateUUID() })),
     updatePermissionRoutes: (permissionRoutes) => set({ permissionRoutes }),
     updateRouteIdPath: (routeIdPath) => set({ routeIdPath })
   }
