@@ -27,6 +27,7 @@
     "@packages/services": "workspace:^",
     "@packages/ui": "workspace:^",
     "@packages/utils": "workspace:^",
+    "@packages/tailwind-config": "workspace:^",
     "ahooks": "^3.7.2",
     "antd": "4.24.7",
     "antd-colorpicker": "^1.0.0",
