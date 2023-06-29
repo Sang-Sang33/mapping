@@ -3,3 +3,9 @@ export interface IFcuTenantItem {
   name: string
   displayName: string
 }
+
+export interface ICreateFcuTenantData {
+  tenantId: IFcuTenantItem['id']
+}
+
+export type TDeleteFcuTenantIds = IFcuTenantItem['id'][]
