@@ -1,14 +1,14 @@
 import MWRequest from '../../../../request'
-import type { ITenantItem } from '../tenant'
-import type { ICreateFcuWarehouseData, IDeleteFcuWarehouseParams, IWarehouseItem } from './typings'
+import type { IFcuTenantItem } from '../tenant'
+import type { ICreateFcuWarehouseData, IDeleteFcuWarehouseParams, IFcuWarehouseItem } from './typings'
 
 const useFcuWarehouseRequest = (mwRequest: MWRequest) => {
   const { get, post, del } = mwRequest
 
-  const getFcuWarehouseIdList = async (tenantId: ITenantItem['id']) =>
-    get<IWarehouseItem['id'][]>('/warehouse', { tenantId })
+  const getFcuWarehouseIdList = async (tenantId: IFcuTenantItem['id']) =>
+    get<IFcuWarehouseItem['id'][]>('/warehouse', { tenantId })
 
-  const createFcuWarehouse = async (data: ICreateFcuWarehouseData) => post<IWarehouseItem[]>('/warehouse', data)
+  const createFcuWarehouse = async (data: ICreateFcuWarehouseData) => post<IFcuWarehouseItem[]>('/warehouse', data)
 
   const deleteFcuWarehouse = async ({ tenantId, warehouseIds }: IDeleteFcuWarehouseParams) => {
     const queryString = warehouseIds.map((id) => `warehouseIds=${id}`).join('&') + `&tenantId=${tenantId}`

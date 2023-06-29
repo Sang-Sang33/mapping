@@ -1,16 +1,16 @@
-import { ITenantItem } from '../tenant'
+import { IFcuTenantItem } from '../tenant'
 
-export interface IWarehouseItem {
+export interface IFcuWarehouseItem {
   id: string
   name: string
 }
 
 export interface ICreateFcuWarehouseData {
-  tenantId: ITenantItem['id']
-  warehouseId: IWarehouseItem['id']
+  tenantId: IFcuTenantItem['id']
+  warehouseId: IFcuWarehouseItem['id']
 }
 
 export interface IDeleteFcuWarehouseParams {
-  tenantId: ITenantItem['id']
-  warehouseIds: IWarehouseItem['id'][]
+  tenantId: IFcuTenantItem['id']
+  warehouseIds: IFcuWarehouseItem['id'][]
 }
