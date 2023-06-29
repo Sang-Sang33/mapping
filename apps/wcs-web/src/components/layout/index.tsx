@@ -3,7 +3,14 @@ import type { ElementRef, FC } from 'react'
 import { Select, type SelectProps } from 'antd'
 import { type ILayoutProps, Layout as UILayout } from '@packages/ui'
 import { useMappingRequest } from '@packages/services'
-import { getTenantIdIC, setTenantIdIC, getWarehouseIdIC, setWarehouseIdIC } from '@packages/utils'
+import {
+  getTenantIdIC,
+  setTenantIdIC,
+  getWarehouseIdIC,
+  setWarehouseIdIC,
+  getTokenIC,
+  redirectToSSO
+} from '@packages/utils'
 import useOptions from '@/hooks/useOptions'
 import { useTranslation } from 'react-i18next'
 
@@ -41,7 +48,7 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   }
 
   useEffect(() => {
-    if (!tenantId) {
+    if (!tenantId && tenantOptions.length) {
       const tenantId = tenantOptions[0].value
       updateTenantId(tenantId)
     }
@@ -78,6 +85,11 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
       ></Select>
     </>
   )
+
+  // 没有token,跳转到单点登录
+  useEffect(() => {
+    if (!getTokenIC()) redirectToSSO(import.meta.env.VITE_SSO_URL)
+  }, [])
 
   return (
     <UILayout
