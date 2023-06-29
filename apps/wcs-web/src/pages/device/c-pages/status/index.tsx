@@ -2,11 +2,11 @@ import React, { memo, useRef, useState } from 'react'
 import type { ElementRef, FC } from 'react'
 import { MwSearchTable, type MwSearchTableField } from 'multiway'
 import { Badge } from 'antd'
-import moment from 'moment'
 // import { fetchDeviceStatus } from '@/http'
 // import type { TDeviceStatusLevel } from '@/http/modules/device/interface'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import { type TDeviceStatusLevel, useWcsRequest } from '@packages/services'
+import { formatDate } from '@packages/utils'
 import './index.less'
 
 const fields: Array<MwSearchTableField> = [
@@ -32,7 +32,7 @@ const fields: Array<MwSearchTableField> = [
     title: '更新时间',
     key: 'update_time',
     align: 'center',
-    render: (_, record) => <span>{moment(record.update_time.value).format('YYYY-MM-DD HH:mm:ss')}</span>
+    render: (_, record) => <span>{formatDate(record.update_time.value)}</span>
   }
 ]
 

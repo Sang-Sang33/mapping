@@ -44,7 +44,6 @@
     "md5": "^2.3.0",
     "mobx": "^6.6.1",
     "mobx-react-lite": "^3.4.0",
-    "moment": "^2.29.4",
     "multiway": "0.0.19",
     "nprogress": "^0.2.0",
     "rc-virtual-list": "^3.4.13",

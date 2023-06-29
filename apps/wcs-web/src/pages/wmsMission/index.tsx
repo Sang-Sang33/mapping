@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { AnyKeyProps, MwSearchTableField, MwSearchTable } from 'multiway'
 import { IMwTableRef } from '@/multiway'
 import { useTranslation } from 'react-i18next'
-import moment from 'moment'
+import { formatDate } from '@packages/utils'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import { type IListParams, type IWmsItem, useWcsRequest } from '@packages/services'
@@ -185,7 +185,7 @@ const WmsMission: FC = () => {
       key: 'creationTime',
       align: 'center',
       render: (text) => {
-        const formatString = moment(text as string).format('YYYY-MM-DD HH:mm:ss')
+        const formatString = formatDate(text as string)
         return <Tooltip title={formatString}>{formatString}</Tooltip>
       },
       ellipsis: true,
@@ -197,7 +197,7 @@ const WmsMission: FC = () => {
       key: 'lastModificationTime',
       align: 'center',
       render: (text) => {
-        const formatString = moment(text as string).format('YYYY-MM-DD HH:mm:ss')
+        const formatString = formatDate(text as string)
         return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : '无'
       },
       ellipsis: true,

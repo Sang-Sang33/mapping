@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { MwSearchTable, MwSearchTableField } from 'multiway'
 import { Badge, List, Tooltip } from 'antd'
 import { WMS_SUB_MISSION_STATUS_ENUM } from './interface.d'
-import moment from 'moment'
+import { formatDate } from '@packages/utils'
 import { IMwTableRef } from '@/multiway'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
@@ -134,7 +134,7 @@ const WmsSubMission: FC<{ wmsMissionId: string }> = (props) => {
       key: 'creationTime',
       align: 'center',
       render: (text) => {
-        const formatString = moment(text as string).format('YYYY-MM-DD HH:mm:ss')
+        const formatString = formatDate(text as string)
         return <Tooltip title={formatString}>{formatString}</Tooltip>
       },
       ellipsis: true
@@ -145,7 +145,7 @@ const WmsSubMission: FC<{ wmsMissionId: string }> = (props) => {
       key: 'lastModificationTime',
       align: 'center',
       render: (text) => {
-        const formatString = moment(text as string).format('YYYY-MM-DD HH:mm:ss')
+        const formatString = formatDate(text as string)
         return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : '无'
       },
       ellipsis: true
