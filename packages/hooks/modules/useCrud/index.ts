@@ -21,7 +21,7 @@ const useCrud = <C, R, U, D>(crudApi: Partial<ICrudApi<C, R, U, D>>) => {
    * 添加节点
    * @param data
    */
-  const handleCreate = async (data: C) => {
+  const handleCreate = async (data: C): Promise<any> => {
     console.log('🚀 ~ file: index.tsx ~ line 26 ~ handleAdd ~ values', data)
     const hide = message.loading('正在添加')
     try {
@@ -40,7 +40,7 @@ const useCrud = <C, R, U, D>(crudApi: Partial<ICrudApi<C, R, U, D>>) => {
    *  删除节点
    * @param selectedRows
    */
-  const handleDelete = async (params: D) => {
+  const handleDelete = async (params: D): Promise<any> => {
     console.log('🚀 ~ file: index.tsx ~ line 45 ~ handleRemove ~ selectedRows', params)
     const hide = message.loading('正在删除')
     // await waitTimePromise(1000);
