@@ -15,8 +15,7 @@ const cultureToLibLocaleMap = {
     ja: ja_JP,
     ko: ko_KR
   },
-  // TODO 升级成dayjs
-  moment: {
+  dayjs: {
     // moment 组件的映射
     zh: 'zh-cn',
     en: 'en',
