@@ -1,35 +1,47 @@
-import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { MwSearchTable, MwDialogForm, MwFields, MwField, type MwSearchTableField } from 'multiway'
-import { Alert, Button, Divider } from 'antd'
+import { Alert, Button, Divider, Modal } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import {
+  type ICreateFcuWarehouseData,
+  type IDeleteFcuWarehouseParams,
+  type IFcuWarehouseItem,
   useFcuRequest,
   useMappingRequest,
-  type ITenantItem,
-  type ICreateFcuTenantData,
-  type TDeleteFcuTenantIds
+  IWarehouseItem
 } from '@packages/services'
 import { useCrud } from '@packages/hooks'
-import UpdateModal from './UpdateModal'
+
+export interface IUpdateModalProps {
+  tenantId: string
+  updateModalVisible: boolean
+  onCancel: () => void
+}
 
 const ROW_KEY = 'id'
-const Configure: FC = () => {
-  const { getFcuTenantIdList, createFcuTenant, deleteFcuTenant } = useFcuRequest()
-  const { getTenantList } = useMappingRequest()
+const UpdateModal: FC<IUpdateModalProps> = (props) => {
+  const { tenantId, updateModalVisible, onCancel } = props
+  const { getFcuWarehouseIdList, createFcuWarehouse, deleteFcuWarehouse } = useFcuRequest()
+  const { getWarehouseListByTenantId } = useMappingRequest()
   /* eslint-disable */
-  const { handleCreate, handleDelete } = useCrud<ICreateFcuTenantData, any, any, TDeleteFcuTenantIds>({
-    create: createFcuTenant,
-    delete: deleteFcuTenant
+  const { handleCreate, handleDelete } = useCrud<ICreateFcuWarehouseData, any, any, IDeleteFcuWarehouseParams>({
+    create: createFcuWarehouse,
+    delete: deleteFcuWarehouse
   })
   /* eslint-disable */
   const tableRef = useRef<any>(null)
-  const [tenantList, setTenantList] = useState<ITenantItem[]>([])
-  const tenantOptions = useMemo(() => tenantList.map((x) => ({ label: x.displayName, value: x.id })), [tenantList])
+  const [warehouseList, setWarehouseList] = useState<IWarehouseItem[]>([])
+  const tenantOptions = useMemo(() => warehouseList.map((x) => ({ label: x.name, value: x.id })), [warehouseList])
   const [addFormDialogVisible, setAddFormDialogVisible] = useState(false)
-  const [selectedRowKeys, setSelectedRowKeys] = useState<ITenantItem['id'][]>([])
-  const [editTenantId, setEditTenantId] = useState('')
-  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false)
+  const [selectedRowKeys, setSelectedRowKeys] = useState<IFcuWarehouseItem['id'][]>([])
+
+  const handleRemove = async (selectedRowKeys: IFcuWarehouseItem['id'][]) => {
+    await handleDelete({
+      tenantId,
+      warehouseIds: selectedRowKeys
+    })
+  }
 
   const tableFields: Array<MwSearchTableField> = [
     {
@@ -62,19 +74,10 @@ const Configure: FC = () => {
 
       render: (_, record) => (
         <>
-          <a
-            onClick={() => {
-              setEditTenantId(record.id)
-              setUpdateModalVisible(true)
-            }}
-          >
-            配置仓库
-          </a>
-
           <Divider type="vertical" />
           <a
             onClick={async () => {
-              await handleDelete([record[ROW_KEY]])
+              await handleRemove([record[ROW_KEY]])
               tableRef.current?.refresh()
             }}
           >
@@ -85,24 +88,21 @@ const Configure: FC = () => {
     }
   ]
 
-  const fetchTenantData = (isFcuTenant = true) =>
-    new Promise<ITenantItem[]>((resolve, reject) => {
-      Promise.all([getFcuTenantIdList(), getTenantList()])
-        .then(([fcuTenantIdList, tenantList]) => {
-          resolve(
-            tenantList.filter((x) => (isFcuTenant ? fcuTenantIdList.includes(x.id) : !fcuTenantIdList.includes(x.id)))
-          )
-        })
-        .catch(reject)
-    })
-
-  useEffect(() => {
-    // 获取租户下拉列表
-    const updateTenantList = async () => {
-      setTenantList(await fetchTenantData(false))
-    }
-    addFormDialogVisible && updateTenantList()
-  }, [addFormDialogVisible])
+  const fetchWarehouseData = useCallback(
+    (isFcuWarehouse = true) =>
+      new Promise<IFcuWarehouseItem[]>((resolve, reject) => {
+        Promise.all([getFcuWarehouseIdList(tenantId), getWarehouseListByTenantId(tenantId)])
+          .then(([fcuWarehouseIdList, warehouseList]) => {
+            resolve(
+              warehouseList.filter((x) =>
+                isFcuWarehouse ? fcuWarehouseIdList.includes(x.id) : !fcuWarehouseIdList.includes(x.id)
+              )
+            )
+          })
+          .catch(reject)
+      }),
+    [tenantId]
+  )
 
   const TableHeader = selectedRowKeys.length ? (
     <Alert
@@ -113,7 +113,7 @@ const Configure: FC = () => {
             size="small"
             type="link"
             onClick={async () => {
-              await handleDelete(selectedRowKeys)
+              await handleRemove(selectedRowKeys)
               setSelectedRowKeys([])
               tableRef.current.refresh()
             }}
@@ -128,13 +128,27 @@ const Configure: FC = () => {
     />
   ) : null
 
+  useEffect(() => {
+    const updateWarehouseList = async () => {
+      setWarehouseList(await fetchWarehouseData(false))
+    }
+    addFormDialogVisible && updateWarehouseList()
+  }, [addFormDialogVisible])
+
   return (
-    <>
+    <Modal
+      width={1000}
+      bodyStyle={{ padding: '32px 40px 48px' }}
+      destroyOnClose
+      title="仓库配置"
+      open={updateModalVisible}
+      onCancel={onCancel}
+    >
       <MwSearchTable
         ref={tableRef}
-        title="租户列表"
+        title="仓库列表"
         api={async () => {
-          const content = await fetchTenantData()
+          const content = await fetchWarehouseData()
           return {
             content,
             totalCount: content.length
@@ -157,7 +171,12 @@ const Configure: FC = () => {
       </MwSearchTable>
       <MwDialogForm
         visible={addFormDialogVisible}
-        addApi={async (params: ICreateFcuTenantData) => await handleCreate(params)}
+        addApi={async (params) =>
+          await handleCreate({
+            tenantId,
+            warehouseId: params?.warehouseId
+          })
+        }
         onClose={() => setAddFormDialogVisible(false)}
         onSuccess={() => {
           tableRef.current.refresh()
@@ -165,8 +184,8 @@ const Configure: FC = () => {
       >
         <MwFields>
           <MwField
-            title="租户"
-            key="tenantId"
+            title="仓库"
+            key="warehouseId"
             type="select"
             options={tenantOptions}
             rules={[
@@ -178,18 +197,8 @@ const Configure: FC = () => {
           />
         </MwFields>
       </MwDialogForm>
-      {editTenantId && (
-        <UpdateModal
-          onCancel={() => {
-            setEditTenantId('')
-            setUpdateModalVisible(false)
-          }}
-          updateModalVisible={updateModalVisible}
-          tenantId={editTenantId}
-        />
-      )}
-    </>
+    </Modal>
   )
 }
 
-export default memo(Configure)
+export default memo(UpdateModal)

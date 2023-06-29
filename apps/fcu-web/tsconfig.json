@@ -1,3 +1,13 @@
 {
-  "extends": "./src/.umi/tsconfig.json"
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "jsx": "react-jsx",
+    "types": ["vite/client"]
+  },
+  "include": ["src"],
+  "extends": "@packages/tsconfig/vite.json",
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
