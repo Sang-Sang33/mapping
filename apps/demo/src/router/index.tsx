@@ -7,16 +7,16 @@ const Home = lazy(() => import('../pages/home'))
 const NotFound = lazy(() => import('@packages/ui/components/404/NotFound'))
 const Wcs = lazy(() => import('../pages/wcs'))
 
-const permission = ['home', 'sys']
+const permission = ['home', 'sys', 'wcs', 'device', 'status', 'feature']
 const defineRoutes: TLayoutRoutes = [
   {
-    path: '/home',
+    path: 'home',
     element: <Home />,
     name: '首页',
     id: 'home'
   },
   {
-    path: '/sys',
+    path: 'sys',
     name: '系统',
     id: 'sys',
     children: [
@@ -24,6 +24,25 @@ const defineRoutes: TLayoutRoutes = [
         path: 'wcs',
         name: 'WCS',
         id: 'wcs',
+        element: <Wcs />
+      }
+    ]
+  },
+  {
+    path: 'device',
+    name: '设备',
+    id: 'device',
+    children: [
+      {
+        path: 'status',
+        name: '状态',
+        id: 'status',
+        element: <Wcs />
+      },
+      {
+        path: 'feature',
+        name: '功能',
+        id: 'feature',
         element: <Wcs />
       }
     ]
@@ -38,7 +57,7 @@ const routes: TLayoutRoutes = [
     id: 'redirect'
   },
   {
-    element: <Layout permission={permission} routes={defineRoutes} />,
+    element: <Layout routes={defineRoutes} />,
     id: 'layout',
     name: '布局',
     children: defineRoutes
