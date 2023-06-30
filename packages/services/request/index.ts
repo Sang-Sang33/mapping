@@ -137,5 +137,6 @@ class MWRequest {
 }
 
 export const { get, post, del, put, upload, download } = new MWRequest({})
+export * from './typings'
 
 export default MWRequest
