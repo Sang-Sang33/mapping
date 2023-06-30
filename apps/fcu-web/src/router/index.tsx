@@ -10,14 +10,14 @@ const NotFound = lazy(() => import('@packages/ui/components/404/NotFound'))
  * @return {*}
  */
 const genaratePageRoutes = () => {
-  const pageModule = import.meta.glob('../pages/**/page.ts', {
+  const pageModule = import.meta.glob('../pages/**/page.{ts,tsx}', {
     eager: true,
     import: 'default'
   })
   const asyncComponentModule = import.meta.glob<boolean, string, { default: ComponentType<any> }>(
     '../pages/**/index.tsx'
   )
-  const notPageNameStrings = ['..', '.', 'pages', 'page.ts', 'c-pages']
+  const notPageNameStrings = ['..', '.', 'pages', 'page.ts', 'page.tsx', 'c-pages']
 
   const pageModuleEntries = Object.entries(pageModule)
   const routes: TLayoutRoutes = []
@@ -30,10 +30,15 @@ const genaratePageRoutes = () => {
         meta: meta as ILayoutData
       }
     })
-    .sort((a, b) => a.path.length - b.path.length)
+    .sort((a, b) => {
+      if (a.path.length === b.path.length && a.meta.order && b.meta.order) {
+        return a.meta.order - b.meta.order
+      }
+      return a.path.length - b.path.length
+    })
   pagesInfo.forEach((pageInfo) => {
     const parentRoute = routes.find((route) => route.path === pageInfo.path[0])
-    const Component = lazy(asyncComponentModule[pageInfo.pageModulePath.replace('page.ts', 'index.tsx')])
+    const Component = lazy(asyncComponentModule[pageInfo.pageModulePath.replace(/page.ts[x]?/, 'index.tsx')])
     const route = {
       path: pageInfo.path.at(-1),
       element: <Component />,
