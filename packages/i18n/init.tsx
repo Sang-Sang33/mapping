@@ -9,7 +9,7 @@ const culture = cultureIc ?? getBrowserCulture()
 // 当前cookie中没有culture, 使用浏览器当前culture, 并设置到cookie中
 !cultureIc && setCultureIc(culture)
 
-const i18n = createInstance({
+export const i18n = createInstance({
   resources,
   lng: culture, // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
   // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
