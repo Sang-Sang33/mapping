@@ -12,7 +12,8 @@ import {
   redirectToSSO
 } from '@packages/utils'
 import useOptions from '@/hooks/useOptions'
-import { useTranslation } from 'react-i18next'
+import { I18nextProvider, useTranslation } from 'react-i18next'
+import i18n from '@/i18n'
 
 const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   const { routes, permission } = props
@@ -92,13 +93,15 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   }, [])
 
   return (
-    <UILayout
-      ref={uiLayoutRef}
-      systemName={t('system')}
-      routes={routes}
-      permission={permission}
-      headerToolBarRender={(defaultDom) => [...renderSelect(), ...Object.values(defaultDom)]}
-    />
+    <I18nextProvider i18n={i18n}>
+      <UILayout
+        ref={uiLayoutRef}
+        systemName={t('system')}
+        routes={routes}
+        permission={permission}
+        headerToolBarRender={(defaultDom) => [...renderSelect(), ...Object.values(defaultDom)]}
+      />
+    </I18nextProvider>
   )
 }
 
