@@ -28,7 +28,7 @@ export type OnNotEditWorkflow = (menuItem: IMenuItem) => void
 interface IProps {
   title: string
   type: WorkflowTypeEnum
-  baseUrl: string
+  workflowEngineUrl: string
   formFields: MwDialogFormField[]
   fetchData: FetchDataFn // 获取菜单数据
   deleteData: DeleteDataFn // 删除工作流
@@ -53,7 +53,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
   const {
     title,
     type,
-    baseUrl,
+    workflowEngineUrl,
     formFields,
     fetchData,
     deleteData,
@@ -431,7 +431,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
           setCanInteract,
           menuListDesignHeight: 886,
           menuItemHeight: 50,
-          baseUrl
+          workflowEngineUrl
         }}
       >
         <Aside

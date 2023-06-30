@@ -6,7 +6,7 @@ interface IWorkflowConfig {
   setCanInteract: React.Dispatch<React.SetStateAction<boolean>>
   menuListDesignHeight: number
   menuItemHeight: number
-  baseUrl: string
+  workflowEngineUrl: string
 }
 
 const WorkflowConfigContext = createContext<Partial<IWorkflowConfig>>({
@@ -14,7 +14,7 @@ const WorkflowConfigContext = createContext<Partial<IWorkflowConfig>>({
   canInteract: true,
   menuListDesignHeight: 886,
   menuItemHeight: 50,
-  baseUrl: 'http://120.79.85.168:6034'
+  workflowEngineUrl: 'http://120.79.85.168:6034'
 })
 
 export { WorkflowConfigContext }
