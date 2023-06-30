@@ -28,6 +28,12 @@ const cultureToLibLocaleMap = {
     en: 'en_US',
     ja: 'ja_JP',
     ko: 'ko_KR'
+  },
+  workflowEngine: {
+    zh: 'zh_CN',
+    en: 'en_US',
+    ja: 'ja_JP',
+    ko: 'ko_KR'
   }
 }
 type TCultureToLibLocaleMap = typeof cultureToLibLocaleMap
