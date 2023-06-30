@@ -1,0 +1,35 @@
+{
+  "name": "@packages/components",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts\""
+  },
+  "devDependencies": {
+    "@packages/eslint-config-custom": "workspace:*",
+    "@packages/hooks": "workspace:*",
+    "@packages/i18n": "workspace:*",
+    "@packages/services": "workspace:*",
+    "@packages/tsconfig": "workspace:*",
+    "@packages/types": "workspace:*",
+    "@packages/ui": "workspace:*",
+    "@packages/utils": "workspace:*",
+    "@types/node": "^20.3.1",
+    "@types/react": "^18.0.37",
+    "@types/react-dom": "^18.0.11",
+    "eslint": "^7.32.0",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.1.4",
+    "antd": "4.24.7",
+    "i18next": "^23.0.1",
+    "multiway": "0.0.19",
+    "react": "^18.2.0",
+    "react-i18next": "^13.0.0",
+    "react-router-dom": "^6.13.0",
+    "react-transition-group": "^4.4.5"
+  }
+}
