@@ -1,0 +1,17 @@
+.sub-menu-list-enter {
+  opacity: 0;
+  transform: perspective(500px) translateZ(-400px);
+}
+.sub-menu-list-enter-active {
+  position: absolute;
+  opacity: 1;
+  transition: all 200ms;
+  transform: perspective(500px) translateZ(0px);
+}
+.sub-menu-list-exit {
+  opacity: 1;
+}
+.sub-menu-list-exit-active {
+  opacity: 0;
+  transition: all 200ms;
+}
