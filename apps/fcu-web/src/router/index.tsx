@@ -51,15 +51,6 @@ const genaratePageRoutes = () => {
 }
 const defineRoutes = genaratePageRoutes()
 
-// const defineRoutes: TLayoutRoutes = [
-//   {
-//     path: 'configure',
-//     element: <Configure />,
-//     name: '配置',
-//     id: 'configure'
-//   }
-// ]
-
 const routes: TLayoutRoutes = [
   {
     path: '/',
