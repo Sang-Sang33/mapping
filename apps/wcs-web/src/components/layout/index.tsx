@@ -69,22 +69,22 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
     updateWarehouseId(warehouseId)
   }
 
-  const renderSelect = () => (
-    <>
-      <Select
-        dropdownMatchSelectWidth={false}
-        options={tenantOptions}
-        value={tenantId}
-        onChange={handleSelectTenant}
-      ></Select>
-      <Select
-        dropdownMatchSelectWidth={false}
-        options={warehouseOptions}
-        value={warehouseId}
-        onChange={handleSelectWarehouse}
-      ></Select>
-    </>
-  )
+  const renderSelect = () => [
+    <Select
+      key="select-tenant"
+      dropdownMatchSelectWidth={false}
+      options={tenantOptions}
+      value={tenantId}
+      onChange={handleSelectTenant}
+    ></Select>,
+    <Select
+      key="select-warehouse"
+      dropdownMatchSelectWidth={false}
+      options={warehouseOptions}
+      value={warehouseId}
+      onChange={handleSelectWarehouse}
+    ></Select>
+  ]
 
   // 没有token,跳转到单点登录
   useEffect(() => {
@@ -97,7 +97,7 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
       systemName={t('system')}
       routes={routes}
       permission={permission}
-      headerToolBarRender={(defaultDom) => [renderSelect(), ...Object.values(defaultDom)]}
+      headerToolBarRender={(defaultDom) => [...renderSelect(), ...Object.values(defaultDom)]}
     />
   )
 }

@@ -42,7 +42,11 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
       </div>
       <div className="flex items-center gap-2">
         {headerToolBarRender
-          ? headerToolBarRender({ locale: <Locale />, setting: <Setting />, user: <User /> })
+          ? headerToolBarRender({
+              locale: <Locale key="locale" />,
+              setting: <Setting key="setting" />,
+              user: <User key="user" />
+            })
           : headerToolBarDefaultRender()}
       </div>
     </div>
