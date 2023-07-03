@@ -1,15 +1,17 @@
 import { MwDialogFormField } from 'multiway'
 import { i18n } from '@packages/i18n'
 const { t } = i18n
+const tNs = (arg: string) =>
+  t(arg, {
+    ns: 'event'
+  })
 
 const fields: Array<MwDialogFormField> = [
   {
-    title: t('event.addDialog.name'),
+    title: tNs('addDialog.name'),
     key: 'name',
     required: true,
-    rules: [
-      { pattern: /^[^.]*$/, message: `${t('event.addDialog.name') + t('event.addDialog.cannotContainDecimalPoint')}` }
-    ]
+    rules: [{ pattern: /^[^.]*$/, message: `${tNs('addDialog.name') + tNs('addDialog.cannotContainDecimalPoint')}` }]
   }
 ]
 

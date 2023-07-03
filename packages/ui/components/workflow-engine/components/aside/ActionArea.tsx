@@ -13,7 +13,7 @@ interface IProps {
 
 const ActionArea: FC<IProps> = (props) => {
   const { onPaste, onExport, onImport, onCopyMulitiple } = props
-  const { t } = useTranslation()
+  const { t } = useTranslation('workflowEngine')
   const popoverContent = () => (
     <>
       <div className="flex items-center gap-3 my-2 cursor-pointer hover:text-[#13c2c2]" onClick={onImport}>
@@ -31,7 +31,7 @@ const ActionArea: FC<IProps> = (props) => {
             p-id="4926"
           ></path>
         </svg>
-        <span>{t('workflowEngine.action.import')}</span>
+        <span>{t('action.import')}</span>
       </div>
       <div className="flex items-center gap-3 my-2 cursor-pointer hover:text-[#13c2c2]" onClick={onExport}>
         <svg
@@ -48,11 +48,11 @@ const ActionArea: FC<IProps> = (props) => {
             fill="currentColor"
           ></path>
         </svg>
-        <span>{t('workflowEngine.action.export')}</span>
+        <span>{t('action.export')}</span>
       </div>
       <div className="flex items-center gap-3 my-2 cursor-pointer hover:text-[#13c2c2]" onClick={onCopyMulitiple}>
         <CopyFilled />
-        <span>{t('workflowEngine.action.copy')}</span>
+        <span>{t('action.copy')}</span>
       </div>
       <div className="flex items-center gap-3 my-2 cursor-pointer hover:text-[#13c2c2]" onClick={onPaste}>
         <svg
@@ -69,14 +69,14 @@ const ActionArea: FC<IProps> = (props) => {
             p-id="12705"
           ></path>
         </svg>
-        <span>{t('workflowEngine.action.paste')}</span>
+        <span>{t('action.paste')}</span>
       </div>
     </>
   )
 
   return (
     <Popover placement="top" content={popoverContent}>
-      <Button type="link">{t('workflowEngine.action.title')}</Button>
+      <Button type="link">{t('action.title')}</Button>
     </Popover>
   )
 }

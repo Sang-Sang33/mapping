@@ -19,7 +19,7 @@ interface FormData {
 const Event: FC<IEventProps> = (props) => {
   const { workflowEngineUrl, baseUrl } = props
   const { fetchEvent, deleteEvent, createEvent, fetchEventWorkflowDefinition, updateEvent } = useWcsRequest(baseUrl)
-  const { t } = useTranslation()
+  const { t } = useTranslation('event')
   // 获取事件工作流数据
   const fetchData: FetchDataFn = () =>
     fetchEvent().then((res) =>
@@ -94,7 +94,7 @@ const Event: FC<IEventProps> = (props) => {
 
   return (
     <WorkflowEngine
-      title={t(`event.title`)}
+      title={t(`title`)}
       type={WorkflowTypeEnum.EVENT}
       workflowEngineUrl={workflowEngineUrl}
       formFields={fields}

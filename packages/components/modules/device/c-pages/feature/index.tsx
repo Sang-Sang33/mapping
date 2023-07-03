@@ -32,7 +32,7 @@ interface FormData {
 
 const Feature: FC<IFeatureProps> = (props) => {
   const { workflowEngineUrl, baseUrl } = props
-  const { t } = useTranslation()
+  const { t } = useTranslation('device')
   const {
     fetchDevice,
     deleteDeviceFunction,
@@ -204,19 +204,19 @@ const Feature: FC<IFeatureProps> = (props) => {
 
   const deviceFields: Array<MwDialogFormField> = [
     {
-      title: t('device.editDialog.oldName'),
+      title: t('editDialog.oldName'),
       key: 'oldName',
       required: true,
       readonly: true
     },
     {
-      title: t('device.editDialog.oldName'),
+      title: t('editDialog.oldName'),
       key: 'newName',
       required: true,
       rules: [
         {
           pattern: /^[^.]*$/,
-          message: `${t('device.addDialog.deviceName') + t('device.addDialog.cannotContainDecimalPoint')}`
+          message: `${t('addDialog.deviceName') + t('addDialog.cannotContainDecimalPoint')}`
         }
       ]
     }
@@ -224,7 +224,7 @@ const Feature: FC<IFeatureProps> = (props) => {
   // 编辑的不是工作流数据(没有definitionId),
   const handleNotEditWorkflow: OnNotEditWorkflow = (menuItem) => {
     setDialogProps({
-      title: t('device.edit'),
+      title: t('edit'),
       mode: 'update',
       initialValues: { oldName: menuItem.label },
       visible: true,
@@ -240,7 +240,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     <>
       <WorkflowEngine
         ref={workflowEngineRef}
-        title={t(`device.title`)}
+        title={t(`title`)}
         type={WorkflowTypeEnum.DEVICE}
         workflowEngineUrl={workflowEngineUrl}
         formFields={fields}

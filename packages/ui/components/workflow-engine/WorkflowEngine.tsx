@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { MwDialogForm, MwDialogFormField } from 'multiway'
 import { MWAxiosRequestConfig } from '@packages/services'
 import { downloadJSON, getLocalLibLocale } from '@packages/utils'
+import { I18nextPackagesProvider } from '@packages/i18n'
 
 import Aside, { IMenuItem, type IAsideComponentRef } from './components/aside'
 import WorkflowIframe from './components/workflow-iframe'
@@ -77,7 +78,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     () => selectedMenuItem?.children?.find((x) => x.definitionId === selectedWorkflowDefinitionId),
     [selectedMenuItem, selectedWorkflowDefinitionId]
   )
-  const { t } = useTranslation()
+  const { t } = useTranslation('workflowEngine')
 
   const loadData = async () => {
     const newMenu = await fetchData()
@@ -140,7 +141,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     newFormFields = await beforeDialogOpen?.(newFormFields || formFields)
 
     setDialogProps({
-      title: `${t('workflowEngine.action.add')}${title}`,
+      title: `${t('action.add')}${title}`,
       mode: 'add',
       initialValues,
       visible: true,
@@ -159,7 +160,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     const initialValues = await getFormInitialValue(menuItem)
 
     setDialogProps({
-      title: `${t('workflowEngine.action.edit')}${title}`,
+      title: `${t('action.edit')}${title}`,
       mode: 'update',
       initialValues,
       visible: true,
@@ -289,7 +290,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     return (
       selectedMenuItem?.children && (
         <MultiCheckDialog
-          title={t('workflowEngine.action.copyDialogTitle')}
+          title={t('action.copyDialogTitle')}
           open={copyDialogOpen}
           data={selectedMenuItem?.children}
           onOk={handleCopyOk}
@@ -307,7 +308,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     return (
       selectedMenuItem?.children && (
         <MultiCheckDialog
-          title={t('workflowEngine.action.exportDialogTitle')}
+          title={t('action.exportDialogTitle')}
           open={exportDialogOpen}
           data={selectedMenuItem?.children}
           onOk={handleExportOk}
@@ -358,7 +359,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
             ghost
             onClick={() => handleAdd(true)}
           >
-            {t('workflowEngine.action.add')}
+            {t('action.add')}
           </Button>
           {selectedWorkflowDefinitionId && (
             <Button
@@ -367,14 +368,14 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
               type="default"
               onClick={() => handleEdit(selectedChildMenuItem || selectedMenuItem)}
             >
-              {t('workflowEngine.action.edit')}
+              {t('action.edit')}
             </Button>
           )}
 
           {selectedWorkflowDefinitionId && (
             <Popconfirm
               placement={'right'}
-              title={`${t('workflowEngine.action.deletePopConfirmTitle')}"${selectedChildMenuItem?.label || label}"`}
+              title={`${t('action.deletePopConfirmTitle')}"${selectedChildMenuItem?.label || label}"`}
               onConfirm={() => handleDelete(selectedChildMenuItem || selectedMenuItem)}
               onCancel={handleConfirmCancel}
               open={isOpenPopConfirm}
@@ -387,7 +388,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
                 danger
                 onClick={() => setIsOpenPopConfirm(true)}
               >
-                {t('workflowEngine.action.delete')}
+                {t('action.delete')}
               </Button>
             </Popconfirm>
           )}
@@ -403,11 +404,11 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       {menu.length === 0 ? (
         <Button type="primary" onClick={() => handleAdd()}>
-          {t('workflowEngine.empty.goToCreate')}
+          {t('empty.goToCreate')}
           {title}
         </Button>
       ) : (
-        <Button type="link">{t('workflowEngine.empty.chooseWorkflow')}</Button>
+        <Button type="link">{t('empty.chooseWorkflow')}</Button>
       )}
     </div>
   )
@@ -471,4 +472,10 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
   )
 })
 
-export default memo(WorkflowEngine)
+const I18nWorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props: IProps, ref) => (
+  <I18nextPackagesProvider>
+    <WorkflowEngine {...props} ref={ref} />
+  </I18nextPackagesProvider>
+))
+
+export default memo(I18nWorkflowEngine)

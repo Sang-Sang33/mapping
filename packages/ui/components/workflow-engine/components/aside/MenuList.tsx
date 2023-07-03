@@ -69,7 +69,7 @@ const MenuList = forwardRef<IMenuListRef, IMenuListProps>((props, ref) => {
   useImperativeHandle(ref, () => ({
     isOpenPopConfirm
   }))
-  const { t } = useTranslation()
+  const { t } = useTranslation('workflowEngine')
   const [action, setAction] = useState<ActionEnum>(ActionEnum.DEFAULT)
   /** 删除 */
   const dropRef = useRef<HTMLDivElement>(null)
@@ -133,7 +133,7 @@ const MenuList = forwardRef<IMenuListRef, IMenuListProps>((props, ref) => {
 
   const items: MenuProps['items'] = [
     {
-      label: <a onClick={() => onPaste?.()}>{t('workflowEngine.action.paste')}</a>,
+      label: <a onClick={() => onPaste?.()}>{t('action.paste')}</a>,
       key: 'paste',
       icon: <SnippetsOutlined />
     }

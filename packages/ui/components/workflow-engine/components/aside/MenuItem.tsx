@@ -47,7 +47,7 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
     onMenuItemMouseLeave
   } = props
   useImperativeHandle(ref, () => ({ menuItemContentRef }))
-  const { t } = useTranslation()
+  const { t } = useTranslation('workflowEngine')
   const menuItemContainerRef = useRef<HTMLDivElement>(null)
   const menuItemContentRef = useRef<HTMLDivElement>(null)
   const nodeRef = useRef<HTMLDivElement>(null)
@@ -65,7 +65,7 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
 
   const items: MenuProps['items'] = [
     {
-      label: <a onClick={() => onEdit?.(menuItem)}>{t('workflowEngine.action.edit')}</a>,
+      label: <a onClick={() => onEdit?.(menuItem)}>{t('action.edit')}</a>,
       key: 'edit',
       icon: <EditOutlined />
     },
@@ -77,7 +77,7 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
             setCanInteract?.(false)
           }}
         >
-          {t('workflowEngine.action.delete')}
+          {t('action.delete')}
         </a>
       ),
       key: 'delete',
@@ -85,7 +85,7 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
       icon: <DeleteOutlined />
     },
     {
-      label: <a onClick={() => onCopy?.(menuItem)}>{t('workflowEngine.action.copy')}</a>,
+      label: <a onClick={() => onCopy?.(menuItem)}>{t('action.copy')}</a>,
       key: 'copy',
       icon: <CopyOutlined />
     }
@@ -109,7 +109,7 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
         <span className="flex items-center w-min-[16px]">{leftIconInternal ?? menuItem.icon}</span>
         <Popconfirm
           placement={'right'}
-          title={`${t('workflowEngine.action.deletePopConfirmTitle')}"${menuItem.label}"`}
+          title={`${t('action.deletePopConfirmTitle')}"${menuItem.label}"`}
           onConfirm={(e) => {
             e?.stopPropagation()
             onDelete?.(menuItem)

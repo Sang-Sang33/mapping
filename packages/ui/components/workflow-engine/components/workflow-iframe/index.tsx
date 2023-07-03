@@ -16,7 +16,7 @@ interface IProps {
 const WorkflowIframe: FC<IProps> = (props) => {
   const { workflowDefinitionId, workflowApi } = props
   const [isLoading, setIsLoading] = useState(false)
-  const { locale, baseUrl } = useContext(WorkflowConfigContext)
+  const { locale, workflowEngineUrl } = useContext(WorkflowConfigContext)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const MessageStrategy = {
     // 工作流引擎did-load之前,发送自定义的getWorkflowDefinitionApi供使用
@@ -56,7 +56,7 @@ const WorkflowIframe: FC<IProps> = (props) => {
           ref={iframeRef}
           width="100%"
           height="100%"
-          src={`${baseUrl}?workflow-definition-id=${workflowDefinitionId}&culture=${locale}&use-x6-graphs=true`}
+          src={`${workflowEngineUrl}?workflow-definition-id=${workflowDefinitionId}&culture=${locale}&use-x6-graphs=true`}
           className="block"
         ></iframe>
         {isLoading && (
