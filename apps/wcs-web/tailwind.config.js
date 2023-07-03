@@ -8,14 +8,14 @@ module.exports = {
     './src/**/*.{ts,tsx}' // 用到tailwind的地方
   ],
   theme: {
-    height: {
-      '10px': '10px',
-      '95px': '95px',
-      '400px': '400px',
-      20: '20rem',
-      5: '5rem',
-      full: '100%'
-    },
+    // height: {
+    //   '10px': '10px',
+    //   '95px': '95px',
+    //   '400px': '400px',
+    //   // 20: '20rem',
+    //   5: '5rem',
+    //   full: '100%'
+    // },
     extend: {},
     boxShadow: {
       box: '0 1px 4px rgb(0 21 41 / 8%)'

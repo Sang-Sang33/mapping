@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom'
+import { Device as DeviceComponent } from '@packages/components'
 
-const Device = () => <Outlet />
+const Device = () => <DeviceComponent />
 
 export default Device
