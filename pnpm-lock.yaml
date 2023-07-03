@@ -133,6 +133,9 @@ importers:
       '@ant-design/icons':
         specifier: ^5.1.4
         version: 5.1.4(react-dom@18.2.0)(react@18.2.0)
+      '@packages/components':
+        specifier: workspace:^
+        version: link:../../packages/components
       '@packages/eslint-config-custom':
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
