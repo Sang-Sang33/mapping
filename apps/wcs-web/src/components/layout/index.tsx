@@ -12,13 +12,12 @@ import {
   redirectToSSO
 } from '@packages/utils'
 import useOptions from '@/hooks/useOptions'
-import { I18nextProvider, useTranslation } from 'react-i18next'
+import { I18nextProvider } from 'react-i18next'
 import i18n from '@/i18n'
 
 const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   const { routes, permission } = props
   const { getTenantList, getWarehouseList } = useMappingRequest()
-  const { t } = useTranslation()
   const uiLayoutRef = useRef<ElementRef<typeof UILayout>>(null)
   const [tenantId, setTenantId] = useState(getTenantIdIC())
   const [warehouseId, setWarehouseId] = useState(getWarehouseIdIC())
@@ -96,7 +95,7 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
     <I18nextProvider i18n={i18n}>
       <UILayout
         ref={uiLayoutRef}
-        systemName={t('system')}
+        systemName={i18n.t('system')}
         routes={routes}
         permission={permission}
         headerToolBarRender={(defaultDom) => [...renderSelect(), ...Object.values(defaultDom)]}
