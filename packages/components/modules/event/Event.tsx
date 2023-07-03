@@ -6,6 +6,7 @@ import type { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn, IMenuItem }
 import fields from './config/formFields'
 import workflowApi from './config/workflowApi'
 import { useTranslation } from 'react-i18next'
+import { I18nextPackagesProvider } from '@packages/i18n'
 
 interface IEventProps {
   workflowEngineUrl: string
@@ -108,4 +109,8 @@ const Event: FC<IEventProps> = (props) => {
   )
 }
 
-export default memo(Event)
+export default memo((props: IEventProps) => (
+  <I18nextPackagesProvider>
+    <Event {...props} />
+  </I18nextPackagesProvider>
+))
