@@ -11,24 +11,26 @@ import {
   getTokenIC,
   redirectToSSO
 } from '@packages/utils'
-import useOptions from '@/hooks/useOptions'
 import { I18nextProvider } from 'react-i18next'
 import i18n from '@/i18n'
 
+let isInitial = true
 const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   const { routes, permission } = props
   const { getTenantList, getWarehouseList } = useMappingRequest()
   const uiLayoutRef = useRef<ElementRef<typeof UILayout>>(null)
   const [tenantId, setTenantId] = useState(getTenantIdIC())
   const [warehouseId, setWarehouseId] = useState(getWarehouseIdIC())
-  const { options: tenantOptions } = useOptions(getTenantList, {
-    transform: {
-      value: 'id',
-      label: 'displayName'
-    }
-  })
   const [warehouseOptions, setWarehouseOptions] = useState<SelectProps['options']>([])
+  const [tenantOptions, setTenantOptions] = useState<SelectProps['options']>([])
 
+  const getTenantOptions = async () => {
+    const tenantList = await getTenantList()
+    return tenantList.map((x) => ({
+      label: x.displayName,
+      value: x.id
+    }))
+  }
   const getWarehouseOptions = async () => {
     const warehoustList = await getWarehouseList()
     return warehoustList.map((x) => ({
@@ -47,22 +49,33 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
     uiLayoutRef.current?.updateLayoutContentKey()
   }
 
-  let isInitial = true
   useEffect(() => {
-    if (!tenantId && tenantOptions.length) {
-      const tenantId = tenantOptions[0].value
-      updateTenantId(tenantId)
+    const updateTenantOptions = async () => {
+      const tenantOptions = await getTenantOptions()
+      setTenantOptions(tenantOptions)
+      if (!tenantId && tenantOptions.length) {
+        const tenantId = tenantOptions[0].value
+        updateTenantId(tenantId)
+      }
     }
+    updateTenantOptions()
+  }, [])
+
+  useEffect(() => {
     const updateWarehouseOptions = async () => {
       const warehouseOptions = await getWarehouseOptions()
       setWarehouseOptions(warehouseOptions)
-
-      if (!isInitial) {
-        // 不是初始化的时候,才需要在选中租户后, 默认选中第一个仓库
+      if (isInitial) {
+        if (!warehouseId && warehouseOptions.length) {
+          const warehouseId = warehouseOptions[0].value as string
+          updateWarehouseId(warehouseId)
+        }
+        isInitial = false
+        console.log('🚀 ~ file: index.tsx ~ line 70 ~ updateWarehouseOptions ~ isInitial', isInitial)
+      } else {
+        console.log('🚀 ~ file: index.tsx ~ line 68 ~ updateWarehouseOptions ~ warehouseOptions', warehouseOptions)
         const warehouseId = warehouseOptions[0].value as string
         updateWarehouseId(warehouseId)
-      } else {
-        isInitial = false
       }
     }
     updateWarehouseOptions()
@@ -77,20 +90,28 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   }
 
   const renderSelect = () => [
-    <Select
-      key="select-tenant"
-      dropdownMatchSelectWidth={false}
-      options={tenantOptions}
-      value={tenantId}
-      onChange={handleSelectTenant}
-    ></Select>,
-    <Select
-      key="select-warehouse"
-      dropdownMatchSelectWidth={false}
-      options={warehouseOptions}
-      value={warehouseId}
-      onChange={handleSelectWarehouse}
-    ></Select>
+    tenantOptions?.length ? (
+      <Select
+        key="select-tenant"
+        dropdownMatchSelectWidth={false}
+        options={tenantOptions}
+        value={tenantId}
+        onChange={handleSelectTenant}
+      ></Select>
+    ) : (
+      ''
+    ),
+    warehouseOptions?.length ? (
+      <Select
+        key="select-warehouse"
+        dropdownMatchSelectWidth={false}
+        options={warehouseOptions}
+        value={warehouseId}
+        onChange={handleSelectWarehouse}
+      ></Select>
+    ) : (
+      ''
+    )
   ]
 
   // 没有token,跳转到单点登录
