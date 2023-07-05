@@ -6,6 +6,7 @@ import Locale from './locale'
 import Setting from './setting'
 import User from './user'
 import { IHeaderNavProps } from '../typings'
+import { I18nextPackagesProvider } from '@packages/i18n'
 
 const HeaderNav: FC<IHeaderNavProps> = (props) => {
   const { systemName, headerToolBarRender } = props
@@ -41,13 +42,15 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
         </Breadcrumb>
       </div>
       <div className="flex items-center gap-2">
-        {headerToolBarRender
-          ? headerToolBarRender({
-              locale: <Locale key="locale" />,
-              setting: <Setting key="setting" />,
-              user: <User key="user" />
-            })
-          : headerToolBarDefaultRender()}
+        <I18nextPackagesProvider>
+          {headerToolBarRender
+            ? headerToolBarRender({
+                locale: <Locale key="locale" />,
+                setting: <Setting key="setting" />,
+                user: <User key="user" />
+              })
+            : headerToolBarDefaultRender()}
+        </I18nextPackagesProvider>
       </div>
     </div>
   )
