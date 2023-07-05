@@ -49,7 +49,12 @@ RUN for app in $(echo $APPS | tr ',' ' '); do filter_args="${filter_args} --filt
 
 # build elsa
 COPY --from=base /source/apps/elsa-designer/ ./apps/elsa-designer/
-RUN if [[ $APPS == *"elsa-designer"* ]]; then pnpm build:elsa; fi
+RUN for app in $(echo $APPS | tr ',' ' '); do \
+    if [ "$app" != "elsa-designer" ]; then \
+        pnpm build:elsa; \
+        break; \
+    fi; \
+    done
 
 
 # 选择更小体积的基础镜像

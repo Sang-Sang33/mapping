@@ -21,7 +21,7 @@ done && turbo prune $scope_args --docker
 
 FROM base as builder
 WORKDIR /source
-ARG APPS
+ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer
 # install 
 COPY .gitignore .gitignore
 COPY --from=base /source/out/json/ .
@@ -40,8 +40,12 @@ RUN for app in $(echo $APPS | tr ',' ' '); do filter_args="${filter_args} --filt
 
 # build elsa
 COPY --from=base /source/apps/elsa-designer/ ./apps/elsa-designer/
-RUN if [[ $APPS == *"elsa-designer"* ]]; then pnpm build:elsa; fi
-
+RUN for app in $(echo $APPS | tr ',' ' '); do \
+    if [ "$app" == "elsa-designer" ]; then \
+        pnpm build:elsa; \
+        break; \
+    fi; \
+    done
 
 # 选择更小体积的基础镜像
 FROM cym1102/nginxwebui:latest
