@@ -15,10 +15,10 @@ import type {
   IMenuItem
 } from '@packages/ui'
 import { useWcsRequest } from '@packages/services'
+import { i18n } from '@packages/i18n'
 import { useTranslation } from 'react-i18next'
 import workflowApi from './config/workflowApi'
 import fields from './config/formFields'
-
 interface IFeatureProps {
   workflowEngineUrl: string
   baseUrl?: string
@@ -240,7 +240,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     <>
       <WorkflowEngine
         ref={workflowEngineRef}
-        title={t(`title`)}
+        title={i18n.t(`title`, { ns: 'device' })}
         type={WorkflowTypeEnum.DEVICE}
         workflowEngineUrl={workflowEngineUrl}
         formFields={fields}
