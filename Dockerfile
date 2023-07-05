@@ -1,12 +1,3 @@
-FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/nginxwebui:latest
-
-COPY --from=builder /source/apps/fcu-web/dist/ /usr/share/nginx/html/fcu-web/
-COPY --from=builder /source/apps/mapping-web/dist/ /usr/share/nginx/html/mapping-web/
-COPY --from=builder /source/apps/wcs-web/dist/ /usr/share/nginx/html/wcs-web/
-COPY --from=builder /source/apps/elsa-designer/www/ /usr/share/nginx/html/elsa-designer
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-
 FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/node:16.15.0 as base
 WORKDIR /source
 ENV NODE_OPTIONS="--max-old-space-size=10240"
@@ -26,8 +17,6 @@ RUN for app in $(echo $APPS | tr ',' ' '); do \
     fi; \
 done && turbo prune $scope_args --docker
 
-
-
 FROM base as builder
 WORKDIR /source
 ARG APPS
@@ -45,8 +34,6 @@ COPY turbo.json turbo.json
 RUN filter_args=""
 RUN for app in $(echo $APPS | tr ',' ' '); do filter_args="${filter_args} --filter=$app"; done && \
     pnpm build $filter_args
-
-
 # build elsa
 COPY --from=base /source/apps/elsa-designer/ ./apps/elsa-designer/
 RUN for app in $(echo $APPS | tr ',' ' '); do \
@@ -59,7 +46,5 @@ RUN for app in $(echo $APPS | tr ',' ' '); do \
 
 # 选择更小体积的基础镜像
 FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/nginxwebui:latest
-
 COPY --from=builder /source/dist/ /usr/share/nginx/html/
-
 COPY default.conf /etc/nginx/conf.d/default.conf
