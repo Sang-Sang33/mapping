@@ -47,6 +47,7 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
     uiLayoutRef.current?.updateLayoutContentKey()
   }
 
+  let isInitial = true
   useEffect(() => {
     if (!tenantId && tenantOptions.length) {
       const tenantId = tenantOptions[0].value
@@ -55,8 +56,14 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
     const updateWarehouseOptions = async () => {
       const warehouseOptions = await getWarehouseOptions()
       setWarehouseOptions(warehouseOptions)
-      const warehouseId = warehouseOptions[0].value as string
-      updateWarehouseId(warehouseId)
+
+      if (!isInitial) {
+        // 不是初始化的时候,才需要在选中租户后, 默认选中第一个仓库
+        const warehouseId = warehouseOptions[0].value as string
+        updateWarehouseId(warehouseId)
+      } else {
+        isInitial = false
+      }
     }
     updateWarehouseOptions()
   }, [tenantId])
