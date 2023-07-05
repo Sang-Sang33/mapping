@@ -127,6 +127,7 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
         routes={routes}
         permission={permission}
         headerToolBarRender={(defaultDom) => [...renderSelect(), ...Object.values(defaultDom)]}
+        ssoUrl={import.meta.env.DEV ? 'http://sso.multiway-cloud.com' : '/sso'}
       />
     </I18nextProvider>
   )

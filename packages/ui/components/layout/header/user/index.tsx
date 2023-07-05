@@ -5,15 +5,16 @@ import { ImportOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { redirectToSSO } from '@packages/utils'
 import user from '../../assets/icons/user.svg'
+import { IHeaderNavProps } from '../../typings'
 
-const User: FC = () => {
+const User: FC<Pick<IHeaderNavProps, 'ssoUrl'>> = (props) => {
   const { t } = useTranslation('layout') // 国际化
   // 用户下拉菜单
   const userMenuItems = [{ label: t('header.logout'), key: 'logout', icon: <ImportOutlined /> }]
   // 退出登录
   const handleUserClick: MenuProps['onClick'] = (item) => {
     if (item.key === 'logout') {
-      redirectToSSO()
+      redirectToSSO(props.ssoUrl)
     }
   }
 

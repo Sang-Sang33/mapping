@@ -9,7 +9,7 @@ import { IHeaderNavProps } from '../typings'
 import { I18nextPackagesProvider } from '@packages/i18n'
 
 const HeaderNav: FC<IHeaderNavProps> = (props) => {
-  const { systemName, headerToolBarRender } = props
+  const { systemName, headerToolBarRender, ssoUrl } = props
   const { routeIdPath, permissionRoutes } = useLayoutStore((state) => ({
     routeIdPath: state.routeIdPath,
     permissionRoutes: state.permissionRoutes
@@ -23,7 +23,7 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
       {/* 设置 */}
       <Setting />
       {/* 用户信息  */}
-      <User />
+      <User ssoUrl={ssoUrl} />
     </>
   )
 
@@ -47,7 +47,7 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
             ? headerToolBarRender({
                 locale: <Locale key="locale" />,
                 setting: <Setting key="setting" />,
-                user: <User key="user" />
+                user: <User key="user" ssoUrl={ssoUrl} />
               })
             : headerToolBarDefaultRender()}
         </I18nextPackagesProvider>
