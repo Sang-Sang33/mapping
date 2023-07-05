@@ -4,7 +4,11 @@ import type { CookieAttributes } from 'js-cookie'
 
 /** token */
 export const getTokenIC = () => AppCookie.get('ACCESS_TOKEN')
-export const removeTokenIC = () => AppCookie.remove('ACCESS_TOKEN')
+export const removeTokenIC = (
+  options: CookieAttributes = {
+    domain: '.multiway-cloud.com'
+  }
+) => AppCookie.remove('ACCESS_TOKEN', options)
 
 /** tenant  */
 export const getTenantIdIC = () => AppCookie.get('TENANT_ID')
