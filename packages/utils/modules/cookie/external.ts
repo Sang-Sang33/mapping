@@ -4,11 +4,7 @@ import type { CookieAttributes } from 'js-cookie'
 
 /** token */
 export const getTokenIC = () => AppCookie.get('ACCESS_TOKEN')
-export const removeTokenIC = (
-  options: CookieAttributes = {
-    domain: '.multiway-cloud.com'
-  }
-) => AppCookie.remove('ACCESS_TOKEN', options)
+export const removeTokenIC = (options?: CookieAttributes) => AppCookie.remove('ACCESS_TOKEN', options)
 
 /** tenant  */
 export const getTenantIdIC = () => AppCookie.get('TENANT_ID')
@@ -28,8 +24,7 @@ export const getCultureIC = () => {
 export const setCultureIc = (
   culture: TCulture,
   options: CookieAttributes = {
-    expires: 365,
-    domain: '.multiway-cloud.com'
+    expires: 365
   }
 ) => {
   const content = `c=${culture}|uic=${culture}`
