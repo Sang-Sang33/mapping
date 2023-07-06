@@ -58,7 +58,18 @@ const Station = () => {
     updatePreview()
   }, [checkedMenu, selectRect, shapesList])
 
-  const tooltipList = useMemo(() => shapesList.map((item) => <Text x={item.canvasPosition.x - 70} y={item.canvasPosition.y + 15} text={`id: ${item.id}, X: ${item.CADPosition.x}, Y: ${item.CADPosition.y}`} fill='red'></Text>), [shapesList])
+  const tooltipList = useMemo(
+    () =>
+      shapesList.map((item) => (
+        <Text
+          x={item.canvasPosition.x - 70}
+          y={item.canvasPosition.y + 15}
+          text={`id: ${item.id}, X: ${item.CADPosition.x}, Y: ${item.CADPosition.y}`}
+          fill="red"
+        ></Text>
+      )),
+    [shapesList]
+  )
 
   const curTypeCanHasCollision = useMemo(() => checkedMenu === 'transferZones', [checkedMenu])
   const showSelectedRectList = useMemo(
@@ -67,15 +78,17 @@ const Station = () => {
   )
   const showSelectedShapeColor = useMemo(() => {
     const res: Record<string, any> = {}
+
     selectedRectList.forEach((rect) => {
       if (checkedMenu === 'all' || checkedMenu === rect.type) {
-        ; (containerLayerRef.current as any).children.forEach(function (item: any) {
-          if (item.attrs.name.includes('shape')) {
+        ;(containerLayerRef.current as any).children.forEach(function (item: any) {
+          if (item.attrs.name?.includes('shape')) {
             if (isPointInRect(rect, item.position())) res[item.attrs.name] = 'green'
           }
         })
       }
     })
+
     return res
   }, [selectedRectList, checkedMenu])
 
@@ -141,13 +154,13 @@ const Station = () => {
       if (!curTypeCanHasCollision && hasCollisionWithSelectedRect(newRect)) return
       EditorStore.changeSelectRect(newRect)
       const res: Record<string, any> = {}
-        ; (containerLayerRef.current as any).children.forEach(function (item: any) {
-          if (item.attrs.name.includes('shape')) {
-            if (isPointInRect(selectRect, item.position())) {
-              res[item.attrs.name] = 'red'
-            }
+      ;(containerLayerRef.current as any).children.forEach(function (item: any) {
+        if (item.attrs.name.includes('shape')) {
+          if (isPointInRect(selectRect, item.position())) {
+            res[item.attrs.name] = 'red'
           }
-        })
+        }
+      })
       setSelectingShapeColor(res)
     }
   }
@@ -155,20 +168,20 @@ const Station = () => {
   function updatePreview() {
     previewLayer?.destroy()
     previewLayer = (containerLayerRef.current as any).clone({ listening: false })
-      ; (previewStageRef.current as any).add(previewLayer)
+    ;(previewStageRef.current as any).add(previewLayer)
   }
 
   function handleMouseUp() {
     setIsPaint(false)
     if (!selectRect.width || !selectRect.height) return
     let isEmpty = true
-      ; (containerLayerRef.current as any).children.forEach(function (item: any) {
-        if (item.attrs.name.includes('shape')) {
-          if (isPointInRect(selectRect, item.position())) {
-            isEmpty = false
-          }
+    ;(containerLayerRef.current as any).children.forEach(function (item: any) {
+      if (item.attrs.name.includes('shape')) {
+        if (isPointInRect(selectRect, item.position())) {
+          isEmpty = false
         }
-      })
+      }
+    })
     if (isEmpty && currentMenu.meta.pointsInsideRect) {
       initSelectRect()
     } else {
@@ -252,11 +265,7 @@ const Station = () => {
             <Rect {...item} stroke={item.strokeColor || 'blue'} dash={[8, 4]}></Rect>
           ))}
         </Layer>
-        <Layer>
-          {
-            tooltipVisible && tooltipList
-          }
-        </Layer>
+        <Layer>{tooltipVisible && tooltipList}</Layer>
       </Stage>
       <EditWarehouse></EditWarehouse>
     </div>
