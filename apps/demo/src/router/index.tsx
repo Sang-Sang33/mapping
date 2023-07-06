@@ -1,9 +1,9 @@
 import { ComponentType, lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { type TLayoutRoutes, type ILayoutData } from '@packages/types'
-import { Layout } from '@packages/ui'
 
 const NotFound = lazy(() => import('@packages/ui/components/404/NotFound'))
+const Layout = lazy(() => import('@packages/ui/components/layout/Layout'))
 
 /**
  * @description: 自动生成后台Layout下的routes 要求页面定义在src/pages目录下, 每个页面都有个page.ts定义路由元信息.如果存在嵌套路由, 需要按照src/pages/** /c-pages/** /index.tsx的方式定义
@@ -17,6 +17,7 @@ const genaratePageRoutes = () => {
   const asyncComponentModule = import.meta.glob<boolean, string, { default: ComponentType<any> }>(
     '../pages/**/index.tsx'
   )
+
   const notPageNameStrings = ['..', '.', 'pages', 'page.ts', 'page.tsx', 'c-pages']
 
   const pageModuleEntries = Object.entries(pageModule)
@@ -39,6 +40,7 @@ const genaratePageRoutes = () => {
   pagesInfo.forEach((pageInfo) => {
     const parentRoute = routes.find((route) => route.path === pageInfo.path[0])
     const Component = lazy(asyncComponentModule[pageInfo.pageModulePath.replace(/page.ts[x]?/, 'index.tsx')])
+    console.log('🚀 ~ file: index.tsx ~ line 44 ~ pagesInfo.forEach ~ Component', Component)
     const route = {
       path: pageInfo.path.at(-1),
       element: <Component />,
@@ -55,6 +57,8 @@ const genaratePageRoutes = () => {
   return routes
 }
 const defineRoutes = genaratePageRoutes()
+console.log('🚀 ~ file: index.tsx ~ line 60 ~ defineRoutes', defineRoutes)
+
 // const permission = ['home', 'sys', 'wcs', 'device', 'status', 'feature']
 
 const routes: TLayoutRoutes = [

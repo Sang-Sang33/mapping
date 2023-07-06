@@ -1,12 +1,9 @@
 import React, { memo } from 'react'
-import type { ReactNode, FC } from 'react'
+import type { FC } from 'react'
+import { Feature as FeatureComponent } from '@packages/components'
 
-interface IProps {
-  children?: ReactNode
-}
-
-const Feature: FC<IProps> = (props) => {
-  return <div>Feature</div>
+const Feature: FC = () => {
+  return <FeatureComponent workflowEngineUrl="http://120.79.85.168:6034"></FeatureComponent>
 }
 
 export default memo(Feature)

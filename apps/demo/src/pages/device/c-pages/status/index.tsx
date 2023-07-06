@@ -1,12 +1,16 @@
 import React, { memo } from 'react'
-import type { ReactNode, FC } from 'react'
+import type { FC } from 'react'
+import { Status as StatusComponent } from '@packages/components'
 
-interface IProps {
-  children?: ReactNode
-}
-
-const Status: FC<IProps> = (props) => {
-  return <div>Status</div>
+const Status: FC = () => {
+  return (
+    <StatusComponent
+      setDefaultDataFilter={({ items, totalCount }) => ({
+        content: items,
+        totalCount
+      })}
+    ></StatusComponent>
+  )
 }
 
 export default memo(Status)
