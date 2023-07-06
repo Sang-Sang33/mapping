@@ -230,6 +230,12 @@ importers:
       '@ant-design/icons':
         specifier: ^5.1.4
         version: 5.1.4(react-dom@18.2.0)(react@18.2.0)
+      '@packages/ui':
+        specifier: workspace:^
+        version: link:../../packages/ui
+      '@packages/utils':
+        specifier: workspace:^
+        version: link:../../packages/utils
       ahooks:
         specifier: ^3.7.2
         version: 3.7.2(react@18.2.0)

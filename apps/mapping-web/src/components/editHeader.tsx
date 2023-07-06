@@ -1,4 +1,4 @@
-import { Layout, Menu, Col, Row, Button, Space, Select, message, Dropdown, Avatar } from 'antd'
+import { Layout, Menu, Col, Row, Button, Space, Select, message } from 'antd'
 import { useStore } from '../store/index'
 import { observer } from 'mobx-react-lite'
 import type { MenuProps } from 'antd'
@@ -9,15 +9,10 @@ import { getCustomerList, getWarehouseList } from '../services'
 import { useRequest } from 'ahooks'
 import { saveSlot, saveTransferPosition, saveTempSlot, getTempSlot, getRcspoint } from '@/services'
 import type { IEditedShapeItem, ISelectedRect, menuType, shapeItem } from '@/types'
-import { getTenant } from '@/utils/auth'
-import { PoweroffOutlined, ImportOutlined } from '@ant-design/icons';
-import { redirectToSso } from '@/utils/auth'
-import { clearAccessToken, getCookieByName, setCookie, removeCookieByName } from '@/utils/auth'
-import user from "@/assets/icons/user.svg";
+import { getTenantIdIC, getWarehouseIdIC, setTenantIdIC, setWarehouseIdIC } from '@packages/utils'
+import { User, Setting } from '@packages/ui'
 
 const { Header } = Layout
-const TANENT_COOKIE = 'tanentId'
-const WAREHOUSE_COOKIE = 'warehouseId'
 
 function EditHeader() {
   const [userList, setUserList] = useState<Record<string, string>[]>([])
@@ -46,12 +41,12 @@ function EditHeader() {
     onSuccess(res) {
       const list = res.map((item: Record<string, string>) => ({ label: item.displayName, value: item.id }))
       setUserList(list)
-      const tanent = getTenant()
+      const tanent = getTenantIdIC()
       const user = res.find((item) => item.name === tanent)
       if (user) {
         EditorStore.setTenantId(user.id)
       } else {
-        const val = getCookieByName(TANENT_COOKIE) || list[0].value
+        const val = getTenantIdIC() || list[0].value
         list.length && EditorStore.setTenantId(val)
       }
     }
@@ -87,7 +82,7 @@ function EditHeader() {
   }, [stageWidth, stageHeight])
 
   const getLocalRectList = (rectListInRcs: ISelectedRect[], rcsData: any) => {
-    if(!rcsData) return []
+    if (!rcsData) return []
     const {
       Border: { DownLeft, UpRight }
     } = rcsData
@@ -124,20 +119,20 @@ function EditHeader() {
     const res = await getWarehouseList({ tenantId })
     const list = res.map((item: Record<string, string>) => ({ label: item.name, value: item.id }))
     setWarehouseList(list)
-    const val = getCookieByName(WAREHOUSE_COOKIE) || (list.length && list[0].value) || undefined
+    const val = getWarehouseIdIC() || (list.length && list[0].value) || undefined
     EditorStore.setWarehouseId(val)
   }
 
   function handleWarehouseChange(val: any) {
     EditorStore.setWarehouseId(val)
-    setCookie(WAREHOUSE_COOKIE, val)
+    setWarehouseIdIC(val)
   }
 
   function handleUserChange(val: string) {
     EditorStore.setWarehouseId(undefined)
     EditorStore.setTenantId(val)
-    setCookie(TANENT_COOKIE, val)
-    removeCookieByName(WAREHOUSE_COOKIE)
+    setTenantIdIC(val)
+    // removeCookieByName(WAREHOUSE_COOKIE)
   }
 
   function saveSelectedRectData() {
@@ -299,17 +294,6 @@ function EditHeader() {
     link.click()
   }
 
-  const handleLogout = () => {
-    clearAccessToken()
-    removeCookieByName(WAREHOUSE_COOKIE)
-    removeCookieByName(TANENT_COOKIE)
-    redirectToSso()
-  }
-
-  const userMenu = (
-    <Menu onClick={handleLogout} items={[{ label: "退出登录", key: "logout", icon: <ImportOutlined /> }]}></Menu>
-  );
-
   return (
     <Header className="header">
       <Row>
@@ -340,14 +324,9 @@ function EditHeader() {
                   导出
                 </Button>
               </>
-
             )}
-            {/* 用户信息  */}
-            <Dropdown overlay={userMenu} placement="bottomRight">
-              <div className="w-14 text-center cursor-pointer hover:bg-gray-100">
-                <Avatar src={user} />
-              </div>
-            </Dropdown>
+            <User ssoUrl={import.meta.env.DEV ? 'http://sso.multiway-cloud.com' : '/sso'}></User>
+            <Setting />
           </Space>
         </Col>
       </Row>
