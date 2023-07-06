@@ -30,5 +30,5 @@ export const redirectToSSO = (
   options.beforeRedirect?.()
   const queryString = `returnUrl=${location.href}&&lang=${getCultureIC()}&&tokenKey=${ECookie.ACCESS_TOKEN}`
 
-  window.location.href = `${ssoUrl}/login?${queryString}`
+  window.location.href = `${ssoUrl}/login/?${queryString}`
 }

@@ -1,9 +1,9 @@
-import { Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import routes from "./routes";
-import Loading from "@/components/loading";
-import Auth from "@/components/auth";
-import lazyLoad from "@/router/utils/lazyLoad";
+import { Suspense } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import routes from './routes'
+import Loading from '@/components/loading'
+import Auth from '@/components/auth'
+import lazyLoad from '@/router/utils/lazyLoad'
 
 function RouterConfig() {
   function getRoute(routes: any[]) {
@@ -13,7 +13,7 @@ function RouterConfig() {
           <Route
             path={item.path}
             element={
-              item.name === "login" || item.name === "404" ? (
+              item.name === 'login' || item.name === '404' ? (
                 <item.component />
               ) : (
                 <Auth>{lazyLoad(item.component)}</Auth>
@@ -25,17 +25,17 @@ function RouterConfig() {
           </Route>
         ))}
       </>
-    );
+    )
   }
-  console.log(getRoute(routes));
+  console.log(getRoute(routes))
 
   return (
-    <Router>
+    <Router basename={import.meta.env.DEV ? '/' : '/sso'}>
       <Suspense fallback={<Loading />}>
         <Routes>{getRoute(routes)}</Routes>
       </Suspense>
     </Router>
-  );
+  )
 }
 
-export default RouterConfig;
+export default RouterConfig

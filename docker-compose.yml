@@ -7,7 +7,7 @@ services: # 集合
       - 3001:8080
     build:
       args:
-        APPS: wcs-web,fcu-web,mapping-web
+        APPS: wcs-web,fcu-web,mapping-web,elsa-designer,sso
       context: .
       dockerfile: ./Dockerfile.dev
     container_name: logistic-web # 容器名称

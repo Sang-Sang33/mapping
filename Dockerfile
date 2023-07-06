@@ -1,7 +1,6 @@
 FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/node:16.15.0 as base
 WORKDIR /source
-ENV NODE_OPTIONS="--max-old-space-size=10240"
-ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer
+ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer,sso
 # init
 RUN npm install turbo@1.10.6 -g
 RUN npm install pnpm -g
@@ -18,8 +17,9 @@ RUN for app in $(echo $APPS | tr ',' ' '); do \
 done && turbo prune $scope_args --docker
 
 FROM base as builder
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 WORKDIR /source
-ARG APPS
+ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer,sso
 # install 
 COPY .gitignore .gitignore
 COPY --from=base /source/out/json/ .
@@ -37,7 +37,7 @@ RUN for app in $(echo $APPS | tr ',' ' '); do filter_args="${filter_args} --filt
 # build elsa
 COPY --from=base /source/apps/elsa-designer/ ./apps/elsa-designer/
 RUN for app in $(echo $APPS | tr ',' ' '); do \
-    if [ "$app" != "elsa-designer" ]; then \
+    if [ "$app" == "elsa-designer" ]; then \
         pnpm build:elsa; \
         break; \
     fi; \

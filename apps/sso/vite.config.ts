@@ -15,8 +15,9 @@ const pathResolve = (dir: string): any => {
 export default defineConfig((mode: ConfigEnv): UserConfig => {
   const env = loadEnv(mode.mode, process.cwd())
   const viteEnv = wrapperEnv(env)
+  const base = mode.mode === 'production' ? '/sso/' : '/'
   return {
-    base: './', // 配置打包静态文件输出路径
+    base, // 配置打包静态文件输出路径
     plugins: [
       react(),
       createHtmlPlugin({
