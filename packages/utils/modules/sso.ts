@@ -1,4 +1,5 @@
-import { removeTenantIdIC, removeTokenIC, removeWarehouseIdIC } from './cookie'
+import { ECookie } from '@packages/enum'
+import { getCultureIC, removeTenantIdIC, removeTokenIC, removeWarehouseIdIC } from './cookie'
 
 interface IOptions {
   autoClearDefaultCache: boolean
@@ -27,7 +28,7 @@ export const redirectToSSO = (
   }
 
   options.beforeRedirect?.()
-  const queryString = `returnUrl=${location.href}`
+  const queryString = `returnUrl=${location.href}&&lang=${getCultureIC()}&&tokenKey=${ECookie.ACCESS_TOKEN}`
 
   window.location.href = `${ssoUrl}/login?${queryString}`
 }
