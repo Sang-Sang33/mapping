@@ -2,11 +2,11 @@ import React, { memo, useState } from 'react'
 import type { FC } from 'react'
 import { Drawer, Tooltip } from 'antd'
 import { CheckOutlined, SettingOutlined } from '@ant-design/icons'
+import { i18n } from '@packages/i18n'
 import type { TTheme } from '../../store'
 import dark from '../../assets/icons/dark.svg'
 import light from '../../assets/icons/light.svg'
 import useLayoutStore from '../../store'
-import { useTranslation } from 'react-i18next'
 
 const Setting: FC = () => {
   const { theme, primaryColor, updateTheme, updatePrimaryColor } = useLayoutStore((state) => ({
@@ -15,11 +15,9 @@ const Setting: FC = () => {
     updatePrimaryColor: state.updatePrimaryColor,
     updateTheme: state.updateTheme
   }))
-  const { t } = useTranslation(['layout']) // 国际化
   const [drawerVisible, setDrawerVisible] = useState(false) // 设置面板显示状态
 
   // 主题风格
-  // TODO Layout header多语言
   const themeList = [
     {
       zh_CN_name: '暗色菜单风格',
@@ -94,7 +92,7 @@ const Setting: FC = () => {
       >
         {/* 主题style */}
         <div>
-          <h3 className="text-gray-700 mb-2.5 font-semibold">{t('header.setting.pageStyle')}</h3>
+          <h3 className="text-gray-700 mb-2.5 font-semibold">{i18n.t('header.setting.pageStyle', { ns: 'layout' })}</h3>
           <div className="flex">
             {themeList.map(({ zh_CN_name, style, icon }) => (
               <span
@@ -115,7 +113,9 @@ const Setting: FC = () => {
 
         {/* 主题色 */}
         <div>
-          <h3 className="font-semibold text-gray-700 mx-0 mt-4 mb-2.5">{t('header.setting.themeColor')}</h3>
+          <h3 className="font-semibold text-gray-700 mx-0 mt-4 mb-2.5">
+            {i18n.t('header.setting.themeColor', { ns: 'layout' })}
+          </h3>
           <div className="flex">
             {colorList.map(({ zh_CN_name, color }) => (
               <Tooltip title={zh_CN_name} color={color} key={color}>

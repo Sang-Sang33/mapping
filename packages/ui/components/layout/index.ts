@@ -1,3 +1,3 @@
 export { default as Layout } from './Layout'
-export { default as Header } from './header'
+export * from './header'
 export * from './typings'
