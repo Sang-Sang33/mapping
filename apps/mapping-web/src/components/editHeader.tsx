@@ -10,7 +10,7 @@ import { useRequest } from 'ahooks'
 import { saveSlot, saveTransferPosition, saveTempSlot, getTempSlot, getRcspoint } from '@/services'
 import type { IEditedShapeItem, ISelectedRect, menuType, shapeItem } from '@/types'
 import { getTenantIdIC, getWarehouseIdIC, setTenantIdIC, setWarehouseIdIC } from '@packages/utils'
-import { User, Setting } from '@packages/ui'
+import { User } from '@packages/ui'
 
 const { Header } = Layout
 
@@ -326,7 +326,6 @@ function EditHeader() {
               </>
             )}
             <User ssoUrl={import.meta.env.DEV ? 'http://sso.multiway-cloud.com' : '/sso'}></User>
-            <Setting />
           </Space>
         </Col>
       </Row>
