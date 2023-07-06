@@ -325,7 +325,7 @@ function EditHeader() {
                 </Button>
               </>
             )}
-            <User ssoUrl={import.meta.env.DEV ? 'http://sso.multiway-cloud.com' : '/sso'}></User>
+            <User ssoUrl={import.meta.env.DEV ? 'http://byd.multiway-cloud.com:44307' : '/sso'}></User>
           </Space>
         </Col>
       </Row>

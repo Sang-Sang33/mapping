@@ -3,7 +3,7 @@ import type { ElementRef, FC } from 'react'
 import { type ILayoutProps, Layout as UILayout } from '@packages/ui'
 import { getTokenIC, redirectToSSO } from '@packages/utils'
 
-const ssoUrl = import.meta.env.DEV ? 'http://sso.multiway-cloud.com' : '/sso'
+const ssoUrl = import.meta.env.DEV ? 'http://byd.multiway-cloud.com:44307' : '/sso'
 const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
   const { routes, permission } = props
   const uiLayoutRef = useRef<ElementRef<typeof UILayout>>(null)

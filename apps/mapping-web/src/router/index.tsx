@@ -4,7 +4,7 @@ import routes from './routes'
 import lazyLoad from '@/router/utils/lazyLoad'
 import { redirectToSSO, getTokenIC } from '@packages/utils'
 function RouterConfig() {
-  if (!getTokenIC()) redirectToSSO(import.meta.env.DEV ? 'http://sso.multiway-cloud.com' : '/sso')
+  if (!getTokenIC()) redirectToSSO(import.meta.env.DEV ? 'http://byd.multiway-cloud.com:44307' : '/sso')
   return (
     <Router>
       <Suspense>
