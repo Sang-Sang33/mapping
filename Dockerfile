@@ -36,13 +36,9 @@ RUN for app in $(echo $APPS | tr ',' ' '); do filter_args="${filter_args} --filt
     pnpm build $filter_args
 # build elsa
 COPY --from=base /source/apps/elsa-designer/ ./apps/elsa-designer/
-RUN for app in $(echo $APPS | tr ',' ' '); do \
-    if [ "$app" == "elsa-designer" ]; then \
-        pnpm build:elsa; \
-        break; \
-    fi; \
-    done
-
+RUN if echo "$APPS" | grep -q "elsa-designer"; then \
+    pnpm build:elsa; \
+fi
 
 # 选择更小体积的基础镜像
 FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/nginxwebui:latest
