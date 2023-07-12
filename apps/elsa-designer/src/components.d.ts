@@ -128,6 +128,7 @@ export namespace Components {
         "language": string;
         "opensModal": boolean;
         "padding": string;
+        "readOnly": boolean;
         "serverUrl": string;
         "setExpression": (value: string) => Promise<void>;
         "singleLineMode": boolean;
@@ -170,6 +171,7 @@ export namespace Components {
         "language": string;
         "monacoLibPath": string;
         "padding": string;
+        "readOnly": boolean;
         "setValue": (value: string) => Promise<void>;
         "singleLineMode": boolean;
         "value": string;
@@ -1080,6 +1082,7 @@ declare namespace LocalJSX {
         "onExpressionChanged"?: (event: CustomEvent<string>) => void;
         "opensModal"?: boolean;
         "padding"?: string;
+        "readOnly"?: boolean;
         "serverUrl"?: string;
         "singleLineMode"?: boolean;
         "workflowDefinitionId"?: string;
@@ -1122,6 +1125,7 @@ declare namespace LocalJSX {
         "monacoLibPath"?: string;
         "onValueChanged"?: (event: CustomEvent<MonacoValueChangedArgs>) => void;
         "padding"?: string;
+        "readOnly"?: boolean;
         "singleLineMode"?: boolean;
         "value"?: string;
     }

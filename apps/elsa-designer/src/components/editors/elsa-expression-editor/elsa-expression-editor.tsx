@@ -1,90 +1,95 @@
-import { Component, EventEmitter, h, Method, Prop, State, Watch, Event } from '@stencil/core';
-import { createElsaClient } from '../../../services';
-import Tunnel from '../../../data/workflow-editor';
-import { MonacoValueChangedArgs } from '../../controls/elsa-monaco/elsa-monaco';
-import { IntellisenseContext } from '../../../models';
-import { monacoEditorDialogService } from '../../../services/monaco-editor-dialog-service';
-import { IconName, iconProvider } from '../../../services/icon-provider';
+import { Component, EventEmitter, h, Method, Prop, State, Watch, Event } from '@stencil/core'
+import { createElsaClient } from '../../../services'
+import Tunnel from '../../../data/workflow-editor'
+import { MonacoValueChangedArgs } from '../../controls/elsa-monaco/elsa-monaco'
+import { IntellisenseContext } from '../../../models'
+import { monacoEditorDialogService } from '../../../services/monaco-editor-dialog-service'
+import { IconName, iconProvider } from '../../../services/icon-provider'
 
 @Component({
   tag: 'elsa-expression-editor',
-  shadow: false,
+  shadow: false
 })
 export class ElsaExpressionEditor {
-  @Event() expressionChanged: EventEmitter<string>;
-  @Prop() opensModal = false;
-  @Prop() language: string;
-  @Prop() expression: string;
-  @Prop({ attribute: 'editor-height', reflect: true }) editorHeight = '6em';
-  @Prop({ attribute: 'single-line', reflect: true }) singleLineMode = false;
-  @Prop() padding: string;
-  @Prop() context?: IntellisenseContext;
-  @Prop({ mutable: true }) serverUrl: string;
-  @Prop({ mutable: true }) workflowDefinitionId: string;
-  @State() currentExpression?: string;
+  @Event() expressionChanged: EventEmitter<string>
+  @Prop() opensModal = false
+  @Prop() language: string
+  @Prop() readOnly: boolean
+  @Prop() expression: string
+  @Prop({ attribute: 'editor-height', reflect: true }) editorHeight = '6em'
+  @Prop({ attribute: 'single-line', reflect: true }) singleLineMode = false
+  @Prop() padding: string
+  @Prop() context?: IntellisenseContext
+  @Prop({ mutable: true }) serverUrl: string
+  @Prop({ mutable: true }) workflowDefinitionId: string
+  @State() currentExpression?: string
 
-  monacoEditor: HTMLElsaMonacoElement;
+  monacoEditor: HTMLElsaMonacoElement
 
   @Watch('expression')
   expressionChangedHandler(newValue: string) {
-    this.currentExpression = newValue;
+    this.currentExpression = newValue
   }
 
   @Method()
   async setExpression(value: string) {
-    await this.monacoEditor.setValue(value);
+    await this.monacoEditor.setValue(value)
   }
 
   async componentWillLoad() {
-    this.currentExpression = this.expression;
+    this.currentExpression = this.expression
   }
 
   async componentDidLoad() {
-    const elsaClient = await createElsaClient(this.serverUrl);
-    const libSource = await elsaClient.scriptingApi.getJavaScriptTypeDefinitions(this.workflowDefinitionId, this.context);
-    const libUri = 'defaultLib:lib.es6.d.ts';
-    await this.monacoEditor.addJavaScriptLib(libSource, libUri);
+    const elsaClient = await createElsaClient(this.serverUrl)
+    const libSource = await elsaClient.scriptingApi.getJavaScriptTypeDefinitions(
+      this.workflowDefinitionId,
+      this.context
+    )
+    const libUri = 'defaultLib:lib.es6.d.ts'
+    await this.monacoEditor.addJavaScriptLib(libSource, libUri)
     if (monacoEditorDialogService.monacoEditor) {
-      monacoEditorDialogService.monacoEditor.addJavaScriptLib(libSource, libUri);
+      monacoEditorDialogService.monacoEditor.addJavaScriptLib(libSource, libUri)
     }
   }
 
   async onMonacoValueChanged(e: MonacoValueChangedArgs) {
-    this.currentExpression = e.value;
-    await this.expressionChanged.emit(e.value);
+    this.currentExpression = e.value
+    await this.expressionChanged.emit(e.value)
   }
 
-  onEditorClick = e => {
-    e.preventDefault();
-    monacoEditorDialogService.show(this.language, this.currentExpression, (val: string) => this.setExpression(val));
-  };
+  onEditorClick = (e) => {
+    e.preventDefault()
+    monacoEditorDialogService.show(this.language, this.currentExpression, (val: string) => this.setExpression(val))
+  }
 
   render() {
-    const language = this.language;
-    const value = this.currentExpression;
+    const language = this.language
+    const value = this.currentExpression
 
     return (
       <elsa-monaco
         value={value}
         language={language}
+        readOnly={this.readOnly}
         editor-height={this.editorHeight}
         single-line={this.singleLineMode}
         padding={this.padding}
-        onValueChanged={e => this.onMonacoValueChanged(e.detail)}
-        ref={el => (this.monacoEditor = el)}
+        onValueChanged={(e) => this.onMonacoValueChanged(e.detail)}
+        ref={(el) => (this.monacoEditor = el)}
       >
-        {this.opensModal &&
+        {this.opensModal && (
           <button
             class="elsa-absolute elsa-z-10"
-            style={{ left: "0.25rem", top: "0.35rem" }}
+            style={{ left: '0.25rem', top: '0.35rem' }}
             onClick={this.onEditorClick}
-            >
-            { iconProvider.getIcon(IconName.OpenInDialog) }
+          >
+            {iconProvider.getIcon(IconName.OpenInDialog)}
           </button>
-        }
+        )}
       </elsa-monaco>
-    );
+    )
   }
 }
 
-Tunnel.injectProps(ElsaExpressionEditor, ['serverUrl', 'workflowDefinitionId']);
+Tunnel.injectProps(ElsaExpressionEditor, ['serverUrl', 'workflowDefinitionId'])
