@@ -76,7 +76,8 @@ export class ElsaStudioRoot {
     const httpClientFactory: () => Promise<AxiosInstance> = () => createHttpClient(serverUrl)
 
     if (this.config) {
-      await fetch(`${document.location.origin + document.location.pathname}/${this.config}`)
+      const path = document.location.pathname === '/' ? '' : document.location.pathname
+      await fetch(`${document.location.origin + path}${this.config}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('HTTP error ' + response.status)
