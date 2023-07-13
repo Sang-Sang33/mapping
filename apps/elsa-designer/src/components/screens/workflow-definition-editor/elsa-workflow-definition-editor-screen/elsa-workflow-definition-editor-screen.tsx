@@ -41,6 +41,7 @@ import { i18n } from 'i18next'
 import { loadTranslations } from '../../../i18n/i18n-loader'
 import { resources } from './localizations'
 import * as collection from 'lodash/collection'
+import { findChildWorkflowActivityDescriptor } from '../../../../utils/utils'
 
 @Component({
   tag: 'elsa-workflow-definition-editor-screen',
@@ -563,7 +564,8 @@ export class ElsaWorkflowDefinitionEditorScreen {
       persistWorkflow: source.persistWorkflow,
       saveWorkflowContext: source.saveWorkflowContext,
       loadWorkflowContext: source.loadWorkflowContext,
-      propertyStorageProviders: source.propertyStorageProviders
+      propertyStorageProviders: source.propertyStorageProviders,
+      activityDescriptor: findChildWorkflowActivityDescriptor(activityDescriptors, source)
     }
   }
 

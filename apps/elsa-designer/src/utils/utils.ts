@@ -1,6 +1,7 @@
 import {
   ActivityDefinition,
   ActivityDefinitionProperty,
+  ActivityDescriptor,
   ActivityModel,
   ConnectionModel,
   WorkflowModel
@@ -263,4 +264,21 @@ export interface Hash<TValue> {
 export const stripActivityNameSpace = (name: string): string => {
   const lastDotIndex = name.lastIndexOf('.')
   return lastDotIndex < 0 ? name : name.substr(lastDotIndex + 1)
+}
+
+export const findChildWorkflowActivityDescriptor = (
+  activityDescriptors: ActivityDescriptor[],
+  activity: ActivityModel | ActivityDefinition
+) => {
+  return activityDescriptors.find((x) => {
+    const workflowDefinitionIdProperty = activity.properties.find((p) => p.name === 'WorkflowDefinitionId')
+    if (workflowDefinitionIdProperty) {
+      // 工作流的type会重复, 需要根据WorkflowDefinitionId的值来找到对应的activityDescriptor
+      return (
+        x.inputProperties.find((p) => p.name === 'WorkflowDefinitionId')?.defaultValue ===
+        workflowDefinitionIdProperty.expressions[workflowDefinitionIdProperty.syntax || 'Literal']
+      )
+    }
+    return x.type == activity.type
+  })
 }

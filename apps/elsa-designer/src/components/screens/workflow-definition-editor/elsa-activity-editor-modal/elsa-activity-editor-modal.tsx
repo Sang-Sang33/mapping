@@ -14,6 +14,7 @@ import { checkBox, FormContext, section, selectField, SelectOption, textArea, te
 import { i18n } from 'i18next'
 import { loadTranslations } from '../../../i18n/i18n-loader'
 import { resources } from './localizations'
+import { findChildWorkflowActivityDescriptor } from '../../../../utils/utils'
 
 export interface TabModel {
   tabName: string
@@ -192,18 +193,18 @@ export class ElsaActivityEditorModal {
   onShowActivityEditor = async (activity: ActivityModel, animate: boolean) => {
     this.activityModel = JSON.parse(JSON.stringify(activity))
     this.activityDescriptor =
-      activity.activityDescriptor ||
-      state.activityDescriptors.find((x) => {
-        const workflowDefinitionIdProperty = activity.properties.find((p) => p.name === 'WorkflowDefinitionId')
-        if (workflowDefinitionIdProperty) {
-          // 工作流的type会重复, 需要根据WorkflowDefinitionId的值来找到对应的activityDescriptor
-          return (
-            x.inputProperties.find((p) => p.name === 'WorkflowDefinitionId')?.defaultValue ===
-            workflowDefinitionIdProperty.expressions.Literal
-          )
-        }
-        return x.type == activity.type
-      })
+      activity.activityDescriptor || findChildWorkflowActivityDescriptor(state.activityDescriptors, activity)
+    // state.activityDescriptors.find((x) => {
+    //   const workflowDefinitionIdProperty = activity.properties.find((p) => p.name === 'WorkflowDefinitionId')
+    //   if (workflowDefinitionIdProperty) {
+    //     // 工作流的type会重复, 需要根据WorkflowDefinitionId的值来找到对应的activityDescriptor
+    //     return (
+    //       x.inputProperties.find((p) => p.name === 'WorkflowDefinitionId')?.defaultValue ===
+    //       workflowDefinitionIdProperty.expressions.Literal
+    //     )
+    //   }
+    //   return x.type == activity.type
+    // })
     // if (activity.type === 'RunWorkflow') {
     //   // 测试代码, 表单属性和数据都是后端返回的, 后续应该由后端返回
     //   // console.log('old activityDescriptor:', this.activityDescriptor);
