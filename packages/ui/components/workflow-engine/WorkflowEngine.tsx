@@ -1,6 +1,6 @@
 import React, { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { Breadcrumb, Button, Empty, message, Popconfirm } from 'antd'
-import { EditFilled, DeleteFilled, AppstoreAddOutlined } from '@ant-design/icons'
+import { EditFilled, DeleteFilled, AppstoreAddOutlined, SettingFilled } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { MwDialogForm, MwDialogFormField } from 'multiway'
 import { MWAxiosRequestConfig } from '@packages/services'
@@ -15,6 +15,7 @@ import MultiCheckDialog from './components/multi-check-dialog/MultiCheckDialog'
 import useCopyAndPaste from './hooks/useCopyAndPaste'
 import { IDefaultDialogFormProps, WorkflowTypeEnum, defaultDialogProps, showMessage } from './common'
 import { WorkflowConfigContext } from './context'
+import DebugDialog from './components/debug-dialog'
 
 import './style.less'
 
@@ -44,6 +45,7 @@ interface IProps {
   }
   onNotEditWorkflow?: OnNotEditWorkflow // 如果不是编辑工作流, 则由外界进行处理
   beforeDialogOpen?: (formFields: MwDialogFormField[]) => Promise<MwDialogFormField[]> // 新增编辑弹窗打开之前(可用于修改formField配置)
+  debug?: (workflowDefinitionId: string, data: any) => Promise<any>
 }
 
 export interface IWorkflowEngineComponentRef {
@@ -65,7 +67,8 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
       Object.fromEntries(formFields.map((x) => [x.key, menuItem.data?.[x.key as keyof IMenuItem]])),
     workflowApi,
     onNotEditWorkflow,
-    beforeDialogOpen
+    beforeDialogOpen,
+    debug
   } = props
   useImperativeHandle(ref, () => ({
     loadData
@@ -173,6 +176,12 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     mode === 'add' ? showMessage('add_success')() : showMessage('update_success')()
     // success(`${mode === 'add' ? '添message.加' : '编辑'}成功`)
     loadData()
+  }
+
+  /** 调试 */
+  const [debugDialogVisible, setDebugDialogVisible] = useState(false)
+  const handleDebug = () => {
+    setDebugDialogVisible(true)
   }
 
   /** 复制 */
@@ -354,6 +363,16 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
 
           <Button
             shape="round"
+            icon={<SettingFilled className="align-middle" />}
+            type="default"
+            ghost
+            onClick={handleDebug}
+            style={{ color: '#7f8c8d', borderColor: '#7f8c8d' }}
+          >
+            {t('action.debug')}
+          </Button>
+          <Button
+            shape="round"
             icon={<AppstoreAddOutlined className="align-middle" />}
             type="primary"
             ghost
@@ -467,6 +486,17 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
           onUpload={(data) => handleUpload(data)}
           onCancel={() => setImportDialogVisible(false)}
         ></ImportDialog>
+        {debugDialogVisible && (
+          <DebugDialog
+            visible={debugDialogVisible}
+            onCancel={() => setDebugDialogVisible(false)}
+            onConfirm={async (data) => {
+              if (!selectedWorkflowDefinitionId) return
+              await debug?.(selectedWorkflowDefinitionId, data)
+              setDebugDialogVisible(false)
+            }}
+          ></DebugDialog>
+        )}
       </WorkflowConfigContext.Provider>
     </div>
   )

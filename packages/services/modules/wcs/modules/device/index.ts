@@ -1,4 +1,5 @@
 import type MWRequest from '../../../../request'
+import { IDebugWorkflow } from '../../../typings'
 import type { ICreateDeviceFunctionData, IDeviceItem, TDeviceStatus } from './typings'
 
 const useWcsDeviceRequest = (mwRequest: MWRequest) => {
@@ -26,6 +27,9 @@ const useWcsDeviceRequest = (mwRequest: MWRequest) => {
       }
     )
 
+    const debugDeviceFunction = (data: IDebugWorkflow) => post('/function/run', data)
+
+
   return {
     fetchDevice,
     deleteDevice,
@@ -34,7 +38,8 @@ const useWcsDeviceRequest = (mwRequest: MWRequest) => {
     deleteDeviceFunction,
     createDeviceFunction,
     updateDeviceFunction,
-    fetchDeviceStatus
+    fetchDeviceStatus,
+    debugDeviceFunction
   }
 }
 

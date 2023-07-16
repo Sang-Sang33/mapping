@@ -1,9 +1,8 @@
 import React, { memo } from 'react'
 import type { FC } from 'react'
 import { useWcsRequest } from '@packages/services'
-import WorkflowEngine, { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn } from '@/components/workflow-engine'
-import { IMenuItem } from '@/components/workflow-engine/components/aside'
-import { WorkflowTypeEnum } from '@/components/workflow-engine/common'
+import { WorkflowEngine, WorkflowTypeEnum } from '@packages/ui'
+import type { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn, IMenuItem } from '@packages/ui'
 import i18n from '@/i18n'
 import { MwDialogFormField } from 'multiway'
 import { IconFont } from '@/components/Icon'
@@ -21,7 +20,8 @@ const Event: FC = () => {
     createMissionProcess,
     fetchMissionProcessWorkflowDefinition,
     updateMissionProcess,
-    fetchMissionProcessAvailableNames
+    fetchMissionProcessAvailableNames,
+    debugMissionProcess
   } = useWcsRequest()
   // 获取事件工作流数据
   const fetchData: FetchDataFn = () =>
@@ -88,10 +88,19 @@ const Event: FC = () => {
     return [...formFields]
   }
 
+  // 调试
+  const debug = async (id: string, data: any) => {
+    return debugMissionProcess({
+      id,
+      extraProperties: data
+    })
+  }
+
   return (
     <WorkflowEngine
       title={i18n.t(`missionProcess.title`)}
       type={WorkflowTypeEnum.MISSION_PROCESS}
+      workflowEngineUrl={import.meta.env.VITE_WORKFLOW_ENGINE_URL || 'http://120.79.85.168:6034'}
       formFields={fields}
       fetchData={fetchData}
       deleteData={deleteData}
@@ -100,6 +109,7 @@ const Event: FC = () => {
       batchCreateData={batchCreateData}
       workflowApi={workflowApi}
       beforeDialogOpen={handleBeforeDialogOpen}
+      debug={debug}
     ></WorkflowEngine>
   )
 }

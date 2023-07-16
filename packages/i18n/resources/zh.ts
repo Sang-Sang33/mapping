@@ -26,6 +26,7 @@ const zh = {
       paste: '粘贴',
       import: '导入',
       export: '导出',
+      debug: '调试',
       deletePopConfirmTitle: '确认删除',
       copyDialogTitle: '请选择需要复制的数据',
       exportDialogTitle: '请选择需要导出的数据',

@@ -40,7 +40,8 @@ const Feature: FC<IFeatureProps> = (props) => {
     deleteDevice,
     updateDeviceFunction,
     updateDevice,
-    fetchDeviceFunction
+    fetchDeviceFunction,
+    debugDeviceFunction
   } = useWcsRequest(baseUrl)
   // 获取数据
   const fetchData: FetchDataFn = () =>
@@ -236,6 +237,14 @@ const Feature: FC<IFeatureProps> = (props) => {
     workflowEngineRef.current?.loadData()
   }
 
+  // 调试
+  const debug = async (id: string, data: any) => {
+    return debugDeviceFunction({
+      id,
+      extraProperties: data
+    })
+  }
+
   return (
     <>
       <WorkflowEngine
@@ -252,6 +261,7 @@ const Feature: FC<IFeatureProps> = (props) => {
         getFormInitialValue={getFormInitialValue}
         workflowApi={workflowApi}
         onNotEditWorkflow={handleNotEditWorkflow}
+        debug={debug}
       ></WorkflowEngine>
       <MwDialogForm
         {...dialogProps}

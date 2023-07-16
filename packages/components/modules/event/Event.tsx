@@ -18,7 +18,8 @@ interface FormData {
 
 const Event: FC<IEventProps> = (props) => {
   const { workflowEngineUrl, baseUrl } = props
-  const { fetchEvent, deleteEvent, createEvent, fetchEventWorkflowDefinition, updateEvent } = useWcsRequest(baseUrl)
+  const { fetchEvent, deleteEvent, createEvent, fetchEventWorkflowDefinition, updateEvent, debugEvent } =
+    useWcsRequest(baseUrl)
   // 获取事件工作流数据
   const fetchData: FetchDataFn = () =>
     fetchEvent().then((res) =>
@@ -90,6 +91,13 @@ const Event: FC<IEventProps> = (props) => {
       }))
     )
   }
+  // 调试
+  const debug = async (id: string, data: any) => {
+    return debugEvent({
+      id,
+      extraProperties: data
+    })
+  }
 
   return (
     <WorkflowEngine
@@ -102,6 +110,7 @@ const Event: FC<IEventProps> = (props) => {
       createData={createData}
       updateData={updateData}
       batchCreateData={batchCreateData}
+      debug={debug}
       workflowApi={workflowApi}
     ></WorkflowEngine>
   )
