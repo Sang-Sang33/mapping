@@ -25,6 +25,96 @@ const en = {
       },
       logout: 'Logout'
     }
+  },
+  workflowEngine: {
+    empty: {
+      goToCreate: 'Go to Create',
+      chooseWorkflow: 'Choose a Workflow'
+    },
+    action: {
+      title: 'Actions',
+      add: 'Add',
+      edit: 'Edit',
+      delete: 'Delete',
+      copy: 'Copy',
+      paste: 'Paste',
+      import: 'Import',
+      export: 'Export',
+      debug: 'Debug',
+      deletePopConfirmTitle: 'Confirm to delete ',
+      copyDialogTitle: 'Select data to copy',
+      exportDialogTitle: 'Select data to export',
+      deleteSuccess: 'Delete successfully',
+      addSuccess: 'Add successfully',
+      updateSuccess: 'Update successfully',
+      copySuccess: 'Copy successfully',
+      pasteNull: 'Please copy data first',
+      pasteInvalid: 'Cannot paste to',
+      importInvalid: 'Cannot import to',
+      deleteCancel: 'Cancel deletion',
+      fileInvalid: 'Please select a JSON file',
+      pasteSuccess: 'Paste successfully',
+      importSuccess: 'Import successfully',
+      selectNull: 'Please select data first'
+    },
+    debugDialog: {
+      title: 'Debug',
+      keyValuePair: 'Key-Value Pair',
+      key: 'Key',
+      valueType: 'Value Type',
+      value: 'Value',
+      add: 'Add',
+      jsonInvalid: 'Please input valid JSON data',
+      keyNull: 'Key cannot be empty',
+      keyPlaceholder: 'Input key',
+      valueTypeNull: 'Value type cannot be empty',
+      valueTypePlaceholder: 'Select value type',
+      valueTypeString: 'String',
+      valueTypeNumber: 'Number',
+      valueTypeBoolean: 'Boolean',
+      valueNull: 'Value cannot be empty',
+      valuePlaceholder: 'Input value'
+    },
+    importDialog: {
+      title: 'Import a JSON file',
+      importText: 'Click or drag a file to import',
+      importHint: 'Support single file import'
+    },
+    multiCheckDialog: {
+      selectAll: 'Select all',
+      deselectAll: 'Deselect all',
+      cancel: 'Close',
+      confirm: 'Confirm'
+    },
+    menuList: {
+      selectAll: 'Select all'
+    }
+  },
+  device: {
+    title: 'Device',
+    edit: 'Edit Device',
+    addDialog: {
+      deviceName: 'Device Name',
+      functionName: 'Function',
+      behaviour: 'Behavior',
+      cannotContainDecimalPoint: 'Cannot contain a decimal point',
+      behaviourSwitchChecked: 'Active',
+      behaviourSwitchUnChecked: 'Passive'
+    },
+    editDialog: {
+      oldName: 'Old Device Name',
+      newName: 'New Device Name'
+    }
+  },
+  function: {
+    title: 'Function'
+  },
+  event: {
+    title: 'Event',
+    addDialog: {
+      name: 'Event Name',
+      cannotContainDecimalPoint: 'Cannot contain a decimal point'
+    }
   }
 }
 

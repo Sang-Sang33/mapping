@@ -211,7 +211,7 @@ const Feature: FC<IFeatureProps> = (props) => {
       readonly: true
     },
     {
-      title: t('editDialog.oldName'),
+      title: t('editDialog.newName'),
       key: 'newName',
       required: true,
       rules: [

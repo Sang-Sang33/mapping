@@ -2,7 +2,10 @@ import React, { Key, memo, useMemo, useState } from 'react'
 import type { FC } from 'react'
 import { Button, Modal, Tree, TreeProps } from 'antd'
 import type { DataNode } from 'antd/lib/tree'
+import { i18n } from '@packages/i18n'
 import { IMenuItem } from '../aside'
+
+const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
 
 interface IProps {
   open: boolean
@@ -49,13 +52,13 @@ const MultiCheckDialog: FC<IProps> = (props) => {
       onCancel={handleCancel}
       footer={[
         <Button key="select" type="primary" onClick={handleSelect}>
-          {isAllChecked ? '取消全选' : '全选'}
+          {isAllChecked ? t('multiCheckDialog.deselectAll') : t('multiCheckDialog.selectAll')}
         </Button>,
         <Button key="cancel" type="default" onClick={handleCancel}>
-          取消
+          {t('multiCheckDialog.cancel')}
         </Button>,
         <Button key="submit" type="primary" onClick={handleOk}>
-          确认
+          {t('multiCheckDialog.confirm')}
         </Button>
       ]}
     >

@@ -144,7 +144,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     newFormFields = await beforeDialogOpen?.(newFormFields || formFields)
 
     setDialogProps({
-      title: `${t('action.add')}${title}`,
+      title: `${t('action.add')} ${title}`,
       mode: 'add',
       initialValues,
       visible: true,
@@ -163,7 +163,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     const initialValues = await getFormInitialValue(menuItem)
 
     setDialogProps({
-      title: `${t('action.edit')}${title}`,
+      title: `${t('action.edit')} ${title}`,
       mode: 'update',
       initialValues,
       visible: true,

@@ -1,9 +1,10 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { ElementRef, FC } from 'react'
-import { Modal, Steps, Button, Radio, type RadioChangeEvent, message } from 'antd'
+import { Modal, Button, Radio, type RadioChangeEvent, message } from 'antd'
 import Editor, { loader } from '@monaco-editor/react'
 import * as monaco from 'monaco-editor'
 import { MwForm, MwFormField } from 'multiway'
+import { i18n } from '@packages/i18n'
 // import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 // import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 // import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
@@ -30,32 +31,18 @@ import { MwForm, MwFormField } from 'multiway'
 
 // loader.config({ monaco })
 
+const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
+
 interface IProps {
   visible: boolean
   onConfirm?: (data: any) => void
   onCancel?: () => void
 }
 
-enum EStepContent {
-  CONFIGURATION_MODE = 'configurationMode',
-  CONFIGURATION = 'configuration'
-}
-
 enum EConfigurationMode {
   KEY_VAVLUE_TABLE = 'keyValueTable',
   JSON_EDITOR = 'jsonEditor'
 }
-
-const steps = [
-  {
-    title: '选择参数配置方式',
-    content: EStepContent.CONFIGURATION_MODE
-  },
-  {
-    title: '参数配置',
-    content: EStepContent.CONFIGURATION
-  }
-]
 
 const KeyValueForm = ({
   onRender
@@ -69,10 +56,10 @@ const KeyValueForm = ({
       rules: [
         {
           required: true,
-          message: '键不能为空'
+          message: t('debugDialog.keyNull')
         }
       ],
-      placeholder: '请输入键名'
+      placeholder: t('debugDialog.keyPlaceholder')
     },
     {
       key: 'valueType',
@@ -81,24 +68,24 @@ const KeyValueForm = ({
       rules: [
         {
           required: true,
-          message: '值类型不能为空'
+          message: t('debugDialog.valueTypeNull')
         }
       ],
       options: [
         {
-          label: '字符串',
+          label: t('debugDialog.valueTypeString'),
           value: 'input'
         },
         {
-          label: '数值',
+          label: t('debugDialog.valueTypeNumber'),
           value: 'number'
         },
         {
-          label: '布尔值',
+          label: t('debugDialog.valueTypeBoolean'),
           value: 'select'
         }
       ],
-      placeholder: '请选择值类型',
+      placeholder: t('debugDialog.valueTypePlaceholder'),
       onChange: (_, __, setFieldsValue) => {
         setFieldsValue?.({
           value: ''
@@ -111,7 +98,7 @@ const KeyValueForm = ({
       rules: [
         {
           required: true,
-          message: '值不能为空'
+          message: t('debugDialog.valueNull')
         }
       ],
       options: [
@@ -124,7 +111,7 @@ const KeyValueForm = ({
           value: false
         }
       ],
-      placeholder: '请输入值'
+      placeholder: t('debugDialog.valuePlaceholder')
     }
   ]
 
@@ -140,24 +127,17 @@ const KeyValueForm = ({
 const DebugDialog: FC<IProps> = (props) => {
   const { visible, onConfirm, onCancel } = props
   const [configurationMode, setConfigurationMode] = useState<EConfigurationMode>(EConfigurationMode.KEY_VAVLUE_TABLE)
-  const [current, setCurrent] = useState(0)
   const [formCount, setFormCount] = useState(1)
   const [forms, setForms] = useState<ElementRef<typeof MwForm>[]>([])
   let editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
 
-  const next = () => {
-    setCurrent(current + 1)
-  }
-  const prev = () => {
-    setCurrent(current - 1)
-  }
   const onChange = (e: RadioChangeEvent) => {
     setConfigurationMode(e.target.value)
   }
   const renderConfigurationMode = () => (
-    <div className="flex items-center justify-center h-20">
+    <div className="flex items-center justify-end h-20">
       <Radio.Group onChange={onChange} value={configurationMode} buttonStyle="solid">
-        <Radio.Button value={EConfigurationMode.KEY_VAVLUE_TABLE}>键值对</Radio.Button>
+        <Radio.Button value={EConfigurationMode.KEY_VAVLUE_TABLE}>{t('debugDialog.keyValuePair')}</Radio.Button>
         <Radio.Button value={EConfigurationMode.JSON_EDITOR}>JSON</Radio.Button>
       </Radio.Group>
     </div>
@@ -167,15 +147,15 @@ const DebugDialog: FC<IProps> = (props) => {
   const renderKeyValueTable = () => (
     <>
       <div className="flex">
-        <span className="flex-1">键</span>
-        <span className="flex-1">值类型</span>
-        <span className="flex-1">值</span>
+        <span className="flex-1">{t('debugDialog.key')}</span>
+        <span className="flex-1">{t('debugDialog.valueType')}</span>
+        <span className="flex-1">{t('debugDialog.value')}</span>
       </div>
       {new Array(formCount).fill('').map((_, i) => (
         <KeyValueForm key={i} onRender={(formRef) => setForms((forms) => [...forms, formRef.current])}></KeyValueForm>
       ))}
       <Button className="w-full -mt-8" type="dashed" onClick={() => setFormCount((c) => c + 1)}>
-        新增
+        {t('debugDialog.add')}
       </Button>
     </>
   )
@@ -186,11 +166,6 @@ const DebugDialog: FC<IProps> = (props) => {
     [EConfigurationMode.KEY_VAVLUE_TABLE]: renderKeyValueTable,
     [EConfigurationMode.JSON_EDITOR]: renderJsonEditor
   }
-  const StepContentMap = {
-    [EStepContent.CONFIGURATION_MODE]: renderConfigurationMode,
-    [EStepContent.CONFIGURATION]: renderConfiguration
-  }
-  const items = steps.map((item) => ({ key: item.title, title: item.title }))
 
   const handleConfirm = () => {
     if (configurationMode === EConfigurationMode.KEY_VAVLUE_TABLE) {
@@ -215,7 +190,7 @@ const DebugDialog: FC<IProps> = (props) => {
         onConfirm?.(json)
       } catch (err) {
         console.log('err:', err)
-        message.error('请输入合法的JSON数据')
+        message.error(t('debugDialog.jsonInvalid'))
       }
     }
   }
@@ -223,32 +198,15 @@ const DebugDialog: FC<IProps> = (props) => {
   return (
     <Modal
       open={visible}
-      title="调试"
+      title={t('debugDialog.title')}
       width={800}
       onCancel={onCancel}
-      footer={null}
+      onOk={handleConfirm}
       maskClosable={false}
       keyboard={false}
     >
-      <Steps current={current} items={items} />
-      <div className="steps-content my-4">{StepContentMap[steps[current].content]()}</div>
-      <div className="steps-action flex justify-end">
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
-            下一步
-          </Button>
-        )}
-        {current > 0 && (
-          <Button style={{ margin: '0 8px' }} onClick={() => prev()}>
-            上一步
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button type="primary" onClick={handleConfirm}>
-            确认
-          </Button>
-        )}
-      </div>
+      {renderConfigurationMode()}
+      {renderConfiguration()}
     </Modal>
   )
 }

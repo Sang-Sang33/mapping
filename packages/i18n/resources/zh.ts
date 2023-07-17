@@ -56,6 +56,38 @@ const zh = {
       pasteSuccess: '粘贴成功',
       importSuccess: '导入成功',
       selectNull: '请先选择数据'
+    },
+    debugDialog: {
+      title: '调试',
+      keyValuePair: '键值对',
+      key: '键',
+      valueType: '值类型',
+      value: '值',
+      add: '新增',
+      jsonInvalid: '请输入有效的JSON数据',
+      keyNull: '键不能为空',
+      keyPlaceholder: '请输入键名',
+      valueTypeNull: '值类型不能为空',
+      valueTypePlaceholder: '请选择值类型',
+      valueTypeString: '字符串',
+      valueTypeNumber: '数值',
+      valueTypeBoolean: '布尔值',
+      valueNull: '值不能为空',
+      valuePlaceholder: '请输入值'
+    },
+    importDialog: {
+      title: '导入JSON文件',
+      importText: '点击或拖拽文件导入',
+      importHint: '支持JSON文件单个导入'
+    },
+    multiCheckDialog: {
+      selectAll: '全选',
+      deselectAll: '取消全选',
+      cancel: '取消',
+      confirm: '确认'
+    },
+    menuList: {
+      selectAll: '全选'
     }
   },
   device: {

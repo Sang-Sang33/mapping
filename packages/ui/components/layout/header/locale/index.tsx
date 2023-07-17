@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import type { FC } from 'react'
 import { Dropdown, type MenuProps } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
-import { TCulture, getCultureIC, setCultureIc } from '@packages/utils'
+import { TCulture, getCultureIC, getLocalLibLocale, setCultureIc } from '@packages/utils'
 
 // 多语言菜单
 const localeMenuItems = [
@@ -14,6 +14,7 @@ const localeMenuItems = [
 // 语言切换
 const handleLocaleSelect: MenuProps['onClick'] = (item) => {
   setCultureIc(item.key as TCulture)
+  localStorage.setItem('MULTIWAY_LOCALE', getLocalLibLocale('multiway'))
   window.location.reload()
 }
 

@@ -1,8 +1,12 @@
 import React, { memo, useState } from 'react'
 import type { FC } from 'react'
-import { Modal, message, Upload } from 'antd'
+import { Modal, Upload } from 'antd'
 import { InboxOutlined } from '@ant-design/icons'
 import type { RcFile } from 'antd/lib/upload'
+import { i18n } from '@packages/i18n'
+import { showMessage } from '../../common'
+
+const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
 
 interface IProps {
   visible: boolean
@@ -17,7 +21,7 @@ const ImportDialog: FC<IProps> = (props) => {
   // 导入前的文件类型检查
   const beforeUpload = (file: RcFile) => {
     if (file.type !== 'application/json') {
-      message.error('请选择JSON格式的文件')
+      showMessage('file_invalid')()
       return false
     }
     setFile(file)
@@ -27,7 +31,7 @@ const ImportDialog: FC<IProps> = (props) => {
   // 对话框的确认按钮点击事件处理函数
   const handleOk = () => {
     if (!file) {
-      message.error('请选择JSON格式的文件')
+      showMessage('file_invalid')()
       return
     }
     const reader = new FileReader()
@@ -43,13 +47,13 @@ const ImportDialog: FC<IProps> = (props) => {
 
   return (
     <div>
-      <Modal open={visible} title="导入JSON文件" onOk={handleOk} onCancel={onCancel} okText="导入" cancelText="取消">
+      <Modal open={visible} title={t('importDialog.title')} onOk={handleOk} onCancel={onCancel}>
         <Upload.Dragger beforeUpload={beforeUpload} fileList={file ? [file] : []} accept=".json" maxCount={1}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
-          <p className="ant-upload-text">点击或拖拽文件导入</p>
-          <p className="ant-upload-hint">支持JSON文件单个导入</p>
+          <p className="ant-upload-text">{t('importDialog.importText')}</p>
+          <p className="ant-upload-hint">{t('importDialog.importHint')}</p>
         </Upload.Dragger>
       </Modal>
     </div>

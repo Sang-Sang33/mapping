@@ -6,13 +6,15 @@ import VirtualList from 'rc-virtual-list'
 import type { CheckboxValueType } from 'antd/lib/checkbox/Group'
 import type { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import { useDrop } from 'ahooks'
-
+import { i18n } from '@packages/i18n'
 import type { IMenuItem } from '.'
 import MenuItem from './MenuItem'
 import ActionArea from './ActionArea'
 import { showMessage } from '../../common'
 import './animate.less'
 import './menu-list.less'
+
+const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
 
 interface IMenuListProps {
   renderData: IMenuItem[]
@@ -76,7 +78,7 @@ const MenuList = forwardRef<IMenuListRef, IMenuListProps>((props, ref) => {
   useDrop(dropRef, {
     onDom: (content, e) => {
       setMenuItemWillDelete(content)
-      setPopConfirmTitle(`确认删除"${content.label}"吗`)
+      setPopConfirmTitle(`${t('action.deletePopConfirmTitle')} "${content.label}"`)
       setIsOpenPopConfirm(true)
     },
     onDragEnter: () => dropRef.current?.classList.add('bg-red-500', 'text-white'),
@@ -213,7 +215,7 @@ const MenuList = forwardRef<IMenuListRef, IMenuListProps>((props, ref) => {
     return (
       <div className="flex-1 flex items-center p-2 justify-start gap-1">
         <Checkbox onChange={handleCheckAllChange} indeterminate={indeterminate} checked={checkAll}>
-          <span className="text-[12px] whitespace-nowrap">全选</span>
+          <span className="text-[12px] whitespace-nowrap">{t('menuList.selectAll')}</span>
         </Checkbox>
         <Tooltip title="确认">
           <CheckOutlined
