@@ -53,8 +53,10 @@ const navigatorLanguageToLocaleMap: Record<string, TCulture> = {
  * @param {string} lib 第三方库的名称
  * @return {string} locale
  */
-export const getLibLocale = (culture: TCulture) => (lib: TLib) => cultureToLibLocaleMap[lib][culture]
-
+export const getLibLocale =
+  <C extends TCulture>(culture: C) =>
+  <L extends TLib>(lib: L) =>
+    cultureToLibLocaleMap[lib][culture] as TCultureToLibLocaleMap[L][C]
 /**
  * @description: 获取浏览器对应的文化
  * @return {*}
@@ -66,8 +68,8 @@ export const getBrowserCulture = () => navigatorLanguageToLocaleMap[navigator.la
  * @param {string} lib 第三方库的名称
  * @return {string} locale
  */
-export const getLocalLibLocale = (lib: TLib) => {
+export const getLocalLibLocale = <L extends TLib>(lib: L) => {
   const cultureIC = getCultureIC()
   const culture = cultureIC ?? getBrowserCulture()
-  return getLibLocale(culture)(lib)
+  return getLibLocale(culture)<L>(lib)
 }
