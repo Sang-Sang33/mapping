@@ -104,10 +104,14 @@ const ko = {
     editDialog: {
       oldName: '이전 장치명',
       newName: '새로운 장치명'
+    },
+    status: {
+      name: '장치',
+      connection: '연결',
+      updateTime: '업데이트 시간',
+      key: '키',
+      value: '값'
     }
-  },
-  function: {
-    title: '기능'
   },
   event: {
     title: '이벤트',

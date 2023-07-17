@@ -104,10 +104,14 @@ const ja = {
     editDialog: {
       oldName: '旧デバイス名',
       newName: '新しいデバイス名'
+    },
+    status: {
+      name: 'デバイス',
+      connection: '接続',
+      updateTime: '更新時間',
+      key: 'キー',
+      value: '値'
     }
-  },
-  function: {
-    title: '機能'
   },
   event: {
     title: 'イベント',

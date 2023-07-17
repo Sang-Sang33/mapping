@@ -104,10 +104,14 @@ const en = {
     editDialog: {
       oldName: 'Old Device Name',
       newName: 'New Device Name'
+    },
+    status: {
+      name: 'Device',
+      connection: 'Connection',
+      updateTime: 'Update Time',
+      key: 'Key',
+      value: 'Value'
     }
-  },
-  function: {
-    title: 'Function'
   },
   event: {
     title: 'Event',

@@ -104,10 +104,14 @@ const zh = {
     editDialog: {
       oldName: '旧设备名',
       newName: '新设备名'
+    },
+    status: {
+      name: '设备',
+      connection: '连接状态',
+      updateTime: '更新时间',
+      key: '名称',
+      value: '值'
     }
-  },
-  function: {
-    title: '功能'
   },
   event: {
     title: '事件',

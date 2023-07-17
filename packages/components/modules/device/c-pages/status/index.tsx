@@ -5,7 +5,10 @@ import { Badge } from 'antd'
 import { useTableAutoRefresh } from '@packages/hooks'
 import { type TDeviceStatusLevel, useWcsRequest } from '@packages/services'
 import { formatDate } from '@packages/utils'
+import { i18n } from '@packages/i18n'
 import './index.less'
+
+const t = (key: string) => i18n.t(key, { ns: 'device' })
 
 interface IStatusProps {
   baseUrl?: string
@@ -14,12 +17,12 @@ interface IStatusProps {
 
 const fields: Array<MwSearchTableField> = [
   {
-    title: '设备',
+    title: t('status.name'),
     key: 'name',
     width: 120
   },
   {
-    title: '连接状态',
+    title: t('status.connection'),
     key: 'connection',
     align: 'center',
     render: (_, record) => (
@@ -32,7 +35,7 @@ const fields: Array<MwSearchTableField> = [
     )
   },
   {
-    title: '更新时间',
+    title: t('status.updateTime'),
     key: 'update_time',
     align: 'center',
     render: (_, record) => <span>{formatDate(record.update_time.value)}</span>
@@ -72,12 +75,12 @@ const Status: FC<IStatusProps> = (props) => {
   const expandedRowRender = () => {
     const expandedTableFields: Array<MwSearchTableField> = [
       {
-        title: '名称',
+        title: t('status.key'),
         key: 'key',
         align: 'center'
       },
       {
-        title: '值',
+        title: t('status.value'),
         key: 'value',
         align: 'center',
         render: (_, record) => (
