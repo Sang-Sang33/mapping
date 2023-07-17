@@ -30,24 +30,24 @@ export enum WorkflowTypeEnum {
 }
 
 const { error, success, warn } = message
-const { t } = i18n
+const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
 
 class MessageManager {
   messageMap = {
-    delete_success: () => success(t('workflowEngine.action.deleteSuccess')),
-    add_success: () => success(t('workflowEngine.action.addSuccess')),
-    update_success: () => success(t('workflowEngine.action.updateSuccess')),
-    copy_success: (message: string) => success(t('workflowEngine.action.copySuccess') + message),
-    paste_null: () => warn(t('workflowEngine.action.pasteNull')),
+    delete_success: () => success(t('action.deleteSuccess')),
+    add_success: () => success(t('action.addSuccess')),
+    update_success: () => success(t('action.updateSuccess')),
+    copy_success: (message: string) => success(t('action.copySuccess') + message),
+    paste_null: () => warn(t('action.pasteNull')),
     paste_invalid: (from: string, to: string) =>
-      warn(`"${t(from + '.title')}"${t('workflowEngine.action.pasteInvalid')}"${t(to + '.title')}"`),
+      warn(`"${t(from + '.title')}"${t('action.pasteInvalid')}"${t(to + '.title')}"`),
     import_invalid: (from: string, to: string) =>
-      warn(`"${t(from + '.title')}"${t('workflowEngine.action.importInvalid')}"${t(to + '.title')}"`),
-    delete_cancel: () => warn(t('workflowEngine.action.deleteCancel')),
-    file_invalid: () => error(t('workflowEngine.action.fileInvalid')),
-    paste_success: () => success(t('workflowEngine.action.pasteSuccess')),
-    import_success: () => success(t('workflowEngine.action.importSuccess')),
-    select_null: () => warn(t('workflowEngine.action.selectNull'))
+      warn(`"${t(from + '.title')}"${t('action.importInvalid')}"${t(to + '.title')}"`),
+    delete_cancel: () => warn(t('action.deleteCancel')),
+    file_invalid: () => error(t('action.fileInvalid')),
+    paste_success: () => success(t('action.pasteSuccess')),
+    import_success: () => success(t('action.importSuccess')),
+    select_null: () => warn(t('action.selectNull'))
   }
 
   showMessage: <T extends keyof MessageManager['messageMap']>(key: T) => MessageManager['messageMap'][T] = (key) =>
