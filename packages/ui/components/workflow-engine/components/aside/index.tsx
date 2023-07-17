@@ -77,7 +77,7 @@ const Aside = forwardRef<IAsideComponentRef, IAsideProps>((props, ref) => {
       {menu?.length ? (
         <>
           <div
-            className="flex flex-col z-10 py-2 px-1 h-full border-r-2 border-gray-200 border-solid bg-[#fbfbfb] slide-in-left w-[150px] min-w-[115px]"
+            className="flex flex-col z-10 py-2 px-1 h-full border-r-2 border-gray-200 border-solid bg-[#fbfbfb] slide-in-left w-[150px] min-w-[150px]"
             ref={listResizeWrapperRef}
           >
             <div className="flex justify-between items-center pt-1 px-2 text-gray-500">

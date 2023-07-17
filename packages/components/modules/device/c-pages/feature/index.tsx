@@ -264,6 +264,11 @@ const Feature: FC<IFeatureProps> = (props) => {
         debug={debug}
       ></WorkflowEngine>
       <MwDialogForm
+        formExtend={{
+          layout: {
+            labelCol: { flex: '160px' }
+          }
+        }}
         {...dialogProps}
         fields={deviceFields}
         updateApi={updateDevice}
