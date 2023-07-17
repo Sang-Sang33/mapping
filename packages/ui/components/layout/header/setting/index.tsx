@@ -8,6 +8,8 @@ import dark from '../../assets/icons/dark.svg'
 import light from '../../assets/icons/light.svg'
 import useLayoutStore from '../../store'
 
+const t = (key: string) => i18n.t(key, { ns: 'layout' })
+
 const Setting: FC = () => {
   const { theme, primaryColor, updateTheme, updatePrimaryColor } = useLayoutStore((state) => ({
     theme: state.theme,
@@ -20,15 +22,11 @@ const Setting: FC = () => {
   // 主题风格
   const themeList = [
     {
-      zh_CN_name: '暗色菜单风格',
-      en_US_name: 'Dark style',
-      style: 'dark',
+      themeKey: 'dark',
       icon: dark
     },
     {
-      zh_CN_name: '亮色菜单风格',
-      en_US_name: 'Light style',
-      style: 'light',
+      themeKey: 'light',
       icon: light
     }
   ]
@@ -36,43 +34,35 @@ const Setting: FC = () => {
   // 主题色
   const colorList = [
     {
-      zh_CN_name: '薄暮',
-      en_US_name: 'Dust Red',
+      colorKey: 'dustRed',
       color: '#F5222D'
     },
     {
-      zh_CN_name: '火山',
-      en_US_name: 'Volcano',
+      colorKey: 'volcano',
       color: '#FA541C'
     },
     {
-      zh_CN_name: '日暮',
-      en_US_name: 'Sunset Orange',
+      colorKey: 'sunsetOrange',
       color: '#FAAD14'
     },
     {
-      zh_CN_name: '明青',
-      en_US_name: 'Cyan',
+      colorKey: 'cyan',
       color: '#13C2C2'
     },
     {
-      zh_CN_name: '极光绿',
-      en_US_name: 'Polar Green',
+      colorKey: 'polarGreen',
       color: '#52C41A'
     },
     {
-      zh_CN_name: '拂晓蓝（默认）',
-      en_US_name: 'Daybreak Blue (default)',
+      colorKey: 'daybreakBlue',
       color: '#1890FF'
     },
     {
-      zh_CN_name: '极客蓝',
-      en_US_name: 'Geek Glue',
+      colorKey: 'geekBlue',
       color: '#2F54EB'
     },
     {
-      zh_CN_name: '酱紫',
-      en_US_name: 'Golden Purple',
+      colorKey: 'goldenPurple',
       color: '#722ED1'
     }
   ]
@@ -92,18 +82,18 @@ const Setting: FC = () => {
       >
         {/* 主题style */}
         <div>
-          <h3 className="text-gray-700 mb-2.5 font-semibold">{i18n.t('header.setting.pageStyle', { ns: 'layout' })}</h3>
+          <h3 className="text-gray-700 mb-2.5 font-semibold">{t('header.setting.pageStyle')}</h3>
           <div className="flex">
-            {themeList.map(({ zh_CN_name, style, icon }) => (
+            {themeList.map(({ themeKey, icon }) => (
               <span
                 className="relative w-12 h-10 mr-4 rounded cursor-pointer"
-                key={style}
-                onClick={() => updateTheme(style as TTheme)}
+                key={themeKey}
+                onClick={() => updateTheme(themeKey as TTheme)}
               >
-                <Tooltip title={zh_CN_name} color={primaryColor} key={style}>
+                <Tooltip title={t('header.setting.themes.' + themeKey)} color={primaryColor} key={themeKey}>
                   <img className="w-full h-full" src={icon} alt="" />
                 </Tooltip>
-                {theme === style && (
+                {theme === themeKey && (
                   <CheckOutlined className="absolute right-2.5 bottom-2.5" style={{ color: primaryColor }} />
                 )}
               </span>
@@ -113,12 +103,10 @@ const Setting: FC = () => {
 
         {/* 主题色 */}
         <div>
-          <h3 className="font-semibold text-gray-700 mx-0 mt-4 mb-2.5">
-            {i18n.t('header.setting.themeColor', { ns: 'layout' })}
-          </h3>
+          <h3 className="font-semibold text-gray-700 mx-0 mt-4 mb-2.5">{t('header.setting.themeColor')}</h3>
           <div className="flex">
-            {colorList.map(({ zh_CN_name, color }) => (
-              <Tooltip title={zh_CN_name} color={color} key={color}>
+            {colorList.map(({ colorKey, color }) => (
+              <Tooltip title={t('header.setting.colors.' + colorKey)} color={color} key={color}>
                 <span
                   className="w-5 h-5 leading-5 text-center rounded-sm text-white mr-2 cursor-pointer flex items-center justify-center"
                   style={{ background: color }}

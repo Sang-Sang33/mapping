@@ -7,7 +7,21 @@ const zh = {
     header: {
       setting: {
         pageStyle: '整体风格设置',
-        themeColor: '主题色'
+        themeColor: '主题色',
+        themes: {
+          dark: '暗色菜单风格',
+          light: '亮色菜单风格'
+        },
+        colors: {
+          dustRed: '薄暮',
+          volcano: '火山',
+          sunsetOrange: '日暮',
+          cyan: '明青',
+          polarGreen: '极光绿',
+          daybreakBlue: '拂晓蓝',
+          geekBlue: '极客蓝',
+          goldenPurple: '酱紫'
+        }
       },
       logout: '退出'
     }

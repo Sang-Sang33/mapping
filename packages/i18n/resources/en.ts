@@ -7,7 +7,21 @@ const en = {
     header: {
       setting: {
         pageStyle: 'Page Style Setting',
-        themeColor: 'Theme Color'
+        themeColor: 'Theme Color',
+        themes: {
+          dark: 'Dark style',
+          light: 'Light style'
+        },
+        colors: {
+          dustRed: 'Dust Red',
+          volcano: 'Volcano',
+          sunsetOrange: 'Sunset Orange',
+          cyan: 'Cyan',
+          polarGreen: 'Polar Green',
+          daybreakBlue: 'Daybreak Blue',
+          geekBlue: 'Geek Glue',
+          goldenPurple: 'Golden Purple'
+        }
       },
       logout: 'Logout'
     }

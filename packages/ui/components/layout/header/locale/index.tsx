@@ -8,8 +8,8 @@ import { TCulture, getCultureIC, setCultureIc } from '@packages/utils'
 const localeMenuItems = [
   { label: '🇨🇳 简体中文', key: 'zh' },
   { label: '🇬🇧 English', key: 'en' },
-  { label: '🇯🇵 日本', key: 'ja' },
-  { label: '🇰🇷 韩国', key: 'ko' }
+  { label: '🇯🇵 日本語', key: 'ja' },
+  { label: '🇰🇷 한국인', key: 'ko' }
 ]
 // 语言切换
 const handleLocaleSelect: MenuProps['onClick'] = (item) => {
