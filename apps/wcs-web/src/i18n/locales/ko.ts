@@ -1,44 +1,60 @@
 const ko = {
-  notfound: "访问的页面不存在",
-  back_home: "返回首页",
-  home: "首页",
-  system: "WCS仓库控制系统",
-  header: {
-    page_style: "整体风格设置",
-    theme_color: "主题色",
-  },
+  system: 'WCS 지능형 창고 제어 시스템',
   aside: {
     wmsMission: {
-      nav: "WMS任务-ko",
+      nav: 'WMS 미션'
     },
     rcsMission: {
-      nav: "RCS任务",
+      nav: 'RCS 미션'
+    },
+    missionProcess: {
+      nav: '미션 처리'
+    },
+    device: {
+      nav: '장치',
+      feature: {
+        nav: '기능'
+      },
+      status: {
+        nav: '상태'
+      }
+    },
+    event: {
+      nav: '이벤트'
     },
     logs: {
-      nav: "日志",
-    },
-
-    basic: {},
-    signal: {
-      nav: "信号配置",
-    },
-    system: {
-      nav: "系统日志",
-      err_log: "设备错误信号日志",
-      task_log: "任务执行日志",
-    },
-    warehouseMap: "仓库地图",
+      nav: '로그'
+    }
   },
-  login: {
-    remember: "记住密码",
-    login: "登录",
-    username: "用户名：admin",
-    password: "密码：123456",
-    username_check: "请输入用户名",
-    password_check: "请输入密码",
-    success: "登录成功！",
-    error: "用户名或密码错误！",
+  wmsMission: {
+    status: '상태',
+    id: '미션 ID',
+    predecessorIds: '선행 미션',
+    priority: '우선순위',
+    from: '출발지',
+    to: '도착지',
+    autoRun: '자동 실행',
+    autoAbort: '자동 중지',
+    creationTime: '생성 시간',
+    lastModificationTime: '최종 수정 시간',
+    extraProperties: '추가 속성'
   },
-};
+  rcsMission: {
+    status: '상태',
+    id: '미션 ID',
+    predecessorIds: '선행 미션',
+    priority: '우선순위',
+    vehicles: '호출 차량',
+    creationTime: '생성 시간',
+    lastModificationTime: '최종 수정 시간',
+    extraProperties: '추가 속성'
+  },
+  missionProcess: {
+    title: '미션 처리',
+    addDialog: {
+      name: '미션 이름'
+    }
+  }
+}
 
-export default ko;
+export default ko
