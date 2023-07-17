@@ -71,9 +71,7 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
           updateWarehouseId(warehouseId)
         }
         isInitial = false
-        console.log('🚀 ~ file: index.tsx ~ line 70 ~ updateWarehouseOptions ~ isInitial', isInitial)
       } else {
-        console.log('🚀 ~ file: index.tsx ~ line 68 ~ updateWarehouseOptions ~ warehouseOptions', warehouseOptions)
         const warehouseId = warehouseOptions[0].value as string
         updateWarehouseId(warehouseId)
       }
