@@ -158,7 +158,7 @@ const WmsSubMission: FC<{ wmsMissionId: string }> = (props) => {
       align: 'center',
       render: (extraProperties: any) => {
         const keys = Object.keys(extraProperties)
-        return keys.length > 0 ? keys.concat(keys).map((label) => <p key={label}>{label}</p>) : '无'
+        return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
       }
     }
   ]
