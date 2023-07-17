@@ -46,7 +46,8 @@ const KeyValueForm = ({
           required: true,
           message: '键不能为空'
         }
-      ]
+      ],
+      placeholder: '请输入键名'
     },
     {
       key: 'valueType',
@@ -71,7 +72,13 @@ const KeyValueForm = ({
           label: '布尔值',
           value: 'select'
         }
-      ]
+      ],
+      placeholder: '请选择值类型',
+      onChange: (_, __, setFieldsValue) => {
+        setFieldsValue?.({
+          value: ''
+        })
+      }
     },
     {
       key: 'value',
@@ -91,7 +98,8 @@ const KeyValueForm = ({
           label: 'false',
           value: false
         }
-      ]
+      ],
+      placeholder: '请输入值'
     }
   ]
 
@@ -188,7 +196,15 @@ const DebugDialog: FC<IProps> = (props) => {
   }
 
   return (
-    <Modal open={visible} title="调试" width={800} onCancel={onCancel} footer={null}>
+    <Modal
+      open={visible}
+      title="调试"
+      width={800}
+      onCancel={onCancel}
+      footer={null}
+      maskClosable={false}
+      keyboard={false}
+    >
       <Steps current={current} items={items} />
       <div className="steps-content my-4">{StepContentMap[steps[current].content]()}</div>
       <div className="steps-action flex justify-end">
