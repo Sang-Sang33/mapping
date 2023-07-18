@@ -486,7 +486,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
           onUpload={(data) => handleUpload(data)}
           onCancel={() => setImportDialogVisible(false)}
         ></ImportDialog>
-        {debugDialogVisible && (
+        {
           <DebugDialog
             visible={debugDialogVisible}
             onCancel={() => setDebugDialogVisible(false)}
@@ -496,7 +496,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
               setDebugDialogVisible(false)
             }}
           ></DebugDialog>
-        )}
+        }
       </WorkflowConfigContext.Provider>
     </div>
   )

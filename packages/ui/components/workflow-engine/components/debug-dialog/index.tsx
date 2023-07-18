@@ -142,34 +142,62 @@ const DebugDialog: FC<IProps> = (props) => {
       </Radio.Group>
     </div>
   )
-  const renderConfiguration = () => ConfigurationMap[configurationMode]()
+  const renderConfiguration = () => [renderKeyValueTable(), renderJsonEditor()]
 
   const renderKeyValueTable = () => (
-    <>
-      <div className="flex">
-        <span className="flex-1">{t('debugDialog.key')}</span>
-        <span className="flex-1">{t('debugDialog.valueType')}</span>
-        <span className="flex-1">{t('debugDialog.value')}</span>
+    <div className={configurationMode === EConfigurationMode.KEY_VAVLUE_TABLE ? '' : 'hidden'}>
+      <div className={`flex ${formCount === 0 ? 'hidden' : ''}`}>
+        <div className="flex-[3] flex">
+          <span className="flex-1">{t('debugDialog.key')}</span>
+          <span className="flex-1">{t('debugDialog.valueType')}</span>
+          <span className="flex-1">{t('debugDialog.value')}</span>
+        </div>
+        <span className="flex-[0.5]">操作</span>
       </div>
       {new Array(formCount).fill('').map((_, i) => (
-        <KeyValueForm key={i} onRender={(formRef) => setForms((forms) => [...forms, formRef.current])}></KeyValueForm>
+        <div className="flex">
+          <div className="flex-[3]">
+            <KeyValueForm
+              key={i}
+              onRender={(formRef) => setForms((forms) => [...forms, formRef.current])}
+            ></KeyValueForm>
+          </div>
+          <div className="flex-[0.5]">
+            <Button
+              type="link"
+              danger
+              onClick={() => {
+                const newForms = [...forms]
+                newForms.splice(i, 1)
+                console.log('🚀 ~ file: index.tsx ~ line 171 ~ newForms', newForms)
+                setForms(newForms)
+                setFormCount((c) => c - 1)
+              }}
+            >
+              删除
+            </Button>
+          </div>
+        </div>
       ))}
-      <Button className="w-full -mt-8" type="dashed" onClick={() => setFormCount((c) => c + 1)}>
+      <Button className="w-full" type="dashed" onClick={() => setFormCount((c) => c + 1)}>
         {t('debugDialog.add')}
       </Button>
-    </>
+    </div>
   )
   const renderJsonEditor = () => (
-    <Editor onMount={(editor) => (editorRef.current = editor)} height="50vh" defaultLanguage="json" defaultValue="{}" />
+    <div className={configurationMode === EConfigurationMode.JSON_EDITOR ? '' : 'hidden'}>
+      <Editor
+        onMount={(editor) => (editorRef.current = editor)}
+        height="50vh"
+        defaultLanguage="json"
+        defaultValue="{}"
+      />
+    </div>
   )
-  const ConfigurationMap = {
-    [EConfigurationMode.KEY_VAVLUE_TABLE]: renderKeyValueTable,
-    [EConfigurationMode.JSON_EDITOR]: renderJsonEditor
-  }
 
   const handleConfirm = () => {
     if (configurationMode === EConfigurationMode.KEY_VAVLUE_TABLE) {
-      Promise.all(forms.map((form: any) => form.validateFields()))
+      Promise.all(forms.map((form: any) => form?.validateFields()))
         .then(() => {
           console.log('all validate success')
           const entries = forms.map((f: any) => {
