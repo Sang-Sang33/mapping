@@ -293,6 +293,9 @@ export namespace Components {
         "basePath": string;
         "culture": string;
     }
+    interface ElsaStudioWorkflowScreen {
+        "mode": 'edit' | 'view';
+    }
     interface ElsaSwitchCasesProperty {
         "activityModel": ActivityModel;
         "propertyDescriptor": ActivityPropertyDescriptor;
@@ -398,6 +401,7 @@ export namespace Components {
         "workflowStatus"?: WorkflowStatus;
     }
     interface ElsaWorkflowInstanceViewerScreen {
+        "canvasHeight"?: string;
         "culture": string;
         "getServerUrl": () => Promise<string>;
         "serverUrl": string;
@@ -741,6 +745,12 @@ declare global {
         prototype: HTMLElsaStudioWorkflowRegistryElement;
         new (): HTMLElsaStudioWorkflowRegistryElement;
     };
+    interface HTMLElsaStudioWorkflowScreenElement extends Components.ElsaStudioWorkflowScreen, HTMLStencilElement {
+    }
+    var HTMLElsaStudioWorkflowScreenElement: {
+        prototype: HTMLElsaStudioWorkflowScreenElement;
+        new (): HTMLElsaStudioWorkflowScreenElement;
+    };
     interface HTMLElsaSwitchCasesPropertyElement extends Components.ElsaSwitchCasesProperty, HTMLStencilElement {
     }
     var HTMLElsaSwitchCasesPropertyElement: {
@@ -940,6 +950,7 @@ declare global {
         "elsa-studio-workflow-instances-list": HTMLElsaStudioWorkflowInstancesListElement;
         "elsa-studio-workflow-instances-view": HTMLElsaStudioWorkflowInstancesViewElement;
         "elsa-studio-workflow-registry": HTMLElsaStudioWorkflowRegistryElement;
+        "elsa-studio-workflow-screen": HTMLElsaStudioWorkflowScreenElement;
         "elsa-switch-cases-property": HTMLElsaSwitchCasesPropertyElement;
         "elsa-tab-content": HTMLElsaTabContentElement;
         "elsa-tab-header": HTMLElsaTabHeaderElement;
@@ -1251,6 +1262,9 @@ declare namespace LocalJSX {
         "basePath"?: string;
         "culture"?: string;
     }
+    interface ElsaStudioWorkflowScreen {
+        "mode"?: 'edit' | 'view';
+    }
     interface ElsaSwitchCasesProperty {
         "activityModel"?: ActivityModel;
         "onValueChange"?: (event: CustomEvent<Array<any>>) => void;
@@ -1350,6 +1364,7 @@ declare namespace LocalJSX {
         "workflowStatus"?: WorkflowStatus;
     }
     interface ElsaWorkflowInstanceViewerScreen {
+        "canvasHeight"?: string;
         "culture"?: string;
         "serverUrl"?: string;
         "workflowInstanceId"?: string;
@@ -1460,6 +1475,7 @@ declare namespace LocalJSX {
         "elsa-studio-workflow-instances-list": ElsaStudioWorkflowInstancesList;
         "elsa-studio-workflow-instances-view": ElsaStudioWorkflowInstancesView;
         "elsa-studio-workflow-registry": ElsaStudioWorkflowRegistry;
+        "elsa-studio-workflow-screen": ElsaStudioWorkflowScreen;
         "elsa-switch-cases-property": ElsaSwitchCasesProperty;
         "elsa-tab-content": ElsaTabContent;
         "elsa-tab-header": ElsaTabHeader;
@@ -1539,6 +1555,7 @@ declare module "@stencil/core" {
             "elsa-studio-workflow-instances-list": LocalJSX.ElsaStudioWorkflowInstancesList & JSXBase.HTMLAttributes<HTMLElsaStudioWorkflowInstancesListElement>;
             "elsa-studio-workflow-instances-view": LocalJSX.ElsaStudioWorkflowInstancesView & JSXBase.HTMLAttributes<HTMLElsaStudioWorkflowInstancesViewElement>;
             "elsa-studio-workflow-registry": LocalJSX.ElsaStudioWorkflowRegistry & JSXBase.HTMLAttributes<HTMLElsaStudioWorkflowRegistryElement>;
+            "elsa-studio-workflow-screen": LocalJSX.ElsaStudioWorkflowScreen & JSXBase.HTMLAttributes<HTMLElsaStudioWorkflowScreenElement>;
             "elsa-switch-cases-property": LocalJSX.ElsaSwitchCasesProperty & JSXBase.HTMLAttributes<HTMLElsaSwitchCasesPropertyElement>;
             "elsa-tab-content": LocalJSX.ElsaTabContent & JSXBase.HTMLAttributes<HTMLElsaTabContentElement>;
             "elsa-tab-header": LocalJSX.ElsaTabHeader & JSXBase.HTMLAttributes<HTMLElsaTabHeaderElement>;

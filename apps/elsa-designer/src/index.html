@@ -27,8 +27,13 @@
       <!-- <elsa-workflow-instance-list-screen
         workflow-id="7448d8d2ded64c868b474b8afce9e852"
       ></elsa-workflow-instance-list-screen> -->
-      <elsa-workflow-definition-editor-screen canvas-height="100vh"></elsa-workflow-definition-editor-screen>
-      <!--<elsa-workflow-instance-viewer-screen id="workflowInstanceViewer" workflow-instance-id="8014e2358d8b4907946eb5f0e075c63c"></elsa-workflow-instance-viewer-screen>-->
+      <!-- <elsa-workflow-definition-editor-screen canvas-height="100vh"></elsa-workflow-definition-editor-screen>
+      <elsa-workflow-instance-viewer-screen
+        id="workflowInstanceViewer"
+        workflow-instance-id="3756e4e5075643e4ad10ed9a52f5d283"
+        canvas-height="100vh"
+      ></elsa-workflow-instance-viewer-screen> -->
+      <elsa-studio-workflow-screen></elsa-studio-workflow-screen>
     </elsa-studio-root>
 
     <!-- Keep this to avoid Stencil from stripping classes added by dagre-d3 and dynamically computed classes <!-->
@@ -330,9 +335,18 @@
       // Get a handle to the elsa-studio-root element.
       const elsaStudioRoot = document.querySelector('elsa-studio-root')
 
+      const elsaStudioWorkflowScreen = document.querySelector('elsa-studio-workflow-screen')
+      const elsaStudioWorkflowScreenParams = ['mode', 'workflow-definition-id', 'workflow-instance-id']
+
       // 设置server和culture
       const entries = new URLSearchParams(location.search)
-      entries.forEach((value, key) => elsaStudioRoot.setAttribute(key, value))
+      entries.forEach((value, key) => {
+        if (elsaStudioWorkflowScreenParams.includes(key)) {
+          elsaStudioWorkflowScreen.setAttribute(key, value)
+        } else {
+          elsaStudioRoot.setAttribute(key, value)
+        }
+      })
 
       // Configure Elsa during the 'initializing' event.
       elsaStudioRoot.addEventListener('initializing', (e) => {
