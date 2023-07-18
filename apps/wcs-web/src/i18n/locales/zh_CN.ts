@@ -48,6 +48,12 @@ const zh_CN = {
     creationTime: '创建时间',
     lastModificationTime: '更新时间',
     extraProperties: '额外信息'
+  },
+  missionProcess: {
+    title: '任务处理',
+    addDialog: {
+      name: '任务名'
+    }
   }
 }
 
