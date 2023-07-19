@@ -2,6 +2,7 @@
   "extends": "@packages/tsconfig/base.json",
   "include": ["."],
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext", "DOM"],
+    "jsx": "react-jsx"
   }
 }
