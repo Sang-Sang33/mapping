@@ -32,13 +32,15 @@ export const mapPermissionToRoutes = (permission: TLayoutPermission, defineRoute
  */
 export const mapRoutesToMenu = (routes: TLayoutRoutes) => {
   const getMenus: (routes: TLayoutRoutes) => MenuProps['items'] = (routes) =>
-    routes.map((route) => ({
-      key: route.id,
-      icon: route.icon,
-      label: route.name,
-      path: route.path,
-      children: route.children?.length ? getMenus(route.children) : null
-    }))
+    routes
+      .filter((route) => !route.path?.includes(':'))
+      .map((route) => ({
+        key: route.id,
+        icon: route.icon,
+        label: route.name,
+        path: route.path,
+        children: route.children?.length ? getMenus(route.children) : null
+      }))
 
   return getMenus(routes)
 }
