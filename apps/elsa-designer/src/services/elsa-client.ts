@@ -470,6 +470,9 @@ export interface CustomApi {
   activitiesApi: {
     list: AxiosRequestConfig
   }
+  workflowInstanceApi: {
+    getWorkflowInstanceById: AxiosRequestConfig
+  }
 }
 
 export interface WorkflowTestApi {

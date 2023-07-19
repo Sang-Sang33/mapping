@@ -387,9 +387,16 @@
 
       window.addEventListener('message', async (e) => {
         if (e.data.type === 'api') {
-          const elsaWorkflowDefinitionEditorScreen = await awaitElement('elsa-workflow-definition-editor-screen')
-          elsaWorkflowDefinitionEditorScreen.customApi = e.data.data
-          elsaWorkflowDefinitionEditorScreen.isCustomApi = true
+          const { mode } = Object.fromEntries(entries)
+          if (mode === 'view') {
+            const elsaWorkflowInstanceViewerScreen = await awaitElement('elsa-workflow-instance-viewer-screen')
+            elsaWorkflowInstanceViewerScreen.customApi = e.data.data
+            elsaWorkflowInstanceViewerScreen.isCustomApi = true
+          } else {
+            const elsaWorkflowDefinitionEditorScreen = await awaitElement('elsa-workflow-definition-editor-screen')
+            elsaWorkflowDefinitionEditorScreen.customApi = e.data.data
+            elsaWorkflowDefinitionEditorScreen.isCustomApi = true
+          }
         }
       })
     </script>

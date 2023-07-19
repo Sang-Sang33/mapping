@@ -404,6 +404,7 @@ export namespace Components {
         "canvasHeight"?: string;
         "culture": string;
         "getServerUrl": () => Promise<string>;
+        "isCustomApi": boolean;
         "serverUrl": string;
         "workflowInstanceId": string;
     }
@@ -1366,6 +1367,7 @@ declare namespace LocalJSX {
     interface ElsaWorkflowInstanceViewerScreen {
         "canvasHeight"?: string;
         "culture"?: string;
+        "isCustomApi"?: boolean;
         "serverUrl"?: string;
         "workflowInstanceId"?: string;
     }

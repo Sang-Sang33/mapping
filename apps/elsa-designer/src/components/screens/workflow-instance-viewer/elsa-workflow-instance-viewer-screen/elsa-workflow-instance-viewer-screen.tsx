@@ -17,7 +17,7 @@ import {
   WorkflowPersistenceBehavior,
   WorkflowStatus
 } from '../../../../models'
-import { ActivityStats, createElsaClient } from '../../../../services/elsa-client'
+import { ActivityStats, createElsaClient, createHttpClient, CustomApi } from '../../../../services/elsa-client'
 import state from '../../../../utils/store'
 import {
   ActivityContextMenuState,
@@ -34,8 +34,10 @@ import { featuresDataManager } from '../../../../services'
 export class ElsaWorkflowInstanceViewerScreen {
   @Prop({ attribute: 'workflow-instance-id' }) workflowInstanceId: string
   @Prop({ attribute: 'server-url' }) serverUrl: string
+  @Prop({ attribute: 'is-custom-api', reflect: true }) isCustomApi = false
   @Prop() culture: string
   @Prop() canvasHeight?: string
+
   @State() workflowInstance: WorkflowInstance
   @State() workflowBlueprint: WorkflowBlueprint
   @State() workflowModel: WorkflowModel
@@ -49,6 +51,7 @@ export class ElsaWorkflowInstanceViewerScreen {
     activity: null
   }
 
+  customApi: Partial<CustomApi>
   el: HTMLElement
   designer: HTMLElsaDesignerTreeElement
   journal: HTMLElsaWorkflowInstanceJournalElement
@@ -97,9 +100,15 @@ export class ElsaWorkflowInstanceViewerScreen {
     }
 
     const client = await createElsaClient(this.serverUrl)
+    const httpClient = await createHttpClient(this.serverUrl)
+    const getWorkflowInstanceById = this.customApi?.workflowInstanceApi?.getWorkflowInstanceById
 
     if (workflowInstanceId && workflowInstanceId.length > 0) {
       try {
+        if (this.isCustomApi && getWorkflowInstanceById) {
+          const { url } = getWorkflowInstanceById
+          workflowInstance = await httpClient.get(url)
+        }
         workflowInstance = await client.workflowInstancesApi.get(workflowInstanceId)
         workflowBlueprint = await client.workflowRegistryApi.get(workflowInstance.definitionId, {
           version: workflowInstance.version
