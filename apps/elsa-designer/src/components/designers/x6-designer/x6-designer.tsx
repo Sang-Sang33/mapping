@@ -1108,7 +1108,9 @@ export class ElsaWorkflowDesigner {
           <div ref={(el) => (this.container = el)}></div>
         </div>
         {this.mode == WorkflowDesignerMode.Edit && this.renderAddActivityButton()}
-        {this.mode !== WorkflowDesignerMode.Test && this.renderAutoLayoutButton()}
+        {this.mode !== WorkflowDesignerMode.Test &&
+          this.mode !== WorkflowDesignerMode.Instance &&
+          this.renderAutoLayoutButton()}
         {this.mode == WorkflowDesignerMode.Test ? (
           <div>
             <div
