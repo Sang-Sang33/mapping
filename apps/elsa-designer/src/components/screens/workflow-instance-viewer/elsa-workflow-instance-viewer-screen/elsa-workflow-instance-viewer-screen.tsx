@@ -26,17 +26,19 @@ import {
 } from '../../../designers/tree/elsa-designer-tree/models'
 import Tunnel from '../../../../data/dashboard'
 import { featuresDataManager } from '../../../../services'
+import { RouterHistory } from '@stencil/router'
 
 @Component({
   tag: 'elsa-workflow-instance-viewer-screen',
   shadow: false
 })
 export class ElsaWorkflowInstanceViewerScreen {
-  @Prop({ attribute: 'workflow-instance-id' }) workflowInstanceId: string
+  @Prop({ attribute: 'workflow-instance-id', reflect: true }) workflowInstanceId: string
   @Prop({ attribute: 'server-url' }) serverUrl: string
   @Prop({ attribute: 'is-custom-api', reflect: true }) isCustomApi = false
   @Prop() culture: string
   @Prop() canvasHeight?: string
+  @Prop() history: RouterHistory
 
   @State() workflowInstance: WorkflowInstance
   @State() workflowBlueprint: WorkflowBlueprint
@@ -51,7 +53,7 @@ export class ElsaWorkflowInstanceViewerScreen {
     activity: null
   }
 
-  customApi: Partial<CustomApi>
+  @Prop() customApi: Partial<CustomApi>
   el: HTMLElement
   designer: HTMLElsaDesignerTreeElement
   journal: HTMLElsaWorkflowInstanceJournalElement
@@ -107,9 +109,11 @@ export class ElsaWorkflowInstanceViewerScreen {
       try {
         if (this.isCustomApi && getWorkflowInstanceById) {
           const { url } = getWorkflowInstanceById
-          workflowInstance = await httpClient.get(url)
+          workflowInstance = await httpClient.get(url + '/' + newValue)
+        } else {
+          workflowInstance = await client.workflowInstancesApi.get(workflowInstanceId)
         }
-        workflowInstance = await client.workflowInstancesApi.get(workflowInstanceId)
+
         workflowBlueprint = await client.workflowRegistryApi.get(workflowInstance.definitionId, {
           version: workflowInstance.version
         })
@@ -138,6 +142,14 @@ export class ElsaWorkflowInstanceViewerScreen {
 
     if (layoutFeature && layoutFeature.enabled) {
       this.layoutDirection = layoutFeature.value as LayoutDirection
+    }
+
+    if (!this.history) {
+      const entries = new URLSearchParams(location.search)
+      const params = Object.fromEntries(entries)
+      const workflowInstanceId = params['workflow-instance-id']
+      if (!workflowInstanceId) console.info('no workflow-instance-id parameter in the URL searh params')
+      else this.workflowInstanceId = workflowInstanceId
     }
 
     await this.serverUrlChangedHandler(this.serverUrl)
@@ -513,4 +525,4 @@ export class ElsaWorkflowInstanceViewerScreen {
     )
   }
 }
-Tunnel.injectProps(ElsaWorkflowInstanceViewerScreen, ['serverUrl', 'culture'])
+Tunnel.injectProps(ElsaWorkflowInstanceViewerScreen, ['serverUrl', 'culture', 'customApi', 'isCustomApi'])

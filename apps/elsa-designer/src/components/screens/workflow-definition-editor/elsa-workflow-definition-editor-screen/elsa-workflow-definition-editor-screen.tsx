@@ -54,11 +54,8 @@ export class ElsaWorkflowDefinitionEditorScreen {
   @Prop({ attribute: 'server-url', reflect: true }) serverUrl: string
   @Prop({ attribute: 'monaco-lib-path', reflect: true }) monacoLibPath: string
   @Prop({ attribute: 'is-custom-api', reflect: true }) isCustomApi = false
-  @Prop({ attribute: 'custom-workflow-definitions-api', reflect: true })
-  customApi: Partial<CustomApi>
-  @Prop()
-  @Prop()
-  features: string
+  @Prop() customApi: Partial<CustomApi>
+  @Prop() features: string
   @Prop() culture: string
   @Prop() basePath: string
   @Prop() serverFeatures: Array<string> = []
@@ -245,13 +242,13 @@ export class ElsaWorkflowDefinitionEditorScreen {
     }
 
     // 非路由模式下, workflowDefinitionId不通过外界传,直接从url地址中获取
-    // if (!this.history) {
-    //   const entries = new URLSearchParams(location.search)
-    //   const params = Object.fromEntries(entries)
-    //   const workflowDefinitionId = params['workflow-definition-id']
-    //   if (!workflowDefinitionId) console.info('no parameter in the URL searh params')
-    //   else this.workflowDefinitionId = workflowDefinitionId
-    // }
+    if (!this.history) {
+      const entries = new URLSearchParams(location.search)
+      const params = Object.fromEntries(entries)
+      const workflowDefinitionId = params['workflow-definition-id']
+      if (!workflowDefinitionId) console.info('no parameter in the URL searh params')
+      else this.workflowDefinitionId = workflowDefinitionId
+    }
 
     // await this.serverUrlChangedHandler(this.serverUrl)
     await this.workflowDefinitionIdChangedHandler(this.workflowDefinitionId)
@@ -1523,5 +1520,7 @@ DashboardTunnel.injectProps(ElsaWorkflowDefinitionEditorScreen, [
   'culture',
   'monacoLibPath',
   'basePath',
-  'serverFeatures'
+  'serverFeatures',
+  'customApi',
+  'isCustomApi'
 ])

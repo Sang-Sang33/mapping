@@ -14,9 +14,10 @@ import { DropdownButtonItem, DropdownButtonOrigin } from "./components/controls/
 import { MonacoValueChangedArgs } from "./components/controls/elsa-monaco/elsa-monaco";
 import { Map } from "./utils/utils";
 import { PagerData } from "./components/controls/elsa-pager/elsa-pager";
+import { CustomApi } from "./services";
 import { ToastNotificationOptions } from "./components/shared/elsa-toast-notification/elsa-toast-notification";
 import { WebhookDefinition } from "./modules/elsa-webhooks/models";
-import { CustomApi } from "./services";
+import { CustomApi as CustomApi1 } from "./services/elsa-client";
 import { ActivityStats } from ".";
 export namespace Components {
     interface ElsaActivityDragPanel {
@@ -260,7 +261,9 @@ export namespace Components {
         "basePath": string;
         "config": string;
         "culture": string;
+        "customApi": CustomApi;
         "features": any;
+        "isCustomApi": boolean;
         "monacoLibPath": string;
         "serverUrl": string;
         "useX6Graphs": boolean;
@@ -403,7 +406,9 @@ export namespace Components {
     interface ElsaWorkflowInstanceViewerScreen {
         "canvasHeight"?: string;
         "culture": string;
+        "customApi": Partial<CustomApi>;
         "getServerUrl": () => Promise<string>;
+        "history": RouterHistory;
         "isCustomApi": boolean;
         "serverUrl": string;
         "workflowInstanceId": string;
@@ -1228,7 +1233,9 @@ declare namespace LocalJSX {
         "basePath"?: string;
         "config"?: string;
         "culture"?: string;
+        "customApi"?: CustomApi;
         "features"?: any;
+        "isCustomApi"?: boolean;
         "monacoLibPath"?: string;
         "onInitialized"?: (event: CustomEvent<ElsaStudio>) => void;
         "onInitializing"?: (event: CustomEvent<ElsaStudio>) => void;
@@ -1367,6 +1374,8 @@ declare namespace LocalJSX {
     interface ElsaWorkflowInstanceViewerScreen {
         "canvasHeight"?: string;
         "culture"?: string;
+        "customApi"?: Partial<CustomApi>;
+        "history"?: RouterHistory;
         "isCustomApi"?: boolean;
         "serverUrl"?: string;
         "workflowInstanceId"?: string;

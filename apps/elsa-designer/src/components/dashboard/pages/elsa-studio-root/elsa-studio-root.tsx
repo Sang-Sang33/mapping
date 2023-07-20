@@ -11,7 +11,8 @@ import {
   createHttpClient,
   ElsaClient,
   propertyDisplayManager,
-  featuresDataManager
+  featuresDataManager,
+  CustomApi
 } from '../../../../services'
 import { AxiosInstance } from 'axios'
 import { EventTypes } from '../../../../models'
@@ -31,6 +32,8 @@ export class ElsaStudioRoot {
   @Prop({ attribute: 'use-x6-graphs', reflect: true }) useX6Graphs = false
   @Prop() features: any
   @Prop() config: string
+  @Prop({ attribute: 'is-custom-api', reflect: true }) isCustomApi = false
+  @Prop({ attribute: 'custom-api' }) customApi: CustomApi
   @State() featuresConfig: any
   @Event() initializing: EventEmitter<ElsaStudio>
   @Event() initialized: EventEmitter<ElsaStudio>
@@ -142,7 +145,9 @@ export class ElsaStudioRoot {
       serverFeatures: this.elsaStudio.serverFeatures,
       serverVersion: this.elsaStudio.serverVersion,
       culture,
-      monacoLibPath: this.monacoLibPath
+      monacoLibPath: this.monacoLibPath,
+      customApi: this.customApi,
+      isCustomApi: this.isCustomApi
     }
 
     return (

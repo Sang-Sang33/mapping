@@ -27,11 +27,14 @@
       <!-- <elsa-workflow-instance-list-screen
         workflow-id="7448d8d2ded64c868b474b8afce9e852"
       ></elsa-workflow-instance-list-screen> -->
-      <!-- <elsa-workflow-definition-editor-screen canvas-height="100vh"></elsa-workflow-definition-editor-screen>
-      <elsa-workflow-instance-viewer-screen
-        id="workflowInstanceViewer"
-        workflow-instance-id="3756e4e5075643e4ad10ed9a52f5d283"
+      <!-- <elsa-workflow-definition-editor-screen
         canvas-height="100vh"
+        is-custom-api
+      ></elsa-workflow-definition-editor-screen> -->
+      <!-- <elsa-workflow-instance-viewer-screen
+        id="workflowInstanceViewer"
+        canvas-height="100vh"
+        is-custom-api
       ></elsa-workflow-instance-viewer-screen> -->
       <elsa-studio-workflow-screen></elsa-studio-workflow-screen>
     </elsa-studio-root>
@@ -335,15 +338,13 @@
       // Get a handle to the elsa-studio-root element.
       const elsaStudioRoot = document.querySelector('elsa-studio-root')
 
-      const elsaStudioWorkflowScreen = document.querySelector('elsa-studio-workflow-screen')
-      const elsaStudioWorkflowScreenParams = ['mode', 'workflow-definition-id', 'workflow-instance-id']
+      // const elsaStudioWorkflowScreen = document.querySelector('elsa-studio-workflow-screen')
+      const elsaStudioRootParams = ['culture', 'use-x6-graphs']
 
       // 设置server和culture
       const entries = new URLSearchParams(location.search)
       entries.forEach((value, key) => {
-        if (elsaStudioWorkflowScreenParams.includes(key)) {
-          elsaStudioWorkflowScreen.setAttribute(key, value)
-        } else {
+        if (elsaStudioRootParams.includes(key)) {
           elsaStudioRoot.setAttribute(key, value)
         }
       })
@@ -388,15 +389,9 @@
       window.addEventListener('message', async (e) => {
         if (e.data.type === 'api') {
           const { mode } = Object.fromEntries(entries)
-          if (mode === 'view') {
-            const elsaWorkflowInstanceViewerScreen = await awaitElement('elsa-workflow-instance-viewer-screen')
-            elsaWorkflowInstanceViewerScreen.customApi = e.data.data
-            elsaWorkflowInstanceViewerScreen.isCustomApi = true
-          } else {
-            const elsaWorkflowDefinitionEditorScreen = await awaitElement('elsa-workflow-definition-editor-screen')
-            elsaWorkflowDefinitionEditorScreen.customApi = e.data.data
-            elsaWorkflowDefinitionEditorScreen.isCustomApi = true
-          }
+          elsaStudioRoot.customApi = e.data.data
+          elsaStudioRoot.setAttribute('custom-api', JSON.stringify(e.data.data))
+          elsaStudioRoot.isCustomApi = true
         }
       })
     </script>
