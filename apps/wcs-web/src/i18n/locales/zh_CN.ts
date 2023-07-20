@@ -22,6 +22,9 @@ const zh_CN = {
     event: {
       nav: '事件'
     },
+    instanceList: {
+      nav: '运行历史'
+    },
     logs: {
       nav: '日志'
     }

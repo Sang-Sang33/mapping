@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^7.32.0",
+    "@packages/enum": "workspace:*",
     "@packages/eslint-config-custom": "workspace:*",
     "@packages/tsconfig": "workspace:*",
     "typescript": "^4.9.4"

@@ -514,6 +514,9 @@ importers:
       '@packages/i18n':
         specifier: workspace:^
         version: link:../../packages/i18n
+      '@packages/multiway-config':
+        specifier: workspace:^
+        version: link:../../packages/multiway-config
       '@packages/services':
         specifier: workspace:^
         version: link:../../packages/services
@@ -817,6 +820,9 @@ importers:
       '@packages/types':
         specifier: workspace:*
         version: link:../types
+      '@packages/utils':
+        specifier: workspace:^
+        version: link:../utils
       antd:
         specifier: ^5.6.1
         version: 5.6.1(react-dom@18.2.0)(react@18.2.0)
@@ -883,6 +889,43 @@ importers:
         specifier: ^4.9.4
         version: 4.9.4
 
+  packages/multiway-config:
+    dependencies:
+      '@packages/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@packages/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@types/node':
+        specifier: ^20.3.1
+        version: 20.3.2
+      '@types/react':
+        specifier: ^18.0.37
+        version: 18.2.13
+      '@types/react-dom':
+        specifier: ^18.0.11
+        version: 18.2.5
+      antd:
+        specifier: 4.24.7
+        version: 4.24.7(react-dom@18.2.0)(react@18.2.0)
+      multiway:
+        specifier: 0.0.19
+        version: 0.0.19(antd@4.24.7)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.0.0
+        version: 18.2.0(react@18.2.0)
+    devDependencies:
+      eslint:
+        specifier: ^7.32.0
+        version: 7.32.0
+      typescript:
+        specifier: ^4.9.4
+        version: 4.9.4
+
   packages/services:
     dependencies:
       '@packages/utils':
@@ -898,6 +941,9 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0
     devDependencies:
+      '@packages/enum':
+        specifier: workspace:*
+        version: link:../enum
       '@packages/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
@@ -2313,7 +2359,6 @@ packages:
 
   /@types/node@20.3.2:
     resolution: {integrity: sha512-vOBLVQeCQfIcF/2Y7eKFTqrMnizK5lRNQ7ykML/5RuwVXVWxYkgwS7xbt4B6fKCUPgbSL5FSsjHQpaGQP/dQmw==}
-    dev: true
 
   /@types/offscreencanvas@2019.7.0:
     resolution: {integrity: sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==}
@@ -2326,7 +2371,6 @@ packages:
     resolution: {integrity: sha512-sRQsOS/sCLnpQhR4DSKGTtWFE3FZjpQa86KPVbhUqdYMRZ9FEFcfAytKhR/vUG2rH1oFbOOej6cuD7MFSobDRQ==}
     dependencies:
       '@types/react': 18.2.13
-    dev: true
 
   /@types/react-reconciler@0.26.7:
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
