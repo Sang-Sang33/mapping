@@ -56,9 +56,11 @@ registerField('switch-custom-children', {
 setDefaultSearchFilter((params: AnyKeyProps) => {
   // return 的数据会作为实际表格所请求的数据，此处为一个示例
   return {
+    Search: params.search,
     PageNumber: params.pagination.current,
     PageSize: params.pagination.pageSize,
-    Sorting: params.sorts
+    Sorting: params.sorts,
+    Filter: params.filters
   }
 })
 
