@@ -11,6 +11,12 @@ interface IProps {
   workflowEngineUrl: string
 }
 
+enum ETabKey {
+  MISSION_PROCESS = 'mission_process',
+  FUNCTION = 'function',
+  EVENT = 'event'
+}
+
 const fields: Array<MwSearchTableField> = [
   {
     title: 'ID',
@@ -75,15 +81,15 @@ const orderByKeyMap: Record<string, string> = {
 
 const tabList = [
   {
-    key: 'mission-process',
+    key: ETabKey.MISSION_PROCESS,
     tab: '任务处理'
   },
   {
-    key: 'function',
+    key: ETabKey.FUNCTION,
     tab: '设备'
   },
   {
-    key: 'event',
+    key: ETabKey.EVENT,
     tab: '事件'
   }
 ]
@@ -93,7 +99,7 @@ const Instance: FC<IProps> = (props) => {
   const { fetchMissionProcessInstanceList } = useWcsRequest()
   const [workflowInstanceId, setWorkflowInstanceId] = useState('')
   const [workflowInstanceDisplayName, setWorkflowInstanceDisplayName] = useState('')
-  const [activeTabKey, setActiveTabKey] = useState<string>('mission-process')
+  const [activeTabKey, setActiveTabKey] = useState<string>(ETabKey.MISSION_PROCESS)
   const mergeFields: MwSearchTableField[] = [
     ...fields,
     {
@@ -116,11 +122,7 @@ const Instance: FC<IProps> = (props) => {
   ]
 
   const locale = getLocalLibLocale('workflowEngine')
-  const { WorkflowIframe, registerMessage } = useWorkflowIframe(workflowEngineUrl, {
-    mode: 'view',
-    workflowInstanceId,
-    culture: locale
-  })
+  const { WorkflowIframe, subscribeMessage } = useWorkflowIframe(workflowEngineUrl)
 
   const workflowApi = {
     workflowInstanceApi: {
@@ -129,7 +131,7 @@ const Instance: FC<IProps> = (props) => {
       }
     }
   }
-  registerMessage('before-initialized', (iframeEl) => {
+  subscribeMessage('before-initialized', (iframeEl) => {
     const contentWindow = iframeEl?.contentWindow
     contentWindow?.postMessage(
       {
@@ -153,7 +155,7 @@ const Instance: FC<IProps> = (props) => {
             }
             bodyStyle={{ height: '827px' }}
           >
-            <WorkflowIframe></WorkflowIframe>
+            <WorkflowIframe mode="view" culture={locale} workflowInstanceId={workflowInstanceId}></WorkflowIframe>
           </Card>
         ) : (
           <MwSearchTable
