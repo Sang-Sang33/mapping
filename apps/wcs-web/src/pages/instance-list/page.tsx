@@ -5,6 +5,6 @@ const { t } = i18n
 export default {
   name: t('aside.instanceList.nav'),
   id: 'instance-list',
-  icon: <IconFont type="icon-shijian"></IconFont>,
+  icon: <IconFont type="icon-history"></IconFont>,
   order: 5
 }
