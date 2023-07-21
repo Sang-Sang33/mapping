@@ -255,7 +255,7 @@ const useWorkflowIframe = (workflowEngineUrl: string, Loading?: ReactNode) => {
           src={`${workflowEngineUrl}?${queryString}`}
           style={{ display: 'block' }}
         ></iframe>
-        <div className="absolute top-0 left-0 bottom-0 right-0">{isLoading && loadingComponent}</div>
+        {isLoading && <div className="absolute top-0 left-0 bottom-0 right-0">{loadingComponent}</div>}
       </div>
     )
   }
