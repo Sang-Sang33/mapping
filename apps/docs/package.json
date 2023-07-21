@@ -1,22 +1,32 @@
 {
   "name": "docs",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "0.0.1",
+  "description": "WCS Proceject Docs",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint \"src/**/*.ts\""
+    "start": "npm run dev",
+    "dev": "dumi dev",
+    "build": "dumi build"
   },
-  "dependencies": {
-    "@packages/ui": "workspace:*"
+  "authors": [
+    "luyao@mw-robot.com"
+  ],
+  "license": "MIT",
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --write --no-error-on-unmatched-pattern"
+    ]
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "@packages/eslint-config-custom": "workspace:*",
-    "@packages/tsconfig": "workspace:*",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.3"
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
+    "dumi": "^2.2.1",
+    "dumi-theme-chakra": "^0.0.21",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0"
   }
 }
