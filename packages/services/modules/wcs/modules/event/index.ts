@@ -1,5 +1,5 @@
 import type MWRequest from '../../../../request'
-import type { IDebugWorkflow } from '../../../typings'
+import type { IDebugWorkflow, IListResult, IWorkflowInstanceItem, IWorkflowInstanceListParams } from '../../typings'
 import type { ICreateEventData, IEventItem } from './typings'
 
 const useWcsEventRequest = (mwRequest: MWRequest) => {
@@ -15,13 +15,17 @@ const useWcsEventRequest = (mwRequest: MWRequest) => {
   const updateEvent = (data: any) => put('/event', data)
   const debugEvent = (data: IDebugWorkflow) => post('/event/run', data)
 
+  const fetchEventInstanceList = (params: IWorkflowInstanceListParams) =>
+    get<IListResult<IWorkflowInstanceItem>>('/event/instance-list', params)
+
   return {
     fetchEvent,
     fetchEventWorkflowDefinition,
     deleteEvent,
     createEvent,
     updateEvent,
-    debugEvent
+    debugEvent,
+    fetchEventInstanceList
   }
 }
 

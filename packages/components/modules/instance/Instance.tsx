@@ -12,7 +12,7 @@ interface IProps {
 }
 
 enum ETabKey {
-  MISSION_PROCESS = 'mission_process',
+  MISSION_PROCESS = 'mission-process',
   FUNCTION = 'function',
   EVENT = 'event'
 }
@@ -96,10 +96,10 @@ const tabList = [
 
 const Instance: FC<IProps> = (props) => {
   const { workflowEngineUrl } = props
-  const { fetchMissionProcessInstanceList } = useWcsRequest()
+  const { fetchMissionProcessInstanceList, fetchEventInstanceList, fetchDeviceFunctionInstanceList } = useWcsRequest()
   const [workflowInstanceId, setWorkflowInstanceId] = useState('')
   const [workflowInstanceDisplayName, setWorkflowInstanceDisplayName] = useState('')
-  const [activeTabKey, setActiveTabKey] = useState<string>(ETabKey.MISSION_PROCESS)
+  const [activeTabKey, setActiveTabKey] = useState<ETabKey>(ETabKey.MISSION_PROCESS)
   const mergeFields: MwSearchTableField[] = [
     ...fields,
     {
@@ -120,6 +120,11 @@ const Instance: FC<IProps> = (props) => {
       }
     }
   ]
+  const tabApiMap = {
+    [ETabKey.MISSION_PROCESS]: fetchMissionProcessInstanceList,
+    [ETabKey.EVENT]: fetchEventInstanceList,
+    [ETabKey.FUNCTION]: fetchDeviceFunctionInstanceList
+  }
 
   const locale = getLocalLibLocale('workflowEngine')
   const { WorkflowIframe, subscribeMessage } = useWorkflowIframe(workflowEngineUrl)
@@ -127,6 +132,11 @@ const Instance: FC<IProps> = (props) => {
   const workflowApi = {
     workflowInstanceApi: {
       getWorkflowInstanceById: {
+        url: `/api/wcs/${activeTabKey}/instance`
+      }
+    },
+    activitiesApi: {
+      list: {
         url: `/api/wcs/${activeTabKey}/activities`
       }
     }
@@ -144,7 +154,14 @@ const Instance: FC<IProps> = (props) => {
 
   return (
     <div className="h-full">
-      <Card tabList={tabList} activeTabKey={activeTabKey} onTabChange={(tab) => setActiveTabKey(tab)}>
+      <Card
+        tabList={tabList}
+        activeTabKey={activeTabKey}
+        onTabChange={(tab) => {
+          setActiveTabKey(tab as ETabKey)
+          setWorkflowInstanceId('')
+        }}
+      >
         {workflowInstanceId ? (
           <Card
             title={
@@ -163,8 +180,9 @@ const Instance: FC<IProps> = (props) => {
             api={async (params) => {
               console.log('🚀 ~ file: Instance.tsx ~ line 174 ~ api={ ~ params', params)
               const { Search, PageNumber, PageSize, Filter, Sorting } = params
+              const listApi = tabApiMap[activeTabKey]
 
-              const { items, totalCount } = await fetchMissionProcessInstanceList({
+              const { items, totalCount } = await listApi({
                 page: PageNumber - 1,
                 pageSize: PageSize,
                 workflowStatus: Filter.workflowStatus?.[0] || null,
