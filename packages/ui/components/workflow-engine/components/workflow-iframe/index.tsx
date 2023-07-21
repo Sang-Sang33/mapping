@@ -1,8 +1,9 @@
-import React, { memo, useContext, useEffect, useRef, useState } from 'react'
+import React, { memo, useContext } from 'react'
 import type { FC } from 'react'
 import { MWAxiosRequestConfig } from '@packages/services'
 import { WorkflowConfigContext } from '../../context'
 import { Loading } from '../../../loading'
+import useWorkflowIframe from '../../hooks/useWorkflowIframe'
 
 interface IProps {
   workflowDefinitionId: string
@@ -15,56 +16,27 @@ interface IProps {
 
 const WorkflowIframe: FC<IProps> = (props) => {
   const { workflowDefinitionId, workflowApi } = props
-  const [isLoading, setIsLoading] = useState(false)
   const { locale, workflowEngineUrl } = useContext(WorkflowConfigContext)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
-  const MessageStrategy = {
-    // 工作流引擎did-load之前,发送自定义的getWorkflowDefinitionApi供使用
-    'before-initialized': () => {
-      const contentWindow = iframeRef.current?.contentWindow
-      contentWindow?.postMessage(
-        {
-          type: 'api',
-          data: workflowApi
-        },
-        '*'
-      )
-    },
-    initialized: () => setIsLoading(false)
-  }
+  const { subscribeMessage, WorkflowIframe } = useWorkflowIframe(workflowEngineUrl || '', <Loading></Loading>)
 
-  useEffect(() => {
-    const handleMessage = (e: MessageEvent) => {
-      // if (e.origin !== workflowEngineBaseUrl) return
-      if (e.data.type === 'life-circle') {
-        const { data } = e.data
-        MessageStrategy[data as keyof typeof MessageStrategy]()
-      }
-    }
-    workflowDefinitionId && setIsLoading(true)
-    window.addEventListener('message', handleMessage)
-
-    return () => {
-      window.removeEventListener('message', handleMessage)
-    }
-  }, [workflowDefinitionId])
+  subscribeMessage('before-initialized', (iframeEl) => {
+    const contentWindow = iframeEl?.contentWindow
+    contentWindow?.postMessage(
+      {
+        type: 'api',
+        data: workflowApi
+      },
+      '*'
+    )
+  })
 
   return (
     <div className="flex-1 bg-[#fbfbfb]">
-      <div className={`relative w-full h-full`}>
-        <iframe
-          ref={iframeRef}
-          width="100%"
-          height="100%"
-          src={`${workflowEngineUrl}?workflow-definition-id=${workflowDefinitionId}&culture=${locale}&use-x6-graphs=true`}
-          className="block"
-        ></iframe>
-        {isLoading && (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
-            <Loading></Loading>
-          </div>
-        )}
-      </div>
+      <WorkflowIframe
+        mode="edit"
+        culture={locale || 'zh-CN'}
+        workflowDefinitionId={workflowDefinitionId}
+      ></WorkflowIframe>
     </div>
   )
 }

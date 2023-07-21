@@ -4,8 +4,9 @@ import { LeftOutlined } from '@ant-design/icons'
 import { MwSearchTable, MwSearchTableField } from 'multiway'
 import { Button, Card } from 'antd'
 import { formatDate, getLocalLibLocale } from '@packages/utils'
-import { useWorkflowIframe } from '@packages/hooks'
+import useWorkflowIframe from '@packages/ui/components/workflow-engine/hooks/useWorkflowIframe'
 import { useWcsRequest } from '@packages/services'
+import { Loading } from '@packages/ui'
 
 interface IProps {
   workflowEngineUrl: string
@@ -127,7 +128,7 @@ const Instance: FC<IProps> = (props) => {
   }
 
   const locale = getLocalLibLocale('workflowEngine')
-  const { WorkflowIframe, subscribeMessage } = useWorkflowIframe(workflowEngineUrl)
+  const { WorkflowIframe, subscribeMessage } = useWorkflowIframe(workflowEngineUrl, <Loading></Loading>)
 
   const workflowApi = {
     workflowInstanceApi: {
@@ -178,7 +179,6 @@ const Instance: FC<IProps> = (props) => {
           <MwSearchTable
             key={activeTabKey}
             api={async (params) => {
-              console.log('🚀 ~ file: Instance.tsx ~ line 174 ~ api={ ~ params', params)
               const { Search, PageNumber, PageSize, Filter, Sorting } = params
               const listApi = tabApiMap[activeTabKey]
 
