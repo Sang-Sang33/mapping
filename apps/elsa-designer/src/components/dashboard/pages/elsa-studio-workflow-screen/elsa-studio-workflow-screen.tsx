@@ -28,7 +28,7 @@ export class ElsaStudioWorkflowScreen {
       ),
       mode === 'view' && (
         <elsa-workflow-instance-viewer-screen
-          workflowInstanceId={params['workflow-instance-id']}
+          // workflowInstanceId={params['workflow-instance-id']}
           canvasHeight="100vh"
         ></elsa-workflow-instance-viewer-screen>
       )

@@ -109,7 +109,7 @@ export class ElsaWorkflowInstanceViewerScreen {
       try {
         if (this.isCustomApi && getWorkflowInstanceById) {
           const { url } = getWorkflowInstanceById
-          workflowInstance = await httpClient.get(url + '/' + newValue)
+          workflowInstance = await httpClient.get(url + '/' + newValue).then((res) => res.data)
         } else {
           workflowInstance = await client.workflowInstancesApi.get(workflowInstanceId)
         }
@@ -121,7 +121,6 @@ export class ElsaWorkflowInstanceViewerScreen {
         console.warn(`The specified workflow definition does not exist. Creating a new one.`)
       }
     }
-
     this.updateModels(workflowInstance, workflowBlueprint)
   }
 
@@ -152,7 +151,7 @@ export class ElsaWorkflowInstanceViewerScreen {
       else this.workflowInstanceId = workflowInstanceId
     }
 
-    await this.serverUrlChangedHandler(this.serverUrl)
+    // await this.serverUrlChangedHandler(this.serverUrl)
     await this.workflowInstanceIdChangedHandler(this.workflowInstanceId)
   }
 
@@ -188,7 +187,20 @@ export class ElsaWorkflowInstanceViewerScreen {
 
   async loadActivityDescriptors() {
     const client = await createElsaClient(this.serverUrl)
-    state.activityDescriptors = await client.activitiesApi.list()
+    const httpClient = await createHttpClient(this.serverUrl)
+
+    let activityDescriptors: ActivityDescriptor[]
+    const list = this.customApi?.activitiesApi?.list
+    if (this.isCustomApi && list) {
+      const { url } = list
+      activityDescriptors = await httpClient({
+        url
+      }).then((res) => res.data)
+    } else {
+      activityDescriptors = await client.activitiesApi.list()
+    }
+    // const runWorkflowDescriptors = await this.getRunWorkflowActivityDescriptors()
+    state.activityDescriptors = [...activityDescriptors]
   }
 
   updateModels(workflowInstance: WorkflowInstance, workflowBlueprint: WorkflowBlueprint) {
