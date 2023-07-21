@@ -33,7 +33,7 @@ COPY turbo.json turbo.json
 # RUN pnpm build $(echo $APPS | tr ',' ' --filter=' | sed -e 's/^/--filter=/')
 RUN filter_args=""
 RUN for app in $(echo $APPS | tr ',' ' '); do filter_args="${filter_args} --filter=$app"; done && \
-    pnpm build $filter_args
+    pnpm build $filter_args --filter=docs
 # build elsa
 COPY --from=base /source/apps/elsa-designer/ ./apps/elsa-designer/
 RUN if echo "$APPS" | grep -q "elsa-designer"; then \

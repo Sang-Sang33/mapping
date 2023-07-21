@@ -2,14 +2,14 @@ import { defineConfig } from 'dumi';
 import { defineThemeConfig } from 'dumi-theme-chakra';
 
 function withPrefix(uri?: string): string {
-  const prefix =
-    process.env.NODE_ENV === 'production' ? '/dumi-theme-chakra/' : '/';
+  const prefix = process.env.NODE_ENV === 'production' ? '/docs/' : '/';
   return [prefix, uri].join('');
 }
 
 export default defineConfig({
   base: withPrefix(),
   publicPath: withPrefix(),
+  outputPath: '../../dist/docs',
   locales: [
     { id: 'zh-CN', name: '中文' },
     { id: 'en-US', name: 'English' },
