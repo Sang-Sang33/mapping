@@ -2,8 +2,7 @@ import React, { memo, useContext } from 'react'
 import type { FC } from 'react'
 import { MWAxiosRequestConfig } from '@packages/services'
 import { WorkflowConfigContext } from '../../context'
-import { Loading } from '../../../loading'
-import useWorkflowIframe from '../../hooks/useWorkflowIframe'
+import WorkflowIframeBase, { TMessageEffectItem } from './WorkflowIframeBase'
 
 interface IProps {
   workflowDefinitionId: string
@@ -17,26 +16,32 @@ interface IProps {
 const WorkflowIframe: FC<IProps> = (props) => {
   const { workflowDefinitionId, workflowApi } = props
   const { locale, workflowEngineUrl } = useContext(WorkflowConfigContext)
-  const { subscribeMessage, WorkflowIframe } = useWorkflowIframe(workflowEngineUrl || '', <Loading></Loading>)
 
-  subscribeMessage('before-initialized', (iframeEl) => {
-    const contentWindow = iframeEl?.contentWindow
-    contentWindow?.postMessage(
-      {
-        type: 'api',
-        data: workflowApi
-      },
-      '*'
-    )
-  })
+  const messageEffectList: TMessageEffectItem[] = [
+    {
+      type: 'before-initialized',
+      callback: (iframeEl) => {
+        const contentWindow = iframeEl?.contentWindow
+        contentWindow?.postMessage(
+          {
+            type: 'api',
+            data: workflowApi
+          },
+          '*'
+        )
+      }
+    }
+  ]
 
   return (
     <div className="flex-1 bg-[#fbfbfb]">
-      <WorkflowIframe
+      <WorkflowIframeBase
+        workflowEngineUrl={workflowEngineUrl || ''}
         mode="edit"
         culture={locale || 'zh-CN'}
         workflowDefinitionId={workflowDefinitionId}
-      ></WorkflowIframe>
+        messageEffectList={messageEffectList}
+      ></WorkflowIframeBase>
     </div>
   )
 }
