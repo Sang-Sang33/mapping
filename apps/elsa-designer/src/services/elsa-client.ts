@@ -472,6 +472,8 @@ export interface CustomApi {
   }
   workflowInstanceApi: {
     getWorkflowInstanceById: AxiosRequestConfig
+    getWorkflowRegistryById: AxiosRequestConfig
+    getWorkflowInstanceExecutionLogById: AxiosRequestConfig
   }
 }
 

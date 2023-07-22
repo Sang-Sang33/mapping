@@ -384,6 +384,8 @@ export namespace Components {
     }
     interface ElsaWorkflowInstanceJournal {
         "activityDescriptors": Array<ActivityDescriptor>;
+        "customApi": Partial<CustomApi>;
+        "isCustomApi": boolean;
         "selectActivityRecord": (activityId?: string) => Promise<void>;
         "serverUrl": string;
         "workflowBlueprint": WorkflowBlueprint;
@@ -1354,6 +1356,8 @@ declare namespace LocalJSX {
     }
     interface ElsaWorkflowInstanceJournal {
         "activityDescriptors"?: Array<ActivityDescriptor>;
+        "customApi"?: Partial<CustomApi>;
+        "isCustomApi"?: boolean;
         "onRecordSelected"?: (event: CustomEvent<WorkflowExecutionLogRecord>) => void;
         "serverUrl"?: string;
         "workflowBlueprint"?: WorkflowBlueprint;

@@ -4,9 +4,10 @@ import { LeftOutlined } from '@ant-design/icons'
 import { MwSearchTable, MwSearchTableField } from 'multiway'
 import { Button, Card } from 'antd'
 import { formatDate, getLocalLibLocale } from '@packages/utils'
-import useWorkflowIframe from '@packages/ui/components/workflow-engine/hooks/useWorkflowIframe'
 import { useWcsRequest } from '@packages/services'
-import { Loading } from '@packages/ui'
+import WorkflowIframeBase, {
+  type TMessageEffectItem
+} from '@packages/ui/components/workflow-engine/components/workflow-iframe/WorkflowIframeBase'
 
 interface IProps {
   workflowEngineUrl: string
@@ -128,30 +129,41 @@ const Instance: FC<IProps> = (props) => {
   }
 
   const locale = getLocalLibLocale('workflowEngine')
-  const { WorkflowIframe, subscribeMessage } = useWorkflowIframe(workflowEngineUrl, <Loading></Loading>)
 
   const workflowApi = {
     workflowInstanceApi: {
       getWorkflowInstanceById: {
         url: `/api/wcs/${activeTabKey}/instance`
+      },
+      getWorkflowRegistryById: {
+        url: `/api/wcs/${activeTabKey}/instance/registry`
+      },
+      getWorkflowInstanceExecutionLogById: {
+        url: `/api/wcs/${activeTabKey}/instance`
       }
     },
     activitiesApi: {
       list: {
-        url: `/api/wcs/${activeTabKey}/activities`
+        url: activeTabKey === ETabKey.FUNCTION ? `/api/wcs/device/activities` : `/api/wcs/${activeTabKey}/activities`
       }
     }
   }
-  subscribeMessage('before-initialized', (iframeEl) => {
-    const contentWindow = iframeEl?.contentWindow
-    contentWindow?.postMessage(
-      {
-        type: 'api',
-        data: workflowApi
-      },
-      '*'
-    )
-  })
+
+  const messageEffectList: TMessageEffectItem[] = [
+    {
+      type: 'before-initialized',
+      callback: (iframeEl) => {
+        const contentWindow = iframeEl?.contentWindow
+        contentWindow?.postMessage(
+          {
+            type: 'api',
+            data: workflowApi
+          },
+          '*'
+        )
+      }
+    }
+  ]
 
   return (
     <div className="h-full">
@@ -173,7 +185,13 @@ const Instance: FC<IProps> = (props) => {
             }
             bodyStyle={{ height: '827px' }}
           >
-            <WorkflowIframe mode="view" culture={locale} workflowInstanceId={workflowInstanceId}></WorkflowIframe>
+            <WorkflowIframeBase
+              workflowEngineUrl={workflowEngineUrl}
+              mode="view"
+              culture={locale}
+              workflowInstanceId={workflowInstanceId}
+              messageEffectList={messageEffectList}
+            ></WorkflowIframeBase>
           </Card>
         ) : (
           <MwSearchTable

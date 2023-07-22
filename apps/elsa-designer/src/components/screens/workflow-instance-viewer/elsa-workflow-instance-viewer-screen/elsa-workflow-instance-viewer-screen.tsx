@@ -9,6 +9,7 @@ import {
   Connection,
   ConnectionModel,
   EventTypes,
+  getVersionOptionsString,
   SyntaxNames,
   WorkflowBlueprint,
   WorkflowExecutionLogRecord,
@@ -35,10 +36,11 @@ import { RouterHistory } from '@stencil/router'
 export class ElsaWorkflowInstanceViewerScreen {
   @Prop({ attribute: 'workflow-instance-id', reflect: true }) workflowInstanceId: string
   @Prop({ attribute: 'server-url' }) serverUrl: string
-  @Prop({ attribute: 'is-custom-api', reflect: true }) isCustomApi = false
   @Prop() culture: string
   @Prop() canvasHeight?: string
   @Prop() history: RouterHistory
+  @Prop({ attribute: 'is-custom-api', reflect: true }) isCustomApi = false
+  @Prop() customApi: Partial<CustomApi>
 
   @State() workflowInstance: WorkflowInstance
   @State() workflowBlueprint: WorkflowBlueprint
@@ -53,7 +55,6 @@ export class ElsaWorkflowInstanceViewerScreen {
     activity: null
   }
 
-  @Prop() customApi: Partial<CustomApi>
   el: HTMLElement
   designer: HTMLElsaDesignerTreeElement
   journal: HTMLElsaWorkflowInstanceJournalElement
@@ -104,6 +105,7 @@ export class ElsaWorkflowInstanceViewerScreen {
     const client = await createElsaClient(this.serverUrl)
     const httpClient = await createHttpClient(this.serverUrl)
     const getWorkflowInstanceById = this.customApi?.workflowInstanceApi?.getWorkflowInstanceById
+    const getWorkflowRegistryById = this.customApi?.workflowInstanceApi?.getWorkflowRegistryById
 
     if (workflowInstanceId && workflowInstanceId.length > 0) {
       try {
@@ -114,9 +116,22 @@ export class ElsaWorkflowInstanceViewerScreen {
           workflowInstance = await client.workflowInstancesApi.get(workflowInstanceId)
         }
 
-        workflowBlueprint = await client.workflowRegistryApi.get(workflowInstance.definitionId, {
-          version: workflowInstance.version
-        })
+        if (this.isCustomApi && getWorkflowRegistryById) {
+          const { url } = getWorkflowRegistryById
+          workflowBlueprint = await httpClient
+            .get(
+              url +
+                '/' +
+                workflowInstance.definitionId +
+                '/' +
+                getVersionOptionsString({ version: workflowInstance.version })
+            )
+            .then((res) => res.data)
+        } else {
+          workflowBlueprint = await client.workflowRegistryApi.get(workflowInstance.definitionId, {
+            version: workflowInstance.version
+          })
+        }
       } catch {
         console.warn(`The specified workflow definition does not exist. Creating a new one.`)
       }
