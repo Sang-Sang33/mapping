@@ -5,7 +5,7 @@ import { useStore } from '../store/index'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { saveRcspoint } from '@/services'
-import {isJsonString} from '@/utils'
+import { isJsonString } from '@/utils'
 
 function UploadJson() {
   const { EditorStore } = useStore()
@@ -19,35 +19,10 @@ function UploadJson() {
         const reader = new FileReader()
         reader.readAsText(file, 'UTF-8')
         reader.onload = function (e) {
-          if(!isJsonString(e.target?.result)) return message.error('文件格式不正确！')
+          if (!isJsonString(e.target?.result)) return message.error('文件格式不正确！')
           const res = JSON.parse(e.target?.result as string)
-          if(!res.Border || !res.Points) return message.error('文件格式不正确！')
-          // const {
-          //   Border: { DownLeft, UpRight },
-          //   Points
-          // } = res
-          // const CADWidth = Math.abs(UpRight.X - DownLeft.X)
-          // const CADHeight = Math.abs(DownLeft.Y - UpRight.Y)
-          // const resPoints: shapeItem[] = Points.map((item: any) => ({
-          //   id: item.Id || item.ID,
-          //   CADPosition: {
-          //     x: Math.abs(item.Position.X - DownLeft.X),
-          //     y: Math.abs(item.Position.Y - UpRight.Y)
-          //   },
-          //   canvasPosition: {
-          //     x: Math.abs(item.Position.X - Math.min(DownLeft.X, UpRight.X)) * (stageWidth / CADWidth),
-          //     y: Math.abs(item.Position.Y - Math.min(UpRight.Y, DownLeft.x)) * (stageHeight / CADHeight)
-          //   }
-          // }))
-          // EditorStore.setShapesList(resPoints)
           EditorStore.setRcsData(res)
           EditorStore.clearSelectRect()
-          // saveRcspoint({
-          //   points: JSON.stringify({
-          //     rcsData: res,
-          //     shapesList: resPoints
-          //   })
-          // })
           saveRcspoint({
             points: JSON.stringify({
               rcsData: res

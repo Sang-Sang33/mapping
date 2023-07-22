@@ -1,5 +1,6 @@
 import type { IMenu, IRect, IRectMenu, ISelectedRect, menuType, shapeItem } from '@/types'
 import { computed, makeAutoObservable } from 'mobx'
+import { message } from 'antd'
 
 export const editColor = {
   area: 'red',
@@ -125,47 +126,60 @@ class EditorStore {
     width: 0,
     height: 0
   }
-  // shapesList: shapeItem[] = []
+  get rcsTransformedData() {
+    if (!Object.keys(this.rcsData).length) return null
+    if ((!this.rcsData.MapOption || !this.rcsData.Vertexs) && (!this.rcsData.Border || !this.rcsData.Points)) return message.error('文件格式不正确！')
+    if (this.rcsData.Border) {
+      const {
+        Border: { DownLeft, UpRight },
+        Points
+      } = this.rcsData
+      const points = Points.map((item) => ({ ...item, ...item.Position }))
+      return { minX: DownLeft.X, minY: DownLeft.Y, maxX: UpRight.X, maxY: UpRight.Y, points }
+    } else {
+      const { MapOption: { DWGMinX, DWGMaxX, DWGMinY, DWGMaxY }, Vertexs } = this.rcsData
+      return { minX: DWGMinX, minY: DWGMinY, maxX: DWGMaxX, maxY: DWGMaxY, points: Vertexs }
+    }
+  }
+  get layoutData() {
+    if (!this.rcsTransformedData) return null
+    const { minX, minY, maxX, maxY } = this.rcsTransformedData
+    const { stageWidth, stageHeight } = this
+    const CADWidth = maxX - minX
+    const CADHeight = maxY - minY
+    const CADToCanvasRatio = Math.min(stageWidth / CADWidth, stageHeight / CADHeight)
+    return { CADWidth, CADHeight, CADToCanvasRatio }
+  }
   get shapesList() {
-    if (!Object.keys(this.rcsData).length) return []
-    const {
-      Border: { DownLeft, UpRight },
-      Points
-    } = this.rcsData
-    const CADWidth = Math.abs(UpRight.X - DownLeft.X)
-    const CADHeight = Math.abs(DownLeft.Y - UpRight.Y)
-    const resPoints: shapeItem[] = Points.map((item: any) => ({
+    if (!this.rcsTransformedData) return []
+    const { minX, minY, points } = this.rcsTransformedData
+    const { CADToCanvasRatio = 1 } = this.layoutData || {}
+    const resPoints: shapeItem[] = points.map((item: any) => ({
       id: item.Id || item.ID,
       CADPosition: {
-        x: Math.abs(item.Position.X - DownLeft.X),
-        y: Math.abs(item.Position.Y - UpRight.Y)
+        x: item.X,
+        y: item.Y
       },
       canvasPosition: {
-        x: Math.abs(item.Position.X - Math.min(DownLeft.X, UpRight.X)) * (this.stageWidth / CADWidth),
-        y: this.stageHeight - Math.abs(item.Position.Y - Math.min(UpRight.Y, DownLeft.X)) * (this.stageHeight / CADHeight)
+        x: Math.abs(item.X - minX) * CADToCanvasRatio,
+        y: Math.abs(item.Y - minY) * CADToCanvasRatio
       }
     }))
-
     return resPoints
   }
   rcsData: Record<string, any> = {}
   selectedRectList: ISelectedRect[] = []
   get rectListInRcs() {
-    const { selectedRectList, rcsData, stageWidth, stageHeight } = this
-
-    if (!Object.keys(rcsData).length) return []
-    const {
-      Border: { DownLeft, UpRight }
-    } = rcsData
+    const { selectedRectList } = this
+    if (!this.rcsTransformedData) return []
+    const { CADToCanvasRatio = 1 } = this.layoutData || {}
     return selectedRectList.map((rect) => {
-      const CADWidth = Math.abs(UpRight.X - DownLeft.X)
-      const CADHeight = Math.abs(DownLeft.Y - UpRight.Y)
       return {
         ...rect,
-        x: (rect.x * CADWidth) / stageWidth + Math.min(DownLeft.X, UpRight.X),
-        y: (rect.y * CADHeight) / stageHeight + Math.min(UpRight.Y, DownLeft.Y),
-        width: (rect.width * CADWidth) / stageWidth,
-        height: (rect.height * CADHeight) / stageHeight
+        x: rect.x * CADToCanvasRatio,
+        y: rect.y * CADToCanvasRatio,
+        width: rect.width * CADToCanvasRatio,
+        height: rect.height * CADToCanvasRatio
       }
     })
   }
@@ -185,6 +199,10 @@ class EditorStore {
   warehouseId: string | undefined = undefined
   editWarehouseShow: boolean = false
   editingRectName: string | undefined = undefined
+  backgroundImage: string | undefined = undefined
+  setBackgroundImage(val: string) {
+    this.backgroundImage = val
+  }
   setStageSize(width: number, height: number) {
     // debugger
     this.stageWidth = width
@@ -200,7 +218,9 @@ class EditorStore {
     this.selectRect = val
   }
   pushSelectedRect(val: ISelectedRect) {
-    this.selectedRectList = [...this.selectedRectList, val]
+    const { x, y, width, height } = val
+    const { CADToCanvasRatio = 1 } = this.layoutData || {}
+    this.selectedRectList = [...this.selectedRectList, { ...val, x: x / CADToCanvasRatio, y: y / CADToCanvasRatio, width: width / CADToCanvasRatio, height: height / CADToCanvasRatio }]
   }
   removeSelectedRect(name: string) {
     this.selectedRectList = this.selectedRectList.filter((item) => item.name !== name)
@@ -211,9 +231,6 @@ class EditorStore {
   replaceSelectRect(val: ISelectedRect[]) {
     this.selectedRectList = [...val]
   }
-  // setShapesList(list: shapeItem[]) {
-  //   this.shapesList = list
-  // }
   setRcsData(data: Record<string, any>) {
     this.rcsData = data
   }

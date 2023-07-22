@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState, useMemo } from 'react'
-import { Stage, Layer, Circle, Rect, Text } from 'react-konva'
+import { Stage, Layer, Circle, Rect, Text, Image as KonvaImage } from 'react-konva'
 import Konva from 'konva'
 import './style.less'
 import EditHeader from '@/components/editHeader'
@@ -19,13 +19,15 @@ const Station = () => {
   const {
     drawerOpen,
     selectRect,
-    selectedRectList,
+    rectListInRcs:selectedRectList,
     checkedMenu,
     shapesList,
     stageWidth,
     stageHeight,
     headerHeight,
-    currentMenu
+    currentMenu,
+    backgroundImage,
+    layoutData
   } = EditorStore
   const [isPaint, setIsPaint] = useState(false)
   const containerLayerRef = useRef(null)
@@ -34,6 +36,11 @@ const Station = () => {
   const [tooltipVisible, setTooltipVisible] = useState(true)
 
   const [selectingShapeColor, setSelectingShapeColor] = useState<Record<string, any>>({})
+  const backgroundImageObj = useMemo(() => {
+    const image = new Image()
+    image.src = backgroundImage
+    return image
+  }, [backgroundImage])
   useEffect(() => {
     if (!drawerOpen && selectRect.width) initSelectRect()
   }, [drawerOpen])
@@ -58,18 +65,7 @@ const Station = () => {
     updatePreview()
   }, [checkedMenu, selectRect, shapesList])
 
-  const tooltipList = useMemo(
-    () =>
-      shapesList.map((item) => (
-        <Text
-          x={item.canvasPosition.x - 70}
-          y={item.canvasPosition.y + 15}
-          text={`id: ${item.id}, X: ${item.CADPosition.x}, Y: ${item.CADPosition.y}`}
-          fill="red"
-        ></Text>
-      )),
-    [shapesList]
-  )
+  const tooltipList = useMemo(() => shapesList.map((item) => <Text x={item.canvasPosition.x - 70} y={item.canvasPosition.y + 15} text={`id: ${item.id}, X: ${item.CADPosition.x}, Y: ${item.CADPosition.y}`} fill='red'></Text>), [shapesList])
 
   const curTypeCanHasCollision = useMemo(() => checkedMenu === 'transferZones', [checkedMenu])
   const showSelectedRectList = useMemo(
@@ -78,21 +74,17 @@ const Station = () => {
   )
   const showSelectedShapeColor = useMemo(() => {
     const res: Record<string, any> = {}
-
     selectedRectList.forEach((rect) => {
       if (checkedMenu === 'all' || checkedMenu === rect.type) {
-        ;(containerLayerRef.current as any).children.forEach(function (item: any) {
-          if (item.attrs.name?.includes('shape')) {
-            if (isPointInRect(rect, item.position())) res[item.attrs.name] = 'green'
-          }
+        shapesList.forEach(function (item: any) {
+          if (isPointInRect(rect, item.canvasPosition)) res[item.id] = 'green'
         })
       }
     })
-
     return res
   }, [selectedRectList, checkedMenu])
 
-  const scaleBy = 1.2
+  const scaleBy = 1.1
 
   const handleZoom = (e: Konva.KonvaEventObject<WheelEvent>) => {
     const stage: any = stageRef.current!
@@ -107,7 +99,7 @@ const Station = () => {
 
     let direction = e.evt.deltaY > 0 ? 1 : -1
 
-    if ((oldScale > 2 && direction > 0) || (oldScale < 0.15 && direction < 0)) return
+    if ((oldScale < 0.15 && direction < 0)) return
     if (e.evt.ctrlKey) {
       direction = -direction
     }
@@ -154,11 +146,9 @@ const Station = () => {
       if (!curTypeCanHasCollision && hasCollisionWithSelectedRect(newRect)) return
       EditorStore.changeSelectRect(newRect)
       const res: Record<string, any> = {}
-      ;(containerLayerRef.current as any).children.forEach(function (item: any) {
-        if (item.attrs.name.includes('shape')) {
-          if (isPointInRect(selectRect, item.position())) {
-            res[item.attrs.name] = 'red'
-          }
+      shapesList.forEach(function (item: any) {
+        if (isPointInRect(selectRect, item.canvasPosition)) {
+          res[item.id] = 'red'
         }
       })
       setSelectingShapeColor(res)
@@ -168,18 +158,16 @@ const Station = () => {
   function updatePreview() {
     previewLayer?.destroy()
     previewLayer = (containerLayerRef.current as any).clone({ listening: false })
-    ;(previewStageRef.current as any).add(previewLayer)
+      ; (previewStageRef.current as any).add(previewLayer)
   }
 
   function handleMouseUp() {
     setIsPaint(false)
     if (!selectRect.width || !selectRect.height) return
     let isEmpty = true
-    ;(containerLayerRef.current as any).children.forEach(function (item: any) {
-      if (item.attrs.name.includes('shape')) {
-        if (isPointInRect(selectRect, item.position())) {
-          isEmpty = false
-        }
+    shapesList.forEach(function (item: any) {
+      if (isPointInRect(selectRect, item.canvasPosition)) {
+        isEmpty = false
       }
     })
     if (isEmpty && currentMenu.meta.pointsInsideRect) {
@@ -249,23 +237,27 @@ const Station = () => {
         onContextMenu={handleContextMenu}
       >
         <Layer ref={containerLayerRef}>
+          {backgroundImage && layoutData && <KonvaImage image={backgroundImageObj} x={0} y={0} width={layoutData.CADWidth * layoutData.CADToCanvasRatio} height={layoutData.CADHeight * layoutData.CADToCanvasRatio} opacity={0.2}></KonvaImage>}
           <Rect name="select-rect" stroke="black" {...selectRect}></Rect>
           {shapesList.map((item: shapeItem) => (
             <Circle
               name={'shape-' + item.id}
               onClick={handleShapeClick}
-              fill="black"
               {...item.canvasPosition}
-              width={12}
-              height={12}
-              fill={showSelectedShapeColor['shape-' + item.id] || selectingShapeColor['shape-' + item.id] || 'black'}
+              width={4}
+              height={4}
+              fill={showSelectedShapeColor[ item.id] || selectingShapeColor[item.id] || 'black'}
             />
           ))}
           {showSelectedRectList.map((item) => (
             <Rect {...item} stroke={item.strokeColor || 'blue'} dash={[8, 4]}></Rect>
           ))}
         </Layer>
-        <Layer>{tooltipVisible && tooltipList}</Layer>
+        {/* <Layer>
+          {
+            tooltipVisible && tooltipList
+          }
+        </Layer> */}
       </Stage>
       <EditWarehouse></EditWarehouse>
     </div>

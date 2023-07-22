@@ -1,4 +1,4 @@
-import { Layout, Menu, Col, Row, Button, Space, Select, message } from 'antd'
+import { Layout, Menu, Col, Row, Button, Space, Select, message, Dropdown, Avatar } from 'antd'
 import { useStore } from '../store/index'
 import { observer } from 'mobx-react-lite'
 import type { MenuProps } from 'antd'
@@ -9,10 +9,16 @@ import { getCustomerList, getWarehouseList } from '../services'
 import { useRequest } from 'ahooks'
 import { saveSlot, saveTransferPosition, saveTempSlot, getTempSlot, getRcspoint } from '@/services'
 import type { IEditedShapeItem, ISelectedRect, menuType, shapeItem } from '@/types'
-import { getTenantIdIC, getWarehouseIdIC, setTenantIdIC, setWarehouseIdIC } from '@packages/utils'
-import { User } from '@packages/ui'
+import { getTenant } from '@/utils/auth'
+import { PoweroffOutlined, ImportOutlined } from '@ant-design/icons';
+import { redirectToSso } from '@/utils/auth'
+import { clearAccessToken, getCookieByName, setCookie, removeCookieByName } from '@/utils/auth'
+import user from "@/assets/icons/user.svg";
+import UploadBackground from '@/components/uploadBackground'
 
 const { Header } = Layout
+const TANENT_COOKIE = 'tanentId'
+const WAREHOUSE_COOKIE = 'warehouseId'
 
 function EditHeader() {
   const [userList, setUserList] = useState<Record<string, string>[]>([])
@@ -41,12 +47,12 @@ function EditHeader() {
     onSuccess(res) {
       const list = res.map((item: Record<string, string>) => ({ label: item.displayName, value: item.id }))
       setUserList(list)
-      const tanent = getTenantIdIC()
+      const tanent = getTenant()
       const user = res.find((item) => item.name === tanent)
       if (user) {
         EditorStore.setTenantId(user.id)
       } else {
-        const val = getTenantIdIC() || list[0].value
+        const val = getCookieByName(TANENT_COOKIE) || list[0].value
         list.length && EditorStore.setTenantId(val)
       }
     }
@@ -72,45 +78,16 @@ function EditHeader() {
     EditorStore.replaceSelectRect([])
   }, [tenantId])
 
-  useEffect(() => {
-    if (!Object.keys(rcsData).length) return
-    getTempSlot().then((rectListInRcs) => {
-      // 获取之前存的rcs画框数据, 根据当前画布尺寸再次渲染
-      const localRectList = getLocalRectList(rectListInRcs as unknown as ISelectedRect[], rcsData)
-      EditorStore.replaceSelectRect(localRectList || [])
-    })
-  }, [stageWidth, stageHeight])
-
-  const getLocalRectList = (rectListInRcs: ISelectedRect[], rcsData: any) => {
-    if (!rcsData) return []
-    const {
-      Border: { DownLeft, UpRight }
-    } = rcsData
-    const CADWidth = Math.abs(UpRight.X - DownLeft.X)
-    const CADHeight = Math.abs(DownLeft.Y - UpRight.Y)
-    const localRectList = rectListInRcs.map((item: any) => ({
-      ...item,
-      x: (item.x - Math.min(DownLeft.X, UpRight.X)) * (stageWidth / CADWidth),
-      y: (item.y - Math.min(UpRight.Y, DownLeft.Y)) * (stageHeight / CADHeight),
-      width: item.width * (stageWidth / CADWidth),
-      height: item.height * (stageHeight / CADHeight)
-    }))
-    return localRectList
-  }
   function loadInitData() {
     Promise.all<any>([getTempSlot(), getRcspoint()])
-      .then(([rectListInRcs, rcsPoint]) => {
+      .then(([rectList, rcsPoint]) => {
         const { rcsData } = rcsPoint
         EditorStore.setRcsData(rcsData || {})
-
-        // EditorStore.setShapesList(shapesList || [])
         setTimeout(() => {
-          const localRectList = getLocalRectList(rectListInRcs, rcsData)
-          EditorStore.replaceSelectRect(localRectList || [])
+          EditorStore.replaceSelectRect(rectList || [])
         }, 0)
       })
       .catch((e) => {
-        // EditorStore.setShapesList([])
         EditorStore.replaceSelectRect([])
       })
   }
@@ -119,30 +96,30 @@ function EditHeader() {
     const res = await getWarehouseList({ tenantId })
     const list = res.map((item: Record<string, string>) => ({ label: item.name, value: item.id }))
     setWarehouseList(list)
-    const val = getWarehouseIdIC() || (list.length && list[0].value) || undefined
+    const val = getCookieByName(WAREHOUSE_COOKIE) || (list.length && list[0].value) || undefined
     EditorStore.setWarehouseId(val)
   }
 
   function handleWarehouseChange(val: any) {
     EditorStore.setWarehouseId(val)
-    setWarehouseIdIC(val)
+    setCookie(WAREHOUSE_COOKIE, val)
   }
 
   function handleUserChange(val: string) {
     EditorStore.setWarehouseId(undefined)
     EditorStore.setTenantId(val)
-    setTenantIdIC(val)
-    // removeCookieByName(WAREHOUSE_COOKIE)
+    setCookie(TANENT_COOKIE, val)
+    removeCookieByName(WAREHOUSE_COOKIE)
   }
 
   function saveSelectedRectData() {
-    saveTempSlot({ items: JSON.stringify(rectListInRcs) })
+    saveTempSlot({ items: JSON.stringify(selectedRectList) })
   }
 
   function genSaveData() {
     const shapesMap: Record<string, IEditedShapeItem> = {}
     const locationRectShapes: Record<string, Record<'rect' | 'shapes', ISelectedRect | shapeItem[]>> = {}
-    selectedRectList.forEach((rect) => {
+    rectListInRcs.forEach((rect) => {
       shapesList.forEach((shape) => {
         if (!isPointInRect(rect, shape.canvasPosition)) return
         if (rect.type === 'location') {
@@ -282,7 +259,7 @@ function EditHeader() {
     })
 
     const json = {
-      rectList: selectedRectList,
+      rectList: rectListInRcs,
       slots,
       positions,
       rcsData,
@@ -293,6 +270,17 @@ function EditHeader() {
     link.href = 'data:text/plain,' + JSON.stringify(json)
     link.click()
   }
+
+  const handleLogout = () => {
+    clearAccessToken()
+    removeCookieByName(WAREHOUSE_COOKIE)
+    removeCookieByName(TANENT_COOKIE)
+    redirectToSso()
+  }
+
+  const userMenu = (
+    <Menu onClick={handleLogout} items={[{ label: "退出登录", key: "logout", icon: <ImportOutlined /> }]}></Menu>
+  );
 
   return (
     <Header className="header">
@@ -309,14 +297,15 @@ function EditHeader() {
             {tenantId && <Button onClick={() => EditorStore.setEditWarehouseShow(true)}>仓库操作</Button>}
           </Space>
         </Col>
-        <Col span={12}>
+        <Col span={11}>
           <Menu theme="dark" mode="horizontal" selectedKeys={[checkedMenu]} items={menuConfig} onClick={onClick} />
         </Col>
-        <Col span={4} offset={1}>
+        <Col span={6}>
           <Space>
             {warehouseId && (
               <>
                 <UploadJson></UploadJson>
+                {rcsData && <UploadBackground></UploadBackground>}
                 <Button type="primary" onClick={handleSave}>
                   保存
                 </Button>
@@ -324,8 +313,14 @@ function EditHeader() {
                   导出
                 </Button>
               </>
+
             )}
-            <User ssoUrl={import.meta.env.DEV ? 'http://byd.multiway-cloud.com:44307' : '/sso'}></User>
+            {/* 用户信息  */}
+            <Dropdown overlay={userMenu} placement="bottomRight">
+              <div className="w-14 text-center cursor-pointer hover:bg-gray-100">
+                <Avatar src={user} />
+              </div>
+            </Dropdown>
           </Space>
         </Col>
       </Row>
