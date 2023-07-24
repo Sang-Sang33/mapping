@@ -167,33 +167,33 @@ const Instance: FC<IProps> = (props) => {
 
   return (
     <div className="h-full">
-      <Card
-        tabList={tabList}
-        activeTabKey={activeTabKey}
-        onTabChange={(tab) => {
-          setActiveTabKey(tab as ETabKey)
-          setWorkflowInstanceId('')
-        }}
-      >
-        {workflowInstanceId ? (
-          <Card
-            title={
-              <div className="flex items-center gap-2">
-                <LeftOutlined className="cursor-pointer" onClick={() => setWorkflowInstanceId('')} />
-                <span>{workflowInstanceDisplayName}</span>
-              </div>
-            }
-            bodyStyle={{ height: '827px' }}
-          >
-            <WorkflowIframeBase
-              workflowEngineUrl={workflowEngineUrl}
-              mode="view"
-              culture={locale}
-              workflowInstanceId={workflowInstanceId}
-              messageEffectList={messageEffectList}
-            ></WorkflowIframeBase>
-          </Card>
-        ) : (
+      {workflowInstanceId ? (
+        <Card
+          title={
+            <div className="flex items-center gap-2">
+              <LeftOutlined className="cursor-pointer" onClick={() => setWorkflowInstanceId('')} />
+              <span>{workflowInstanceDisplayName}</span>
+            </div>
+          }
+          bodyStyle={{ height: '823px', padding: 0 }}
+        >
+          <WorkflowIframeBase
+            workflowEngineUrl={workflowEngineUrl}
+            mode="view"
+            culture={locale}
+            workflowInstanceId={workflowInstanceId}
+            messageEffectList={messageEffectList}
+          ></WorkflowIframeBase>
+        </Card>
+      ) : (
+        <Card
+          tabList={tabList}
+          activeTabKey={activeTabKey}
+          onTabChange={(tab) => {
+            setActiveTabKey(tab as ETabKey)
+            setWorkflowInstanceId('')
+          }}
+        >
           <MwSearchTable
             key={activeTabKey}
             api={async (params) => {
@@ -224,8 +224,8 @@ const Instance: FC<IProps> = (props) => {
               showSizeChanger: true
             }}
           />
-        )}
-      </Card>
+        </Card>
+      )}
     </div>
   )
 }
