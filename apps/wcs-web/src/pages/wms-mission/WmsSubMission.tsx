@@ -1,10 +1,10 @@
 import React, { ElementRef, memo, useRef } from 'react'
 import type { FC } from 'react'
-import { MwSearchTable, MwSearchTableField } from 'multiway'
+import { MwButton, MwSearchTable, MwSearchTableField } from 'multiway'
 import { Badge, List, Tooltip } from 'antd'
 import { WMS_SUB_MISSION_STATUS_ENUM } from './interface.d'
 import { formatDate } from '@packages/utils'
-import { IMwTableRef } from '@/multiway'
+import { IMwTableRef } from '@packages/multiway-config'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import { type IWmsItem, useWcsRequest } from '@packages/services'
@@ -188,7 +188,7 @@ const WmsSubMission: FC<{ wmsMissionId: string }> = (props) => {
         pagination={false}
         tableExtend={tableExtend}
         height={itemHeight * 4}
-      />
+      ></MwSearchTable>
     </div>
   )
 }

@@ -1,12 +1,12 @@
 import React, { ElementRef, useRef, useState } from 'react'
 import type { FC } from 'react'
-import { Badge, Descriptions, List, Switch, Tooltip } from 'antd'
+import { Badge, List, Switch, Tooltip } from 'antd'
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
 import { observer } from 'mobx-react-lite'
-import { AnyKeyProps, MwSearchTableField, MwSearchTable } from 'multiway'
-import { IMwTableRef } from '@/multiway'
+import { AnyKeyProps, MwSearchTableField, MwSearchTable, MwButton, MwAction } from 'multiway'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@packages/utils'
+import { IMwTableRef } from '@packages/multiway-config'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import { type IListParams, type IWmsItem, useWcsRequest } from '@packages/services'
@@ -88,7 +88,8 @@ const WmsMission: FC = () => {
         ) : (
           '无'
         )
-      }
+      },
+      dialog: true
     },
     {
       title: t('wmsMission.priority'),
@@ -99,7 +100,8 @@ const WmsMission: FC = () => {
       render: (_, record) => {
         return <Badge size="small" color={ColorBox[record.priority]} showZero count={record.priority}></Badge>
       },
-      sort: true
+      sort: true,
+      dialog: true
     },
     {
       title: t('wmsMission.from'),
@@ -129,7 +131,8 @@ const WmsMission: FC = () => {
         ) : (
           '无'
         )
-      }
+      },
+      dialog: true
     },
     {
       title: t('wmsMission.to'),
@@ -159,7 +162,8 @@ const WmsMission: FC = () => {
         ) : (
           '无'
         )
-      }
+      },
+      dialog: true
     },
     {
       title: t('wmsMission.autoRun'),
@@ -168,7 +172,8 @@ const WmsMission: FC = () => {
       align: 'center',
       render: (_, record) => (
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoRun} />
-      )
+      ),
+      dialog: true
     },
     {
       title: t('wmsMission.autoAbort'),
@@ -177,7 +182,8 @@ const WmsMission: FC = () => {
       align: 'center',
       render: (_, record) => (
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoRun} />
-      )
+      ),
+      dialog: true
     },
     {
       title: t('wmsMission.creationTime'),
@@ -212,7 +218,8 @@ const WmsMission: FC = () => {
       render: (extraProperties: any) => {
         const keys = Object.keys(extraProperties)
         return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
-      }
+      },
+      dialog: true
     }
   ]
 
@@ -264,9 +271,24 @@ const WmsMission: FC = () => {
     })
   }
 
+  const [isDebugging, setIsDebugging] = useState(false)
+  isDebugging &&
+    fields.push({
+      title: '操作',
+      width: 150,
+      key: 'action',
+      render: () => <MwButton type="link">添加子任务</MwButton>
+    })
+
   return (
     <div>
       <MwSearchTable
+        title={
+          <div className="flex items-center py-2">
+            调试模式：
+            <Switch checkedChildren="开启" unCheckedChildren="关闭" checked={isDebugging} onChange={setIsDebugging} />
+          </div>
+        }
         ref={wmsMissionTableRef}
         rowKey="id"
         fields={fields}
@@ -278,7 +300,12 @@ const WmsMission: FC = () => {
           }
         }}
         onLoad={handleLoad}
-      ></MwSearchTable>
+        dialogFormExtend={{
+          fields
+        }}
+      >
+        {isDebugging && <MwAction action="add">添加WMS任务</MwAction>}
+      </MwSearchTable>
     </div>
   )
 }
