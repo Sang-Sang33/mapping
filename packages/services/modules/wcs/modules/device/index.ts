@@ -30,7 +30,7 @@ const useWcsDeviceRequest = (mwRequest: MWRequest) => {
   const debugDeviceFunction = (data: IDebugWorkflow) => post('/function/run', data)
 
   const fetchDeviceFunctionInstanceList = (params: IWorkflowInstanceListParams) =>
-    get<IListResult<IWorkflowInstanceItem>>('/event/instance-list', params)
+    get<IListResult<IWorkflowInstanceItem>>('/function/instance-list', params)
 
   return {
     fetchDevice,
