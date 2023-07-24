@@ -100,7 +100,7 @@ const Instance: FC<IProps> = (props) => {
   const { workflowEngineUrl } = props
   const { fetchMissionProcessInstanceList, fetchEventInstanceList, fetchDeviceFunctionInstanceList } = useWcsRequest()
   const [workflowInstanceId, setWorkflowInstanceId] = useState('')
-  const [workflowInstanceDisplayName, setWorkflowInstanceDisplayName] = useState('')
+  const [workflowInstanceName, setWorkflowInstanceName] = useState('')
   const [activeTabKey, setActiveTabKey] = useState<ETabKey>(ETabKey.MISSION_PROCESS)
   const mergeFields: MwSearchTableField[] = [
     ...fields,
@@ -113,7 +113,7 @@ const Instance: FC<IProps> = (props) => {
             type="link"
             onClick={() => {
               setWorkflowInstanceId(record.id)
-              setWorkflowInstanceDisplayName(record.displayName)
+              setWorkflowInstanceName(record.name)
             }}
           >
             查看
@@ -167,33 +167,40 @@ const Instance: FC<IProps> = (props) => {
 
   return (
     <div className="h-full">
-      {workflowInstanceId ? (
-        <Card
-          title={
-            <div className="flex items-center gap-2">
-              <LeftOutlined className="cursor-pointer" onClick={() => setWorkflowInstanceId('')} />
-              <span>{workflowInstanceDisplayName}</span>
-            </div>
-          }
-          bodyStyle={{ height: '823px', padding: 0 }}
-        >
-          <WorkflowIframeBase
-            workflowEngineUrl={workflowEngineUrl}
-            mode="view"
-            culture={locale}
-            workflowInstanceId={workflowInstanceId}
-            messageEffectList={messageEffectList}
-          ></WorkflowIframeBase>
-        </Card>
-      ) : (
-        <Card
-          tabList={tabList}
-          activeTabKey={activeTabKey}
-          onTabChange={(tab) => {
-            setActiveTabKey(tab as ETabKey)
+      <Card
+        tabList={tabList}
+        activeTabKey={activeTabKey}
+        onTabChange={(tab) => {
+          setActiveTabKey(tab as ETabKey)
+        }}
+        bodyStyle={{ padding: '0 24px 24px' }}
+        tabProps={{
+          onTabClick: () => {
             setWorkflowInstanceId('')
-          }}
-        >
+          }
+        }}
+      >
+        {workflowInstanceId ? (
+          // <Card
+          //   title={
+          //     <div className="flex items-center gap-2">
+          //       <LeftOutlined className="cursor-pointer" onClick={() => setWorkflowInstanceId('')} />
+          //       <span>{workflowInstanceName}</span>
+          //     </div>
+          //   }
+          //   bodyStyle={{ height: '823px', padding: 0 }}
+          // >
+          <div style={{ height: '790px' }}>
+            <WorkflowIframeBase
+              workflowEngineUrl={workflowEngineUrl}
+              mode="view"
+              culture={locale}
+              workflowInstanceId={workflowInstanceId}
+              messageEffectList={messageEffectList}
+            ></WorkflowIframeBase>
+          </div>
+        ) : (
+          // </Card>
           <MwSearchTable
             key={activeTabKey}
             api={async (params) => {
@@ -219,13 +226,15 @@ const Instance: FC<IProps> = (props) => {
             searchExtend={{ inline: true }}
             compact
             extraRefreshVisible
-            extraSizeVisible
             pagination={{
               showSizeChanger: true
             }}
+            tableExtend={{
+              size: 'middle'
+            }}
           />
-        </Card>
-      )}
+        )}
+      </Card>
     </div>
   )
 }
