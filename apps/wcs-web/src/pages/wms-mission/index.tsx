@@ -89,7 +89,13 @@ const WmsMission: FC = () => {
           '无'
         )
       },
-      dialog: true
+      // dialog: true,
+      type: 'select',
+      dialog: {
+        showSearch: true,
+        mode: 'multiple'
+      },
+      options: wmsMissionTableRef.current?.getTableData().map((d) => ({ label: d.id, value: d.id }))
     },
     {
       title: t('wmsMission.priority'),
@@ -101,7 +107,10 @@ const WmsMission: FC = () => {
         return <Badge size="small" color={ColorBox[record.priority]} showZero count={record.priority}></Badge>
       },
       sort: true,
-      dialog: true
+      dialog: {
+        defaultValue: 1
+      },
+      type: 'number'
     },
     {
       title: t('wmsMission.from'),
@@ -173,7 +182,12 @@ const WmsMission: FC = () => {
       render: (_, record) => (
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoRun} />
       ),
-      dialog: true
+      type: 'custom',
+      dialog: {
+        renderContent: (_: any, record: any) => (
+          <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoRun} />
+        )
+      }
     },
     {
       title: t('wmsMission.autoAbort'),
@@ -181,9 +195,18 @@ const WmsMission: FC = () => {
       key: 'autoAbort',
       align: 'center',
       render: (_, record) => (
-        <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoRun} />
+        <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoAbort} />
       ),
-      dialog: true
+      type: 'custom',
+      dialog: {
+        renderContent: (_: any, record: any) => (
+          <Switch
+            checkedChildren={<CheckOutlined />}
+            unCheckedChildren={<CloseOutlined />}
+            checked={record.autoAbort}
+          />
+        )
+      }
     },
     {
       title: t('wmsMission.creationTime'),

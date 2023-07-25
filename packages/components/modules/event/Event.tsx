@@ -1,11 +1,12 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import type { FC } from 'react'
 import { useWcsRequest } from '@packages/services'
 import { WorkflowEngine, WorkflowTypeEnum } from '@packages/ui'
 import type { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn, IMenuItem } from '@packages/ui'
+import { i18n } from '@packages/i18n'
+import { useStorage } from '@packages/hooks'
 import fields from './config/formFields'
 import workflowApi from './config/workflowApi'
-import { i18n } from '@packages/i18n'
 
 interface IEventProps {
   workflowEngineUrl: string
@@ -20,6 +21,8 @@ const Event: FC<IEventProps> = (props) => {
   const { workflowEngineUrl, baseUrl } = props
   const { fetchEvent, deleteEvent, createEvent, fetchEventWorkflowDefinition, updateEvent, debugEvent } =
     useWcsRequest(baseUrl)
+  const storage = useStorage()
+
   // 获取事件工作流数据
   const fetchData: FetchDataFn = () =>
     fetchEvent().then((res) =>
@@ -92,7 +95,13 @@ const Event: FC<IEventProps> = (props) => {
     )
   }
   // 调试
+  let [eventDebugHistory, setEventDebugHistory] = useState(storage.getItem('EVENT_DEBUG_HISTORY') ?? {})
   const debug = async (id: string, data: any) => {
+    const newEventDebugHistory = { ...eventDebugHistory }
+    newEventDebugHistory[id] = data
+    storage.setItem('EVENT_DEBUG_HISTORY', newEventDebugHistory)
+    setEventDebugHistory(newEventDebugHistory)
+
     return debugEvent({
       id,
       extraProperties: data
@@ -112,6 +121,7 @@ const Event: FC<IEventProps> = (props) => {
       batchCreateData={batchCreateData}
       debug={debug}
       workflowApi={workflowApi}
+      debuggingHistory={eventDebugHistory}
     ></WorkflowEngine>
   )
 }

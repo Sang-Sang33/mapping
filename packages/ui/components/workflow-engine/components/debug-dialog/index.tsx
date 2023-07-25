@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
 import type { ElementRef, FC } from 'react'
 import { Modal, Button, Radio, type RadioChangeEvent, message } from 'antd'
 import Editor, { loader } from '@monaco-editor/react'
@@ -35,6 +35,7 @@ const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
 
 interface IProps {
   visible: boolean
+  debuggingDefaultValue?: Record<string, any>
   onConfirm?: (data: any) => void
   onCancel?: () => void
 }
@@ -45,11 +46,13 @@ enum EConfigurationMode {
 }
 
 const KeyValueForm = ({
+  defaultValue,
   onRender
 }: {
-  onRender?: (formRef: React.MutableRefObject<ElementRef<typeof MwForm>>) => void
+  defaultValue?: any
+  onRender?: (formRef: React.MutableRefObject<any>) => void
 }) => {
-  const formRef = useRef<ElementRef<typeof MwForm>>(null)
+  const formRef = useRef<any>(null)
   const fields: Array<MwFormField> = [
     {
       key: 'key',
@@ -59,12 +62,13 @@ const KeyValueForm = ({
           message: t('debugDialog.keyNull')
         }
       ],
-      placeholder: t('debugDialog.keyPlaceholder')
+      placeholder: t('debugDialog.keyPlaceholder'),
+      defaultValue: defaultValue['key']
     },
     {
       key: 'valueType',
       type: 'select',
-      defaultValue: 'input',
+      defaultValue: defaultValue['valueType'] || 'input',
       rules: [
         {
           required: true,
@@ -111,7 +115,8 @@ const KeyValueForm = ({
           value: false
         }
       ],
-      placeholder: t('debugDialog.valuePlaceholder')
+      placeholder: t('debugDialog.valuePlaceholder'),
+      defaultValue: defaultValue['value']
     }
   ]
 
@@ -120,16 +125,32 @@ const KeyValueForm = ({
   }, [])
 
   return (
-    <MwForm className="!mb-2" ref={formRef as any} fields={fields} formLayout="vertical" span={8} gutter={8}></MwForm>
+    <MwForm
+      className="!mb-2"
+      ref={formRef as any}
+      fields={fields}
+      formLayout="vertical"
+      span={8}
+      gutter={8}
+      props={{ initialValues: defaultValue }}
+    ></MwForm>
   )
 }
 
 const DebugDialog: FC<IProps> = (props) => {
-  const { visible, onConfirm, onCancel } = props
+  const { visible, debuggingDefaultValue, onConfirm, onCancel } = props
   const [configurationMode, setConfigurationMode] = useState<EConfigurationMode>(EConfigurationMode.KEY_VAVLUE_TABLE)
   const [formCount, setFormCount] = useState(1)
   const [forms, setForms] = useState<ElementRef<typeof MwForm>[]>([])
   let editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const debuggingDefaultValueEntries = useMemo(
+    () => (debuggingDefaultValue ? Object.entries(debuggingDefaultValue) : []),
+    [debuggingDefaultValue]
+  )
+
+  useEffect(() => {
+    setFormCount(debuggingDefaultValueEntries.length || 1)
+  }, [debuggingDefaultValueEntries])
 
   const onChange = (e: RadioChangeEvent) => {
     setConfigurationMode(e.target.value)
@@ -154,46 +175,74 @@ const DebugDialog: FC<IProps> = (props) => {
         </div>
         <span className="flex-[0.5]">操作</span>
       </div>
-      {new Array(formCount).fill('').map((_, i) => (
-        <div className="flex">
-          <div className="flex-[3]">
-            <KeyValueForm
-              key={i}
-              onRender={(formRef) => setForms((forms) => [...forms, formRef.current])}
-            ></KeyValueForm>
+      {new Array(formCount).fill('').map((_, i) => {
+        const [key, value] = debuggingDefaultValueEntries[i] ?? []
+        let valueType = ''
+        switch (typeof value) {
+          case 'string':
+            valueType = 'input'
+            break
+          case 'number':
+            valueType = 'number'
+            break
+          case 'boolean':
+            valueType = 'select'
+            break
+          default:
+            valueType = 'input'
+            break
+        }
+        const defaultValue = {
+          key: key ?? '',
+          value: value ?? '',
+          valueType
+        }
+
+        return (
+          <div className="flex" key={key}>
+            <div className="flex-[3]">
+              <KeyValueForm
+                key={i}
+                onRender={(formRef) => {
+                  setForms((forms) => [...forms, formRef.current])
+                  // formRef.current?.setFieldsValue?.(defaultValue)
+                }}
+                defaultValue={defaultValue}
+              ></KeyValueForm>
+            </div>
+            <div className="flex-[0.5]">
+              <Button
+                type="link"
+                danger
+                onClick={() => {
+                  const newForms = [...forms]
+                  newForms.splice(i, 1)
+                  setForms(newForms)
+                  setFormCount((c) => c - 1)
+                }}
+              >
+                删除
+              </Button>
+            </div>
           </div>
-          <div className="flex-[0.5]">
-            <Button
-              type="link"
-              danger
-              onClick={() => {
-                const newForms = [...forms]
-                newForms.splice(i, 1)
-                console.log('🚀 ~ file: index.tsx ~ line 171 ~ newForms', newForms)
-                setForms(newForms)
-                setFormCount((c) => c - 1)
-              }}
-            >
-              删除
-            </Button>
-          </div>
-        </div>
-      ))}
+        )
+      })}
       <Button className="w-full" type="dashed" onClick={() => setFormCount((c) => c + 1)}>
         {t('debugDialog.add')}
       </Button>
     </div>
   )
-  const renderJsonEditor = () => (
-    <div className={configurationMode === EConfigurationMode.JSON_EDITOR ? '' : 'hidden'}>
-      <Editor
-        onMount={(editor) => (editorRef.current = editor)}
-        height="50vh"
-        defaultLanguage="json"
-        defaultValue="{}"
-      />
-    </div>
-  )
+  const renderJsonEditor = () => {
+    const [value, setValue] = useState('{}')
+    useEffect(() => {
+      setValue(JSON.stringify(debuggingDefaultValue, null, 2) ?? {})
+    }, [debuggingDefaultValue])
+    return (
+      <div className={configurationMode === EConfigurationMode.JSON_EDITOR ? '' : 'hidden'}>
+        <Editor onMount={(editor) => (editorRef.current = editor)} height="50vh" defaultLanguage="json" value={value} />
+      </div>
+    )
+  }
 
   const handleConfirm = () => {
     if (configurationMode === EConfigurationMode.KEY_VAVLUE_TABLE) {

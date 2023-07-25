@@ -16,6 +16,7 @@ import type {
 } from '@packages/ui'
 import { useWcsRequest } from '@packages/services'
 import { i18n } from '@packages/i18n'
+import { useStorage } from '@packages/hooks'
 import { useTranslation } from 'react-i18next'
 import workflowApi from './config/workflowApi'
 import fields from './config/formFields'
@@ -43,6 +44,8 @@ const Feature: FC<IFeatureProps> = (props) => {
     fetchDeviceFunction,
     debugDeviceFunction
   } = useWcsRequest(baseUrl)
+  const storage = useStorage()
+
   // 获取数据
   const fetchData: FetchDataFn = () =>
     fetchDevice().then((res) =>
@@ -238,7 +241,13 @@ const Feature: FC<IFeatureProps> = (props) => {
   }
 
   // 调试
+
+  let [featureDebugHistory, setFeatureDebugHistory] = useState(storage.getItem('FEATURE_DEBUG_HISTORY') ?? {})
   const debug = async (id: string, data: any) => {
+    const newFeatureDebugHistory = { ...featureDebugHistory }
+    newFeatureDebugHistory[id] = data
+    storage.setItem('FEATURE_DEBUG_HISTORY', newFeatureDebugHistory)
+    setFeatureDebugHistory(newFeatureDebugHistory)
     return debugDeviceFunction({
       id,
       extraProperties: data
@@ -262,6 +271,7 @@ const Feature: FC<IFeatureProps> = (props) => {
         workflowApi={workflowApi}
         onNotEditWorkflow={handleNotEditWorkflow}
         debug={debug}
+        debuggingHistory={featureDebugHistory}
       ></WorkflowEngine>
       <MwDialogForm
         formExtend={{

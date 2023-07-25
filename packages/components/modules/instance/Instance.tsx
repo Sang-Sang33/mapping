@@ -100,7 +100,6 @@ const Instance: FC<IProps> = (props) => {
   const { workflowEngineUrl } = props
   const { fetchMissionProcessInstanceList, fetchEventInstanceList, fetchDeviceFunctionInstanceList } = useWcsRequest()
   const [workflowInstanceId, setWorkflowInstanceId] = useState('')
-  const [workflowInstanceName, setWorkflowInstanceName] = useState('')
   const [activeTabKey, setActiveTabKey] = useState<ETabKey>(ETabKey.MISSION_PROCESS)
   const mergeFields: MwSearchTableField[] = [
     ...fields,
@@ -113,7 +112,6 @@ const Instance: FC<IProps> = (props) => {
             type="link"
             onClick={() => {
               setWorkflowInstanceId(record.id)
-              setWorkflowInstanceName(record.name)
             }}
           >
             查看

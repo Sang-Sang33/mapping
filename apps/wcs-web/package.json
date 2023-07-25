@@ -22,6 +22,7 @@
     "@ant-design/icons": "^5.1.4",
     "@jiaminghi/data-view-react": "^1.2.5",
     "@packages/components": "workspace:^",
+    "@packages/hooks": "workspace:^",
     "@packages/i18n": "workspace:^",
     "@packages/multiway-config": "workspace:^",
     "@packages/services": "workspace:^",

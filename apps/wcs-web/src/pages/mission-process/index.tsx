@@ -1,8 +1,9 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import type { FC } from 'react'
 import { useWcsRequest } from '@packages/services'
 import { WorkflowEngine, WorkflowTypeEnum } from '@packages/ui'
 import type { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn, IMenuItem } from '@packages/ui'
+import { useStorage } from '@packages/hooks'
 import i18n from '@/i18n'
 import { MwDialogFormField } from 'multiway'
 import { IconFont } from '@/components/Icon'
@@ -23,6 +24,8 @@ const Event: FC = () => {
     fetchMissionProcessAvailableNames,
     debugMissionProcess
   } = useWcsRequest()
+  const storage = useStorage()
+
   // 获取事件工作流数据
   const fetchData: FetchDataFn = () =>
     fetchMissionProcess().then((res) =>
@@ -89,7 +92,14 @@ const Event: FC = () => {
   }
 
   // 调试
+  let [missionProcessDebugHistory, setMissionProcessDebugHistory] = useState(
+    storage.getItem('MISSION_PROCESS_DEBUG_HISTORY') ?? {}
+  )
   const debug = async (id: string, data: any) => {
+    const newMissionProcessDebugHistory = { ...missionProcessDebugHistory }
+    newMissionProcessDebugHistory[id] = data
+    storage.setItem('MISSION_PROCESS_DEBUG_HISTORY', newMissionProcessDebugHistory)
+    setMissionProcessDebugHistory(newMissionProcessDebugHistory)
     return debugMissionProcess({
       id,
       extraProperties: data
@@ -110,6 +120,7 @@ const Event: FC = () => {
       workflowApi={workflowApi}
       beforeDialogOpen={handleBeforeDialogOpen}
       debug={debug}
+      debuggingHistory={missionProcessDebugHistory}
     ></WorkflowEngine>
   )
 }

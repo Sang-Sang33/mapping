@@ -44,6 +44,7 @@ interface IProps {
     } // workflow api的request config, 用来控制elsa-designer发起请求
   }
   onNotEditWorkflow?: OnNotEditWorkflow // 如果不是编辑工作流, 则由外界进行处理
+  debuggingHistory?: Record<string, any>
   beforeDialogOpen?: (formFields: MwDialogFormField[]) => Promise<MwDialogFormField[]> // 新增编辑弹窗打开之前(可用于修改formField配置)
   debug?: (workflowDefinitionId: string, data: any) => Promise<any>
 }
@@ -67,6 +68,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
       Object.fromEntries(formFields.map((x) => [x.key, menuItem.data?.[x.key as keyof IMenuItem]])),
     workflowApi,
     onNotEditWorkflow,
+    debuggingHistory,
     beforeDialogOpen,
     debug
   } = props
@@ -361,7 +363,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
         <div className="flex gap-2">
           {selectedMenuItem?.children?.length && renderHeaderActionArea()}
 
-          <Button
+         {selectedWorkflowDefinitionId &&  <Button
             shape="round"
             icon={<SettingFilled className="align-middle" />}
             type="default"
@@ -370,7 +372,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
             style={{ color: '#7f8c8d', borderColor: '#7f8c8d' }}
           >
             {t('action.debug')}
-          </Button>
+          </Button>}
           <Button
             shape="round"
             icon={<AppstoreAddOutlined className="align-middle" />}
@@ -486,9 +488,12 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
           onUpload={(data) => handleUpload(data)}
           onCancel={() => setImportDialogVisible(false)}
         ></ImportDialog>
-        {
+        {debugDialogVisible && (
           <DebugDialog
             visible={debugDialogVisible}
+            debuggingDefaultValue={
+              (selectedWorkflowDefinitionId && debuggingHistory?.[selectedWorkflowDefinitionId]) ?? {}
+            }
             onCancel={() => setDebugDialogVisible(false)}
             onConfirm={async (data) => {
               if (!selectedWorkflowDefinitionId) return
@@ -496,7 +501,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
               setDebugDialogVisible(false)
             }}
           ></DebugDialog>
-        }
+        )}
       </WorkflowConfigContext.Provider>
     </div>
   )
