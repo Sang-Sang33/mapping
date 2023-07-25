@@ -4,13 +4,13 @@ import { message } from 'antd'
 import { MwDialogForm, MwDialogFormField } from 'multiway'
 import { WorkflowEngine, WorkflowTypeEnum, defaultDialogProps } from '@packages/ui'
 import type {
-  CreateDataFn,
-  DeleteDataFn,
-  FetchDataFn,
+  TCreate,
+  TDelete,
+  TFetch,
   GetFormInitialValueFn,
   IWorkflowEngineComponentRef,
-  OnNotEditWorkflow,
-  UpdateDataFn,
+  TNotEditWorkflow,
+  TUpdate,
   IDefaultDialogFormProps,
   IMenuItem
 } from '@packages/ui'
@@ -47,7 +47,7 @@ const Feature: FC<IFeatureProps> = (props) => {
   const storage = useStorage()
 
   // 获取数据
-  const fetchData: FetchDataFn = () =>
+  const onFetch: TFetch = () =>
     fetchDevice().then((res) =>
       res.map((x) => ({
         label: x.name,
@@ -109,7 +109,7 @@ const Feature: FC<IFeatureProps> = (props) => {
       }))
     )
   // 删除数据
-  const deleteData: DeleteDataFn = (menuItem) => {
+  const onDelete: TDelete = (menuItem) => {
     if (menuItem.definitionId) {
       return deleteDeviceFunction(menuItem.definitionId)
     } else {
@@ -117,7 +117,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     }
   }
   // 创建数据
-  const createData: CreateDataFn = ({ deviceName, functionName, behaviour }: FormData) => {
+  const onCreate: TCreate = ({ deviceName, functionName, behaviour }: FormData) => {
     const name = `${deviceName}.${functionName}.${behaviour ? 'Active' : 'Passive'}`
     return createDeviceFunction([
       {
@@ -130,7 +130,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     ])
   }
   // 更新数据
-  const updateData: UpdateDataFn = async ({ deviceName, functionName, behaviour }: FormData, menuItem) => {
+  const onUpdate: TUpdate = async ({ deviceName, functionName, behaviour }: FormData, menuItem) => {
     const name = `${deviceName}.${functionName}.${behaviour ? 'Active' : 'Passive'}`
     const [workflowDefinition] = await fetchDeviceFunction([menuItem.definitionId!])
     const { definitionId, isPublished } = workflowDefinition
@@ -142,7 +142,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     })
   }
   // 复制或导入
-  const batchCreateData = async (menu: IMenuItem[], parentMenu?: IMenuItem) => {
+  const onBatchCreate = async (menu: IMenuItem[], parentMenu?: IMenuItem) => {
     let definitionIds: string[] = []
     let idNameMap: Record<string, string> = {}
     const type = menu[0].type
@@ -226,7 +226,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     }
   ]
   // 编辑的不是工作流数据(没有definitionId),
-  const handleNotEditWorkflow: OnNotEditWorkflow = (menuItem) => {
+  const handleNotEditWorkflow: TNotEditWorkflow = (menuItem) => {
     setDialogProps({
       title: t('edit'),
       mode: 'update',
@@ -262,11 +262,11 @@ const Feature: FC<IFeatureProps> = (props) => {
         type={WorkflowTypeEnum.DEVICE}
         workflowEngineUrl={workflowEngineUrl}
         formFields={fields}
-        fetchData={fetchData}
-        deleteData={deleteData}
-        createData={createData}
-        updateData={updateData}
-        batchCreateData={batchCreateData}
+        onFetch={onFetch}
+        onDelete={onDelete}
+        onCreate={onCreate}
+        onUpdate={onUpdate}
+        onBatchCreate={onBatchCreate}
         getFormInitialValue={getFormInitialValue}
         workflowApi={workflowApi}
         onNotEditWorkflow={handleNotEditWorkflow}

@@ -18,30 +18,30 @@ import ActionArea from './components/aside/ActionArea'
 import MultiCheckDialog from './components/multi-check-dialog/MultiCheckDialog'
 import { useTranslation } from 'react-i18next'
 
-export type FetchDataFn = () => Promise<IMenuItem[]>
-export type DeleteDataFn = (menuItem: IMenuItem) => Promise<any>
-export type CreateDataFn = (data: any) => Promise<any>
-export type UpdateDataFn = (data: any, menuItem: IMenuItem) => Promise<any>
-export type BatchCreateData = (menu: IMenuItem[], parentMenu?: IMenuItem) => Promise<any>
+export type TFetch = () => Promise<IMenuItem[]>
+export type TDelete = (menuItem: IMenuItem) => Promise<any>
+export type TCreate = (data: any) => Promise<any>
+export type TUpdate = (data: any, menuItem: IMenuItem) => Promise<any>
+export type TBatchCreate = (menu: IMenuItem[], parentMenu?: IMenuItem) => Promise<any>
 export type GetFormInitialValueFn = (menuItem: IMenuItem) => Promise<any>
-export type OnNotEditWorkflow = (menuItem: IMenuItem) => void
+export type TNotEditWorkflow = (menuItem: IMenuItem) => void
 
 interface IProps {
   title: string
   type: WorkflowTypeEnum
   formFields: MwDialogFormField[]
-  fetchData: FetchDataFn // 获取菜单数据
-  deleteData: DeleteDataFn // 删除工作流
-  createData: CreateDataFn // 创建工作流
-  updateData: UpdateDataFn // 更新工作流
-  batchCreateData: BatchCreateData // 批量创建工作流
+  onFetch: TFetch // 获取菜单数据
+  onDelete: TDelete // 删除工作流
+  onCreate: TCreate // 创建工作流
+  onUpdate: TUpdate // 更新工作流
+  onBatchCreate: TBatchCreate // 批量创建工作流
   getFormInitialValue?: GetFormInitialValueFn // 获取工作流详情
   workflowApi: {
     [key: string]: {
       [key: string]: AxiosRequestConfig
     } // workflow api的request config, 用来控制elsa-designer发起请求
   }
-  onNotEditWorkflow?: OnNotEditWorkflow // 如果不是编辑工作流, 则由外界进行处理
+  onNotEditWorkflow?: TNotEditWorkflow // 如果不是编辑工作流, 则由外界进行处理
   beforeDialogOpen?: (formFields: MwDialogFormField[]) => Promise<MwDialogFormField[]> // 新增编辑弹窗打开之前(可用于修改formField配置)
 }
 
@@ -54,11 +54,11 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     title,
     type,
     formFields,
-    fetchData,
-    deleteData,
-    createData,
-    updateData,
-    batchCreateData,
+    onFetch,
+    onDelete,
+    onCreate,
+    onUpdate,
+    onBatchCreate,
     getFormInitialValue = (menuItem) =>
       Object.fromEntries(formFields.map((x) => [x.key, menuItem.data?.[x.key as keyof IMenuItem]])),
     workflowApi,
@@ -80,7 +80,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
   const { t } = useTranslation()
 
   const loadData = async () => {
-    const newMenu = await fetchData()
+    const newMenu = await onFetch()
     setMenu(newMenu)
     setSelectedMenuItem((oldSelectedMenuItem) => {
       // 如果重新加载数据找不到需要选中的menuItem, 需要清空selectedWorkflowDefinitionId, 防止仍在显示之前的workflow
@@ -112,7 +112,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
 
   const handleDelete = async (menuItem: IMenuItem) => {
     try {
-      await deleteData(menuItem)
+      await onDelete(menuItem)
       showMessage('delete_success')()
       setSelectedWorkflowDefinitionId(undefined)
       setIsOpenPopConfirm(false)
@@ -227,7 +227,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     }
 
     const result = batchCheckDulplicate(pastedContent, pastedTo)
-    await batchCreateData(result, selectedMenuItem)
+    await onBatchCreate(result, selectedMenuItem)
     await loadData()
     showMessage('paste_success')()
   }
@@ -251,7 +251,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
 
     const result = batchCheckDulplicate(data, importTo)
     setImportDialogVisible(false)
-    await batchCreateData(result, selectedMenuItem)
+    await onBatchCreate(result, selectedMenuItem)
     await loadData()
     showMessage('import_success')()
   }
@@ -458,8 +458,8 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
           {...dialogProps}
           onClose={() => setDialogProps(defaultDialogProps)}
           onSuccess={handleSuccess}
-          addApi={createData}
-          updateApi={(params) => updateData(params, editingMenuItem!)}
+          addApi={onCreate}
+          updateApi={(params) => onUpdate(params, editingMenuItem!)}
         />
         <ImportDialog
           visible={importDialogVisible}

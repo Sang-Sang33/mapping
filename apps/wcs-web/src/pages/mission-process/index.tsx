@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react'
 import type { FC } from 'react'
 import { useWcsRequest } from '@packages/services'
 import { WorkflowEngine, WorkflowTypeEnum } from '@packages/ui'
-import type { CreateDataFn, DeleteDataFn, FetchDataFn, UpdateDataFn, IMenuItem } from '@packages/ui'
+import type { TCreate, TDelete, TFetch, TUpdate, IMenuItem } from '@packages/ui'
 import { useStorage } from '@packages/hooks'
 import i18n from '@/i18n'
 import { MwDialogFormField } from 'multiway'
@@ -27,7 +27,7 @@ const Event: FC = () => {
   const storage = useStorage()
 
   // 获取事件工作流数据
-  const fetchData: FetchDataFn = () =>
+  const onFetch: TFetch = () =>
     fetchMissionProcess().then((res) =>
       res.map((x) => ({
         label: x.name,
@@ -39,8 +39,8 @@ const Event: FC = () => {
       }))
     )
 
-  const deleteData: DeleteDataFn = (menuItem: IMenuItem) => deleteMissionProcess(menuItem.definitionId!)
-  const createData: CreateDataFn = ({ name }: FormData) => {
+  const onDelete: TDelete = (menuItem: IMenuItem) => deleteMissionProcess(menuItem.definitionId!)
+  const onCreate: TCreate = ({ name }: FormData) => {
     return createMissionProcess([
       {
         name,
@@ -51,7 +51,7 @@ const Event: FC = () => {
       }
     ])
   }
-  const updateData: UpdateDataFn = async ({ name }: FormData, menuItem) => {
+  const onUpdate: TUpdate = async ({ name }: FormData, menuItem) => {
     const [workflowDefinition] = await fetchMissionProcessWorkflowDefinition([menuItem.definitionId!])
     const { definitionId, isPublished } = workflowDefinition
     return updateMissionProcess({
@@ -62,7 +62,7 @@ const Event: FC = () => {
     })
   }
   // 复制或导入
-  const batchCreateData = async (menu: IMenuItem[]) => {
+  const onBatchCreate = async (menu: IMenuItem[]) => {
     const definitionIds = menu.map((menuItem) => menuItem.definitionId as string)
     const idNameMap = Object.fromEntries(menu.map(({ definitionId, label }) => [definitionId, label]))
 
@@ -112,11 +112,11 @@ const Event: FC = () => {
       type={WorkflowTypeEnum.MISSION_PROCESS}
       workflowEngineUrl={import.meta.env.VITE_WORKFLOW_ENGINE_URL || 'http://120.79.85.168:6034'}
       formFields={fields}
-      fetchData={fetchData}
-      deleteData={deleteData}
-      createData={createData}
-      updateData={updateData}
-      batchCreateData={batchCreateData}
+      onFetch={onFetch}
+      onDelete={onDelete}
+      onCreate={onCreate}
+      onUpdate={onUpdate}
+      onBatchCreate={onBatchCreate}
       workflowApi={workflowApi}
       beforeDialogOpen={handleBeforeDialogOpen}
       debug={debug}
