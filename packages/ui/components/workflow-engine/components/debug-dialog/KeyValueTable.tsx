@@ -52,7 +52,7 @@ const getNewFormState = () => ({
 const KeyValueTable = forwardRef<IKeyValueTableRef, IProps>((props, ref) => {
   const { defaultValue, value } = props
   const [formStates, setFormStates] = useState<IFormItem[]>(
-    Object.keys(defaultValue).length ? getFormStates(defaultValue) : [getNewFormState()]
+    defaultValue && Object.keys(defaultValue).length ? getFormStates(defaultValue) : [getNewFormState()]
   )
   const jsonState = useJsonStates(formStates)
   useImperativeHandle(
