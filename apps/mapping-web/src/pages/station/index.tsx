@@ -210,7 +210,7 @@ const Station = () => {
 
   function handleShapeMouseOver(shapeItem) {
     const list = genSaveData.slots.filter(item => item.puDoPoint == shapeItem.id) || []
-    setHoveredShape({ ...shapeItem, position: list[list.length - 1].name })
+    setHoveredShape({ ...shapeItem, position: list[list.length - 1]?.name })
   }
 
   function handleShapeMouseOut() {
