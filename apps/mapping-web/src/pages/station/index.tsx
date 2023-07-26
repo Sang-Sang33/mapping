@@ -19,7 +19,7 @@ const Station = () => {
   const {
     drawerOpen,
     selectRect,
-    rectListInRcs:selectedRectList,
+    rectListInRcs: selectedRectList,
     checkedMenu,
     shapesList,
     stageWidth,
@@ -27,13 +27,14 @@ const Station = () => {
     headerHeight,
     currentMenu,
     backgroundImage,
-    layoutData
+    layoutData,
+    genSaveData
   } = EditorStore
   const [isPaint, setIsPaint] = useState(false)
   const containerLayerRef = useRef(null)
   const stageRef = useRef(null)
   const previewStageRef = useRef(null)
-  const [tooltipVisible, setTooltipVisible] = useState(true)
+  const [hoveredShape, setHoveredShape] = useState<any>(null)
 
   const [selectingShapeColor, setSelectingShapeColor] = useState<Record<string, any>>({})
   const backgroundImageObj = useMemo(() => {
@@ -64,8 +65,6 @@ const Station = () => {
   useEffect(() => {
     updatePreview()
   }, [checkedMenu, selectRect, shapesList])
-
-  const tooltipList = useMemo(() => shapesList.map((item) => <Text x={item.canvasPosition.x - 70} y={item.canvasPosition.y + 15} text={`id: ${item.id}, X: ${item.CADPosition.x}, Y: ${item.CADPosition.y}`} fill='red'></Text>), [shapesList])
 
   const curTypeCanHasCollision = useMemo(() => checkedMenu === 'transferZones', [checkedMenu])
   const showSelectedRectList = useMemo(
@@ -113,7 +112,6 @@ const Station = () => {
       y: pointer.y - mousePointTo.y * newScale
     }
     stage.position(newPos)
-    setTooltipVisible(stage.scaleX() >= 1)
   }
 
   function getPos() {
@@ -210,6 +208,15 @@ const Station = () => {
     console.log(e)
   }
 
+  function handleShapeMouseOver(shapeItem) {
+    const list = genSaveData.slots.filter(item => item.puDoPoint == shapeItem.id) || []
+    setHoveredShape({ ...shapeItem, position: list[list.length - 1].name })
+  }
+
+  function handleShapeMouseOut() {
+    setHoveredShape(null)
+  }
+
   return (
     <div>
       {checkedMenu === 'all' && <Legend></Legend>}
@@ -239,25 +246,28 @@ const Station = () => {
         <Layer ref={containerLayerRef}>
           {backgroundImage && layoutData && <KonvaImage image={backgroundImageObj} x={0} y={0} width={layoutData.CADWidth * layoutData.CADToCanvasRatio} height={layoutData.CADHeight * layoutData.CADToCanvasRatio} opacity={0.2}></KonvaImage>}
           <Rect name="select-rect" stroke="black" {...selectRect}></Rect>
+          {showSelectedRectList.map((item) => (
+            <Rect {...item} stroke={item.strokeColor || 'blue'} dash={[8, 4]}></Rect>
+          ))}
           {shapesList.map((item: shapeItem) => (
             <Circle
               name={'shape-' + item.id}
               onClick={handleShapeClick}
+              onMouseOver={() => handleShapeMouseOver(item)}
+              onMouseOut={() => handleShapeMouseOut(item)}
               {...item.canvasPosition}
               width={4}
               height={4}
-              fill={showSelectedShapeColor[ item.id] || selectingShapeColor[item.id] || 'black'}
+              fill={showSelectedShapeColor[item.id] || selectingShapeColor[item.id] || 'black'}
             />
           ))}
-          {showSelectedRectList.map((item) => (
-            <Rect {...item} stroke={item.strokeColor || 'blue'} dash={[8, 4]}></Rect>
-          ))}
         </Layer>
-        {/* <Layer>
-          {
-            tooltipVisible && tooltipList
-          }
-        </Layer> */}
+        <Layer>
+          {hoveredShape && <>
+            <Text x={hoveredShape.canvasPosition.x - 70} y={hoveredShape.canvasPosition.y + 5} text={`id: ${hoveredShape.id}, X: ${hoveredShape.CADPosition.x}, Y: ${hoveredShape.CADPosition.y}`} fill='red'></Text>
+            <Text x={hoveredShape.canvasPosition.x - 70} y={hoveredShape.canvasPosition.y + 20} text={`库位号：${hoveredShape.position}`} fill='red'></Text>
+          </>}
+        </Layer>
       </Stage>
       <EditWarehouse></EditWarehouse>
     </div>
