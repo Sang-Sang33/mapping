@@ -22,3 +22,8 @@ export interface IWmsSubItem {
   comments: string
   extraProperties: Record<string, any>
 }
+
+export type TCreateWmsItem = Omit<IWmsItem, 'id' | 'comments' | 'status' | 'creationTime' | 'lastModificationTime'>
+export type TUpdateWmsItem = TCreateWmsItem
+export type TCreateWmsSubItem = Omit<IWmsSubItem, 'id' | 'comments' | 'action'>
+export type TUpdateWmsSubItem = TCreateWmsSubItem

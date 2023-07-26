@@ -6,6 +6,7 @@ import KeyValueTable from './KeyValueTable'
 import JsonEditor from './JsonEditor'
 
 interface IProps {
+  value?: Record<string, any>
   defaultValue?: any
   defaultEditorHeight?: string
 }
@@ -23,7 +24,7 @@ export enum EConfiguration {
 const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
 
 const Configuration = forwardRef<IConfigurationRef, IProps>((props, ref) => {
-  const { defaultValue, defaultEditorHeight } = props
+  const { value, defaultValue, defaultEditorHeight } = props
   const [configurationMode, setConfiguration] = useState<EConfiguration>(EConfiguration.KEY_VAVLUE_TABLE)
   useImperativeHandle(
     ref,
@@ -67,7 +68,7 @@ const Configuration = forwardRef<IConfigurationRef, IProps>((props, ref) => {
         </Radio.Group>
       </div>
       <div className={configurationMode === EConfiguration.KEY_VAVLUE_TABLE ? '' : 'hidden'}>
-        <KeyValueTable ref={keyValueTableRef} defaultValue={defaultValue}></KeyValueTable>
+        <KeyValueTable ref={keyValueTableRef} defaultValue={defaultValue} value={value}></KeyValueTable>
       </div>
       <div className={configurationMode === EConfiguration.JSON_EDITOR ? '' : 'hidden'}>
         <JsonEditor ref={jsonEditorRef} defaultValue={defaultValue} defaultHeight={defaultEditorHeight}></JsonEditor>

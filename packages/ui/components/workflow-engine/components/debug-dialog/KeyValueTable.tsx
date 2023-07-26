@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useImperativeHandle, useState } from 'react'
+import React, { forwardRef, memo, useEffect, useImperativeHandle, useState } from 'react'
 import { FormJson, ETypes, useJsonStates } from 'antd-form-json'
 import type { IFormItem } from 'antd-form-json'
 import { generateUUID } from '@packages/utils'
@@ -7,13 +7,14 @@ import { i18n } from '@packages/i18n'
 
 interface IProps {
   defaultValue?: any
+  value?: Record<string, any>
 }
 
 interface IKeyValueTableRef {
   getJson: () => Record<string, any>
 }
 
-const getDefaultFormStates = (defaultValue: Record<string, any>) => {
+const getFormStates = (value: Record<string, any>) => {
   const formStates: IFormItem[] = []
   const _recursion = (data: Record<string, any>, parent: IFormItem[] = []) => {
     for (let k in data) {
@@ -34,7 +35,7 @@ const getDefaultFormStates = (defaultValue: Record<string, any>) => {
       parent.push(formItem)
     }
   }
-  _recursion(defaultValue, formStates)
+  _recursion(value, formStates)
 
   return formStates
 }
@@ -49,9 +50,9 @@ const getNewFormState = () => ({
 })
 
 const KeyValueTable = forwardRef<IKeyValueTableRef, IProps>((props, ref) => {
-  const { defaultValue } = props
+  const { defaultValue, value } = props
   const [formStates, setFormStates] = useState<IFormItem[]>(
-    Object.keys(defaultValue).length ? getDefaultFormStates(defaultValue) : [getNewFormState()]
+    Object.keys(defaultValue).length ? getFormStates(defaultValue) : [getNewFormState()]
   )
   const jsonState = useJsonStates(formStates)
   useImperativeHandle(
@@ -61,6 +62,10 @@ const KeyValueTable = forwardRef<IKeyValueTableRef, IProps>((props, ref) => {
     }),
     [jsonState]
   )
+
+  useEffect(() => {
+    value && setFormStates(getFormStates(value))
+  }, [value])
 
   return (
     <div>

@@ -1005,6 +1005,9 @@ importers:
       antd:
         specifier: 4.24.7
         version: 4.24.7(react-dom@18.2.0)(react@18.2.0)
+      antd-form-json:
+        specifier: ^0.0.4
+        version: 0.0.4(antd@4.24.7)(react-dom@18.2.0)(react@18.2.0)
       i18next:
         specifier: ^23.0.1
         version: 23.0.1
@@ -7784,6 +7787,21 @@ packages:
       tinycolor2: 1.6.0
     transitivePeerDependencies:
       - react-dom
+    dev: false
+
+  /antd-form-json@0.0.4(antd@4.24.7)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-f8EMr8zWCNAOfIUhZeBft9e8Iicn2uG4UC0C4zFHVjRMo3OCtlij3uwu+rzDaBaXcJcSs2HFx2O4qADqj8rXgQ==}
+    peerDependencies:
+      antd: '>=4'
+      react: '>=17.0.2'
+      react-dom: '>=17.0.2'
+    dependencies:
+      '@ant-design/icons': 5.1.4(react-dom@18.2.0)(react@18.2.0)
+      antd: 4.24.7(react-dom@18.2.0)(react@18.2.0)
+      immer: 9.0.21
+      lodash-es: 4.17.21
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /antd@4.24.7(react-dom@18.2.0)(react@18.2.0):

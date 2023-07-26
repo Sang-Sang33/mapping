@@ -1,9 +1,16 @@
 import type MWRequest from '../../../../request'
 import type { IListResult, IListParams } from '../../typings'
-import type { IWmsItem, IWmsSubItem } from './typings'
+import type {
+  IWmsItem,
+  IWmsSubItem,
+  TCreateWmsItem,
+  TCreateWmsSubItem,
+  TUpdateWmsItem,
+  TUpdateWmsSubItem
+} from './typings'
 
 const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
-  const { get } = mwRequest
+  const { get, post, put } = mwRequest
 
   const getWmsMissionList = async (params: IListParams, showProgress = false) => {
     const Sorting: string =
@@ -38,10 +45,28 @@ const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
       { showProgress }
     )
 
+  const createWmsMission = (data: TCreateWmsItem) => post('/wms-mission', data)
+  const updateWmsMission = (data: TUpdateWmsItem) => put('/wms-mission', data)
+  const completeWmsMission = (missionId: IWmsItem['id']) => post('/wms-mission/complete', { missionId })
+  const cancelWmsMission = (missionId: IWmsItem['id']) => post('/wms-mission/cancel', { missionId })
+
+  const createWmsSubMission = (data: TCreateWmsSubItem) => post('/wms-sub-mission', data)
+  const updateWmsSubMission = (data: TUpdateWmsSubItem) => put('/wms-sub-mission', data)
+  const cancelWmsSubMission = (missionId: IWmsItem['id']) => post('/wms-sub-mission/cancel', { missionId })
+
   return {
     getWmsMissionList,
     getWmsSubMissionList,
-    getWmsMissionPage
+    getWmsMissionPage,
+
+    createWmsMission,
+    updateWmsMission,
+    completeWmsMission,
+    cancelWmsMission,
+
+    createWmsSubMission,
+    updateWmsSubMission,
+    cancelWmsSubMission
   }
 }
 
