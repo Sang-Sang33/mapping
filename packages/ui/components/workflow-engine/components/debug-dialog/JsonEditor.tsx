@@ -4,6 +4,7 @@ import * as monaco from 'monaco-editor'
 
 interface IProps {
   defaultValue?: any
+  defaultHeight?: string
 }
 
 interface IJsonEditorRef {
@@ -11,7 +12,7 @@ interface IJsonEditorRef {
 }
 
 const JsonEditor = forwardRef<IJsonEditorRef, IProps>((props, ref) => {
-  const { defaultValue } = props
+  const { defaultValue, defaultHeight = '50vh' } = props
   const [value, setValue] = useState('{}')
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   useImperativeHandle(
@@ -23,10 +24,15 @@ const JsonEditor = forwardRef<IJsonEditorRef, IProps>((props, ref) => {
   )
 
   useEffect(() => {
-    setValue(JSON.stringify(defaultValue, null, 2) ?? {})
+    setValue(JSON.stringify(defaultValue, null, 2) ?? '{}')
   }, [defaultValue])
   return (
-    <Editor onMount={(editor) => (editorRef.current = editor)} height="50vh" defaultLanguage="json" value={value} />
+    <Editor
+      onMount={(editor) => (editorRef.current = editor)}
+      height={defaultHeight}
+      defaultLanguage="json"
+      value={value}
+    />
   )
 })
 

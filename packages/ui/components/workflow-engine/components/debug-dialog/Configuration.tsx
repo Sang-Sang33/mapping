@@ -7,6 +7,7 @@ import JsonEditor from './JsonEditor'
 
 interface IProps {
   defaultValue?: any
+  defaultEditorHeight?: string
 }
 
 interface IConfigurationRef {
@@ -22,7 +23,7 @@ export enum EConfiguration {
 const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
 
 const Configuration = forwardRef<IConfigurationRef, IProps>((props, ref) => {
-  const { defaultValue } = props
+  const { defaultValue, defaultEditorHeight } = props
   const [configurationMode, setConfiguration] = useState<EConfiguration>(EConfiguration.KEY_VAVLUE_TABLE)
   useImperativeHandle(
     ref,
@@ -79,7 +80,7 @@ const Configuration = forwardRef<IConfigurationRef, IProps>((props, ref) => {
         <KeyValueTable ref={keyValueTableRef} defaultValue={defaultValue}></KeyValueTable>
       </div>
       <div className={configurationMode === EConfiguration.JSON_EDITOR ? '' : 'hidden'}>
-        <JsonEditor ref={jsonEditorRef} defaultValue={defaultValue}></JsonEditor>
+        <JsonEditor ref={jsonEditorRef} defaultValue={defaultValue} defaultHeight={defaultEditorHeight}></JsonEditor>
       </div>
     </div>
   )
