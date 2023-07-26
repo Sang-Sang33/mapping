@@ -68,7 +68,7 @@ class NRequest {
 			},
 			error => {
 				if (error.response.status === 401) {
-					// redirectToSso()
+					redirectToSso()
 				} else {
 					message.error(error.message);
 				}
