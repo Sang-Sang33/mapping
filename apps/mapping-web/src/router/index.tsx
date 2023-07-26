@@ -4,7 +4,7 @@ import routes from "./routes";
 import lazyLoad from "@/router/utils/lazyLoad";
 import { redirectToSso, getAccessToken } from '@/utils/auth'
 function RouterConfig() {
-	// if (!getAccessToken()) redirectToSso()
+	if (!getAccessToken()) redirectToSso()
 	return (
 		<Router>
 			<Suspense>

@@ -38,6 +38,7 @@ const Station = () => {
 
   const [selectingShapeColor, setSelectingShapeColor] = useState<Record<string, any>>({})
   const backgroundImageObj = useMemo(() => {
+    if(!backgroundImage) return
     const image = new Image()
     image.src = backgroundImage
     return image
