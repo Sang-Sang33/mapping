@@ -33,18 +33,8 @@ const Configuration = forwardRef<IConfigurationRef, IProps>((props, ref) => {
         new Promise((resolve, reject) => {
           {
             if (configurationMode === EConfiguration.KEY_VAVLUE_TABLE) {
-              const forms = keyValueTableRef.current!.forms
-              Promise.all(forms.map((form: any) => form?.validateFields()))
-                .then(() => {
-                  console.log('all validate success')
-                  const entries = forms.map((f: any) => {
-                    const { key, value } = f.getFieldsValue()
-                    return [key, value]
-                  })
-                  const properties = Object.fromEntries(entries)
-                  resolve(properties)
-                })
-                .catch(reject)
+              const json = keyValueTableRef.current!.getJson()
+              resolve(json)
             } else if (configurationMode === EConfiguration.JSON_EDITOR) {
               const editor = jsonEditorRef.current
               const value = editor?.getValue?.()
