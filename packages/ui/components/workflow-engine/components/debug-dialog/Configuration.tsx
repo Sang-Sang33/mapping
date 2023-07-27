@@ -71,7 +71,12 @@ const Configuration = forwardRef<IConfigurationRef, IProps>((props, ref) => {
         <KeyValueTable ref={keyValueTableRef} defaultValue={defaultValue} value={value}></KeyValueTable>
       </div>
       <div className={configurationMode === EConfiguration.JSON_EDITOR ? '' : 'hidden'}>
-        <JsonEditor ref={jsonEditorRef} defaultValue={defaultValue} defaultHeight={defaultEditorHeight}></JsonEditor>
+        <JsonEditor
+          ref={jsonEditorRef}
+          defaultValue={defaultValue}
+          defaultHeight={defaultEditorHeight}
+          value={value}
+        ></JsonEditor>
       </div>
     </div>
   )
