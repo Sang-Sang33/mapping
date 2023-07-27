@@ -98,7 +98,11 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
         '无'
       )
     },
-    dialog: true
+    type: 'select',
+    dialog: {
+      showSearch: true,
+      mode: 'multiple'
+    }
   },
   {
     title: t('wmsMission.to'),
@@ -129,7 +133,11 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
         '无'
       )
     },
-    dialog: true
+    type: 'select',
+    dialog: {
+      showSearch: true,
+      mode: 'multiple'
+    }
   },
   {
     title: t('wmsMission.autoRun'),
@@ -293,13 +301,33 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
         '无'
       )
     },
-    dialog: true
+    type: 'select',
+    dialog: {
+      showSearch: true,
+      mode: 'multiple'
+    }
   },
   {
     title: '动作',
     width: 80,
     key: 'action',
-    align: 'center'
+    align: 'left',
+    type: 'select',
+    dialog: true,
+    options: [
+      {
+        label: 'PickUp',
+        value: 'PickUp'
+      },
+      {
+        label: 'PutDown',
+        value: 'PutDown'
+      },
+      {
+        label: 'Wait',
+        value: 'Wait'
+      }
+    ]
   },
   {
     title: '创建时间',

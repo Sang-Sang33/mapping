@@ -24,6 +24,6 @@ export interface IWmsSubItem {
 }
 
 export type TCreateWmsItem = Omit<IWmsItem, 'id' | 'comments' | 'status' | 'creationTime' | 'lastModificationTime'>
-export type TUpdateWmsItem = TCreateWmsItem
-export type TCreateWmsSubItem = Omit<IWmsSubItem, 'id' | 'comments' | 'action'>
-export type TUpdateWmsSubItem = TCreateWmsSubItem
+export type TUpdateWmsItem = TCreateWmsItem & { missionId: string }
+export type TCreateWmsSubItem = Omit<IWmsSubItem, 'id' | 'comments' | 'action'> & { missionId: string}
+export type TUpdateWmsSubItem = TCreateWmsSubItem & { missionId: string; subMissionId: string }

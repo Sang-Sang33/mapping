@@ -1,15 +1,16 @@
-import React, { ElementRef, useEffect, useMemo, useRef, useState } from 'react'
+import React, { ElementRef, memo, useMemo, useRef, useState } from 'react'
 import type { FC } from 'react'
-import { Button, List, Switch, Tooltip } from 'antd'
-import { observer } from 'mobx-react-lite'
+import { Button, List, Switch, Tooltip, message } from 'antd'
+import { debounce } from 'lodash'
 import { AnyKeyProps, MwSearchTable, MwButton, MwSearchTableField } from 'multiway'
 import { IMwTableRef } from '@packages/multiway-config'
 import { type IListParams, type IWmsItem, useWcsRequest } from '@packages/services'
+import { generateUUID } from '@packages/utils'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import useToggleDebuggingField from '@/hooks/useToggleDebuggingField'
-import WmsSubMission from './WmsSubMission'
 import MissionDialog from '@/components/mission-dialog'
+import WmsSubMission from './WmsSubMission'
 import { ColorBox, wmsMissionfields, wmsSubMissionFields } from './fields'
 import './index.less'
 
@@ -28,7 +29,9 @@ const WmsMission: FC = () => {
     cancelWmsMission,
     createWmsSubMission,
     updateWmsSubMission,
-    cancelWmsSubMission
+    cancelWmsSubMission,
+    fetchWmsMissionAvailablePredecessors,
+    fetchSlot
   } = useWcsRequest()
   useTableAutoRefresh(wmsMissionTableRef)
   const { antTableRef, focusToRow } = useTableFocusRow()
@@ -51,9 +54,45 @@ const WmsMission: FC = () => {
       setPreWmsMissionId(wmsMissionId)
     }
   }
-  wmsMissionfields.forEach((field) => {
+
+  // 更新表单项的options
+  const updateDialogFormFieldOptions = (
+    fieldKey: MwSearchTableField['key'],
+    options: MwSearchTableField['options']
+  ) => {
+    setDialogFormFields((fields) => {
+      const newDialogFormFields = [...fields]
+      const targetFields = newDialogFormFields.find((f) => f.key === fieldKey)
+      if (targetFields) targetFields.options = options
+      return newDialogFormFields
+    })
+  }
+  // 初始化from或to的field配置, 实现库位点列表防抖搜索
+  const initFromOrToField = (field: MwSearchTableField) => {
+    const dialog = field.dialog as any
+    const updateSlotOptions = async (searchItem = '') => {
+      const slot = await fetchSlot(searchItem)
+      const options = slot.map((s) => ({ label: s, value: s }))
+      updateDialogFormFieldOptions(field.key, options)
+    }
+    dialog.onSearch = debounce(updateSlotOptions, 200)
+    dialog.onFocus = debounce(() => updateSlotOptions(), 200)
+  }
+  // 初始化前置任务的field配置, 实现聚焦获取列表
+  const initPredecessorIds = (field: MwSearchTableField) => {
+    const dialog = field.dialog as any
+    const updatePrecessorsOptions = async () => {
+      const predecessors = await fetchWmsMissionAvailablePredecessors()
+      const options = predecessors.map((s) => ({ label: s, value: s }))
+      updateDialogFormFieldOptions(field.key, options)
+    }
+    dialog.onFocus = debounce(() => updatePrecessorsOptions(), 200)
+  }
+
+  // field 处理
+  wmsMissionfields.forEach(async (field) => {
     if (field.key === 'predecessorIds') {
-      field.render = (values: string[]) => {
+      field.render ??= (values: string[]) => {
         return values.length > 0 ? (
           <List
             size="small"
@@ -80,7 +119,16 @@ const WmsMission: FC = () => {
           '无'
         )
       }
-      field.options = wmsMissionTableRef.current?.getTableData().map((d) => ({ label: d.id, value: d.id }))
+      initPredecessorIds(field)
+    } else if (field.key === 'from' || field.key === 'to') {
+      initFromOrToField(field)
+    }
+  })
+  wmsSubMissionFields.forEach((field) => {
+    if (field.key === 'predecessorIds') {
+      initPredecessorIds(field)
+    } else if (field.key === 'to') {
+      initFromOrToField(field)
     }
   })
 
@@ -98,14 +146,22 @@ const WmsMission: FC = () => {
         <WmsSubMission
           wmsMissionId={record.id}
           isDebugging={isDebugging}
-          onUpdate={(subMissionRecord) => {
+          onUpdate={async (subMissionRecord) => {
             setIsSub(true)
             setMode('update')
             setDialogFormFields(getFormFieldsFromTableFields(wmsSubMissionFields))
+            setParentMissionId(record.id)
             setMissionDialogOpen(true)
             Promise.resolve().then(() => setInitialValues(subMissionRecord))
           }}
-          onCancel={cancelWmsSubMission}
+          onCancel={(subMissionId) =>
+            cancelWmsSubMission({
+              subMissionId,
+              missionId: record.id
+            }).then(() => {
+              message.success('任务已取消')
+            })
+          }
         ></WmsSubMission>
       ),
       onExpand: handleExpand,
@@ -125,7 +181,8 @@ const WmsMission: FC = () => {
     })
   }
 
-  let [dialogFormFields, setDialogFormFields] = useState(getFormFieldsFromTableFields(wmsMissionfields))
+  const [dialogFormFields, setDialogFormFields] = useState(getFormFieldsFromTableFields(wmsMissionfields))
+  const [parentMissionId, setParentMissionId] = useState('')
 
   const [isDebugging, setIsDebugging] = useState(false)
   useToggleDebuggingField(wmsMissionfields, isDebugging, (_, record) => (
@@ -133,7 +190,7 @@ const WmsMission: FC = () => {
       <MwButton
         className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
-        onClick={() => {
+        onClick={async () => {
           setIsSub(false)
           setMode('update')
           setDialogFormFields(getFormFieldsFromTableFields(wmsMissionfields))
@@ -147,7 +204,9 @@ const WmsMission: FC = () => {
         className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
         onClick={() => {
-          completeWmsMission(record.id)
+          completeWmsMission(record.id).then(() => {
+            message.success('任务已完成')
+          })
         }}
       >
         完成
@@ -157,7 +216,9 @@ const WmsMission: FC = () => {
         className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
         onClick={() => {
-          cancelWmsMission(record.id)
+          cancelWmsMission(record.id).then(() => {
+            message.success('任务已取消')
+          })
         }}
       >
         取消
@@ -165,9 +226,11 @@ const WmsMission: FC = () => {
       <MwButton
         className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
-        onClick={() => {
+        onClick={async () => {
           setIsSub(true)
+          setMode('create')
           setDialogFormFields(getFormFieldsFromTableFields(wmsSubMissionFields))
+          setParentMissionId(record.id)
           setMissionDialogOpen(true)
         }}
       >
@@ -176,27 +239,27 @@ const WmsMission: FC = () => {
     </div>
   ))
 
-  useEffect(() => {
-    setDialogFormFields(getFormFieldsFromTableFields(wmsMissionfields))
-  }, [isDebugging])
-
   const [missionDialogOpen, setMissionDialogOpen] = useState(false)
   const [mode, setMode] = useState<'create' | 'update'>('create')
   const [isSub, setIsSub] = useState(false)
   const missionDialogTitle = useMemo(() => (mode === 'create' ? '添加' : '编辑'), [mode])
-  const [initialValues, setInitialValues] = useState({})
+  const [initialValues, setInitialValues] = useState<Record<string, any>>({})
   const onMissionDialogConfirm = async (data: any) => {
     if (!isSub) {
       if (mode === 'create') {
-        await createWmsMission(data)
+        await createWmsMission({ missionId: generateUUID(), ...data })
+        message.success('创建WMS任务成功')
       } else {
-        await updateWmsMission(data)
+        await updateWmsMission({ missionId: initialValues.id, ...data })
+        message.success('编辑WMS任务成功')
       }
     } else {
       if (mode === 'create') {
-        await createWmsSubMission(data)
+        await createWmsSubMission({ missionId: parentMissionId, subMissionId: generateUUID(), ...data })
+        message.success('创建WMS子任务成功')
       } else {
-        await updateWmsSubMission(data)
+        await updateWmsSubMission({ missionId: parentMissionId, subMissionId: initialValues.id, ...data })
+        message.success('编辑WMS子任务成功')
       }
     }
 
@@ -227,7 +290,7 @@ const WmsMission: FC = () => {
         {isDebugging && (
           <Button
             type="primary"
-            onClick={() => {
+            onClick={async () => {
               setIsSub(false)
               setMode('create')
               setDialogFormFields(getFormFieldsFromTableFields(wmsMissionfields))
@@ -256,4 +319,4 @@ const WmsMission: FC = () => {
   )
 }
 
-export default observer(WmsMission)
+export default memo(WmsMission)

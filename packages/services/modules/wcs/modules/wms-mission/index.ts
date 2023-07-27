@@ -52,7 +52,11 @@ const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
 
   const createWmsSubMission = (data: TCreateWmsSubItem) => post('/wms-sub-mission', data)
   const updateWmsSubMission = (data: TUpdateWmsSubItem) => put('/wms-sub-mission', data)
-  const cancelWmsSubMission = (missionId: IWmsItem['id']) => post('/wms-sub-mission/cancel', { missionId })
+  const cancelWmsSubMission = (data: { missionId: IWmsItem['id']; subMissionId: IWmsSubItem['id'] }) =>
+    post('/wms-sub-mission/cancel', data)
+
+  const fetchWmsMissionAvailablePredecessors = () => get<string[]>('/wms-mission/available-predecessors')
+  const fetchSlot = (searchTerm: string) => get<string[]>('/slot', { searchTerm })
 
   return {
     getWmsMissionList,
@@ -66,7 +70,10 @@ const useWcsWmsMissionRequest = (mwRequest: MWRequest) => {
 
     createWmsSubMission,
     updateWmsSubMission,
-    cancelWmsSubMission
+    cancelWmsSubMission,
+
+    fetchWmsMissionAvailablePredecessors,
+    fetchSlot
   }
 }
 
