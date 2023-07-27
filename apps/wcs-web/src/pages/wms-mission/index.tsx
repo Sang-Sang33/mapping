@@ -9,7 +9,7 @@ import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import useToggleDebuggingField from '@/hooks/useToggleDebuggingField'
 import WmsSubMission from './WmsSubMission'
-import MissionDialog from './MissionDialog'
+import MissionDialog from '@/components/mission-dialog'
 import { ColorBox, wmsMissionfields, wmsSubMissionFields } from './fields'
 import './index.less'
 
@@ -111,7 +111,8 @@ const WmsMission: FC = () => {
       onExpand: handleExpand,
       expandedRowKeys: [missionId]
     },
-    ref: antTableRef
+    ref: antTableRef,
+    size: 'middle'
   }
 
   const handleLoad = () => {
@@ -130,7 +131,7 @@ const WmsMission: FC = () => {
   useToggleDebuggingField(wmsMissionfields, isDebugging, (_, record) => (
     <div className="flex gap-2">
       <MwButton
-        className="!px-1"
+        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
         onClick={() => {
           setIsSub(false)
@@ -143,7 +144,7 @@ const WmsMission: FC = () => {
         编辑
       </MwButton>
       <MwButton
-        className="!px-1"
+        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
         onClick={() => {
           completeWmsMission(record.id)
@@ -153,7 +154,7 @@ const WmsMission: FC = () => {
       </MwButton>
       <MwButton
         danger
-        className="!px-1"
+        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
         onClick={() => {
           cancelWmsMission(record.id)
@@ -162,7 +163,7 @@ const WmsMission: FC = () => {
         取消
       </MwButton>
       <MwButton
-        className="!px-1"
+        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
         type="link"
         onClick={() => {
           setIsSub(true)

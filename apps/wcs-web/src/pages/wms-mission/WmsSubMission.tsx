@@ -6,8 +6,8 @@ import { IMwTableRef } from '@packages/multiway-config'
 import { type IWmsItem, useWcsRequest } from '@packages/services'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
-import { ColorBox, wmsSubMissionFields } from './fields'
 import useToggleDebuggingField from '@/hooks/useToggleDebuggingField'
+import { ColorBox, wmsSubMissionFields } from './fields'
 
 interface IProps {
   wmsMissionId: string

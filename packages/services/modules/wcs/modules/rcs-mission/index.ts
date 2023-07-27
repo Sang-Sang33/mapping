@@ -1,9 +1,16 @@
 import type MWRequest from '../../../../request'
 import type { IListResult, IListParams } from '../../typings'
-import type { IRcsItem, IRcsSubItem } from './typings'
+import type {
+  IRcsItem,
+  IRcsSubItem,
+  TCreateRcsItem,
+  TCreateRcsSubItem,
+  TUpdateRcsItem,
+  TUpdateRcsSubItem
+} from './typings'
 
 const useWcsRcsMissionRequest = (mwRequest: MWRequest) => {
-  const { get } = mwRequest
+  const { get, post, put } = mwRequest
 
   const getRcsMissionList = async (params: IListParams, showProgress = false) => {
     const Sorting: string =
@@ -38,10 +45,28 @@ const useWcsRcsMissionRequest = (mwRequest: MWRequest) => {
       { showProgress }
     )
 
+  const createRcsMission = (data: TCreateRcsItem) => post('/rcs-mission', data)
+  const updateRcsMission = (data: TUpdateRcsItem) => put('/rcs-mission', data)
+  const completeRcsMission = (missionId: IRcsItem['id']) => post('/rcs-mission/complete', { missionId })
+  const cancelRcsMission = (missionId: IRcsItem['id']) => post('/rcs-mission/cancel', { missionId })
+
+  const createRcsSubMission = (data: TCreateRcsSubItem) => post('/rcs-sub-mission', data)
+  const updateRcsSubMission = (data: TUpdateRcsSubItem) => put('/rcs-sub-mission', data)
+  const cancelRcsSubMission = (missionId: IRcsItem['id']) => post('/rcs-sub-mission/cancel', { missionId })
+
   return {
     getRcsMissionList,
     getRcsSubMissionList,
-    getRcsMissionPage
+    getRcsMissionPage,
+
+    createRcsMission,
+    updateRcsMission,
+    completeRcsMission,
+    cancelRcsMission,
+
+    createRcsSubMission,
+    updateRcsSubMission,
+    cancelRcsSubMission
   }
 }
 
