@@ -130,7 +130,10 @@ class EditorStore {
   }
   get rcsTransformedData() {
     if (!Object.keys(this.rcsData).length) return null
-    if ((!this.rcsData.MapOption || !this.rcsData.Vertexs) && (!this.rcsData.Border || !this.rcsData.Points)) return message.error('文件格式不正确！')
+    if ((!this.rcsData.MapOption || !this.rcsData.Vertexs) && (!this.rcsData.Border || !this.rcsData.Points)) {
+      message.error('文件格式不正确！')
+      return null
+    }
     if (this.rcsData.Border) {
       const {
         Border: { DownLeft, UpRight },
@@ -353,6 +356,7 @@ class EditorStore {
     this.selectedRectList = [...val]
   }
   setRcsData(data: Record<string, any>) {
+
     this.rcsData = data
   }
   initRectMenuParams() {
