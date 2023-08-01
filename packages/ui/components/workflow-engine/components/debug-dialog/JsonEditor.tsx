@@ -1,11 +1,12 @@
 import React, { forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import Editor from '@monaco-editor/react'
+import Editor, { EditorProps } from '@monaco-editor/react'
 import * as monaco from 'monaco-editor'
 
 interface IProps {
   value?: Record<string, any>
   defaultValue?: any
   defaultHeight?: string
+  options?: EditorProps['options']
 }
 
 interface IJsonEditorRef {
@@ -13,7 +14,7 @@ interface IJsonEditorRef {
 }
 
 const JsonEditor = forwardRef<IJsonEditorRef, IProps>((props, ref) => {
-  const { value, defaultValue, defaultHeight = '50vh' } = props
+  const { value, defaultValue, defaultHeight = '50vh', options } = props
   const [editorValue, setEditorValue] = useState(JSON.stringify(defaultValue, null, 2) ?? '{}')
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   useImperativeHandle(
@@ -33,6 +34,7 @@ const JsonEditor = forwardRef<IJsonEditorRef, IProps>((props, ref) => {
       height={defaultHeight}
       defaultLanguage="json"
       value={editorValue}
+      options={options}
     />
   )
 })
