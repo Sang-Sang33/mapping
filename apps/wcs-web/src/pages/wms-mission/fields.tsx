@@ -38,7 +38,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   {
     title: t('wmsMission.id'),
     key: 'id',
-    width: 270,
+    width: 320,
     ellipsis: true
     // search: true
   },
@@ -67,11 +67,12 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
     dialog: {
       defaultValue: 1
     },
-    type: 'number'
+    type: 'number',
+    hidden: true
   },
   {
     title: t('wmsMission.from'),
-    width: 150,
+    width: 200,
     key: 'from',
     align: 'center',
     render: (values: string[]) => {
@@ -106,7 +107,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.to'),
-    width: 150,
+    width: 200,
     key: 'to',
     align: 'center',
     render: (values: string[]) => {
@@ -153,7 +154,8 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoRun} />
       ),
       defaultValue: true
-    }
+    },
+    hidden: true
   },
   {
     title: t('wmsMission.autoAbort'),
@@ -169,7 +171,8 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoAbort} />
       ),
       defaultValue: true
-    }
+    },
+    hidden: true
   },
   {
     title: t('wmsMission.creationTime'),
@@ -204,7 +207,8 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
       return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
-    }
+    },
+    hidden: true
     // dialog: true
     // type: 'custom',
     // dialog: {
@@ -270,7 +274,8 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     dialog: {
       defaultValue: 1
     },
-    type: 'number'
+    type: 'number',
+    hidden: true
   },
   {
     title: '到',
@@ -360,6 +365,7 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
       return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
-    }
+    },
+    hidden: true
   }
 ]

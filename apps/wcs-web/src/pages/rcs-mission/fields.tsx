@@ -64,7 +64,8 @@ export const rcsMissionfields: Array<MwSearchTableField> = [
     dialog: {
       defaultValue: 1
     },
-    type: 'number'
+    type: 'number',
+    hidden: true
   },
   {
     title: t('rcsMission.vehicles'),
@@ -108,8 +109,9 @@ export const rcsMissionfields: Array<MwSearchTableField> = [
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
       return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
-    }
-  }
+    },
+    hidden: true
+  },
 ]
 
 const RcsSubMissionColorStrategy = {
@@ -160,7 +162,8 @@ export const rcsSubMissionFields: Array<MwSearchTableField> = [
     align: 'center',
     render: (_, record) => {
       return <Badge size="small" color={ColorBox[record.priority]} showZero count={record.priority}></Badge>
-    }
+    },
+    hidden: true
   },
   {
     title: '到',
@@ -185,7 +188,8 @@ export const rcsSubMissionFields: Array<MwSearchTableField> = [
         <Descriptions.Item label="举升高度">{record.forkArm?.liftHeight}</Descriptions.Item>
         <Descriptions.Item label="下降高度">{record.forkArm?.declineHeight}</Descriptions.Item>
       </Descriptions>
-    )
+    ),
+    hidden: true
   },
   {
     title: '创建时间',
@@ -218,6 +222,7 @@ export const rcsSubMissionFields: Array<MwSearchTableField> = [
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
       return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
-    }
+    },
+    hidden: true
   }
 ]
