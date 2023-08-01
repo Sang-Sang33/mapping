@@ -198,6 +198,7 @@ const WmsMission: FC = () => {
             setMissionDialogOpen(true)
             Promise.resolve().then(() => setInitialValues(record))
           }}
+          disabled={!record.isUpdatable}
         >
           编辑
         </MwButton>
@@ -212,6 +213,7 @@ const WmsMission: FC = () => {
               message.success('任务已完成')
             })
           }}
+          disabled={!record.isCompletable}
         >
           完成
         </MwButton>
@@ -224,6 +226,7 @@ const WmsMission: FC = () => {
               message.success('任务已取消')
             })
           }}
+          disabled={!record.isCancelable}
         >
           取消
         </MwButton>

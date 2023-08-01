@@ -66,6 +66,7 @@ const WmsSubMission: FC<IProps> = (props) => {
           onClick={() => {
             onUpdate?.(record)
           }}
+          disabled={!record.isUpdatable}
         >
           编辑
         </MwButton>
@@ -76,6 +77,7 @@ const WmsSubMission: FC<IProps> = (props) => {
           onClick={() => {
             onCancel?.(record.id)
           }}
+          disabled={!record.isCancelable}
         >
           取消
         </MwButton>
