@@ -185,7 +185,7 @@ const WmsMission: FC = () => {
 
   const [isDebugging, setIsDebugging] = useState(false)
   const ctrl: MwTableCtrlField = {
-    width: 300,
+    width: 275,
     render: (_, record) => (
       <div className="flex gap-2">
         <MwButton

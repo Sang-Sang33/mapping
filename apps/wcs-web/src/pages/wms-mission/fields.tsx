@@ -21,7 +21,7 @@ const WmsMissionColorStrategy = {
 export const wmsMissionfields: Array<MwSearchTableField> = [
   {
     title: t('wmsMission.status'),
-    width: 150,
+    width: 100,
     key: 'status',
     align: 'center',
     render: (_, record) => {
@@ -72,7 +72,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.from'),
-    width: 200,
+    width: 180,
     key: 'from',
     align: 'center',
     render: (values: string[]) => {
@@ -107,7 +107,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.to'),
-    width: 200,
+    width: 180,
     key: 'to',
     align: 'center',
     render: (values: string[]) => {
@@ -176,7 +176,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.creationTime'),
-    width: 180,
+    width: 160,
     key: 'creationTime',
     align: 'center',
     render: (text) => {
@@ -188,7 +188,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.lastModificationTime'),
-    width: 180,
+    width: 160,
     key: 'lastModificationTime',
     align: 'center',
     render: (text) => {
