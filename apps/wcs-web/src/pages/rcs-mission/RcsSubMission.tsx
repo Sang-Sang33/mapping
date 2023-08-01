@@ -13,11 +13,12 @@ interface IProps {
   isDebugging: boolean
   onUpdate?: (data: Record<string, any>) => void
   onCancel?: (id: string) => void
+  onView?: (data: Record<string, any>) => void
 }
 
 const itemHeight = 113
 const RcsSubMission: FC<IProps> = (props) => {
-  const { rcsSubMissionId, isDebugging = false, onUpdate, onCancel } = props
+  const { rcsSubMissionId, isDebugging = false, onUpdate, onCancel, onView } = props
   const { getRcsSubMissionList } = useWcsRequest()
   const rcsSubMissionTableRef = useRef<ElementRef<typeof MwSearchTable> & IMwTableRef<IRcsSubItem>>(null)
   useTableAutoRefresh(rcsSubMissionTableRef)
@@ -68,6 +69,15 @@ const RcsSubMission: FC<IProps> = (props) => {
           }}
         >
           编辑
+        </MwButton>
+        <MwButton
+          className="!px-1"
+          type="link"
+          onClick={() => {
+            onView?.(record)
+          }}
+        >
+          详情
         </MwButton>
         <MwButton
           danger

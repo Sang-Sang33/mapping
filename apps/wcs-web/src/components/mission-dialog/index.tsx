@@ -15,7 +15,6 @@ interface IProps {
 
 const MissionDialog: FC<IProps> = (props) => {
   const { open = false, title, fields, initialValues, onConfirm, onCancel } = props
-  console.log('🚀 ~ file: index.tsx ~ line 18 ~ fields', fields)
   // const [dialogOpen, setDialogOpen] = useState(false)
   const dialogFormRef = useRef<any>(null)
   const configurationRef = useRef<ElementRef<typeof Configuration>>(null)

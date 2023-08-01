@@ -1,11 +1,12 @@
 import React, { ElementRef, memo, useMemo, useRef, useState } from 'react'
 import type { FC } from 'react'
-import { Button, List, Switch, Tooltip, message } from 'antd'
+import { Button, Drawer, List, Switch, Tooltip, message } from 'antd'
 import { debounce } from 'lodash'
-import { AnyKeyProps, MwSearchTable, MwButton, MwSearchTableField, MwAction, MwTableCtrlField } from 'multiway'
+import { AnyKeyProps, MwSearchTable, MwButton, MwSearchTableField, MwTableCtrlField } from 'multiway'
 import { IMwTableRef } from '@packages/multiway-config'
 import { type IListParams, type IWmsItem, useWcsRequest } from '@packages/services'
 import { generateUUID } from '@packages/utils'
+import JsonEditor from '@packages/ui/components/workflow-engine/components/debug-dialog/JsonEditor'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import MissionDialog from '@/components/mission-dialog'
@@ -14,7 +15,16 @@ import { ColorBox, wmsMissionfields, wmsSubMissionFields } from './fields'
 import './index.less'
 
 const getFormFieldsFromTableFields = (tableFields: MwSearchTableField[]) =>
-  tableFields.filter((f) => f.dialog).map((f) => (typeof f.dialog === 'object' ? { ...f, ...f.dialog } : f))
+  tableFields
+    .filter((f) => f.dialog)
+    .map((f) => (typeof f.dialog === 'object' ? { ...f, ...f.dialog, hidden: false } : f))
+
+const getDetailDrawerFieldsFromTableFields = (tableFields: MwSearchTableField[]) =>
+  tableFields.map((f) => ({
+    key: f.key,
+    title: f.title,
+    render: f.render
+  }))
 
 const WmsMission: FC = () => {
   const [missionId, setMissionId] = useState<string>('')
@@ -161,6 +171,11 @@ const WmsMission: FC = () => {
               message.success('任务已取消')
             })
           }
+          onView={(subRecord) => {
+            setDetail(subRecord as IWmsItem)
+            setDetailDrawerFields(getDetailDrawerFieldsFromTableFields(wmsSubMissionFields))
+            setDetailDrawerOpen(true)
+          }}
         ></WmsSubMission>
       ),
       onExpand: handleExpand,
@@ -202,9 +217,17 @@ const WmsMission: FC = () => {
         >
           编辑
         </MwButton>
-        <MwAction className="!px-1 !py-0 !h-[17px] !leading-[17px]" type="link" action="view">
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            setDetail(record as IWmsItem)
+            setDetailDrawerFields(getDetailDrawerFieldsFromTableFields(wmsMissionfields))
+            setDetailDrawerOpen(true)
+          }}
+        >
           详情
-        </MwAction>
+        </MwButton>
         <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
           type="link"
@@ -275,6 +298,11 @@ const WmsMission: FC = () => {
     setMissionDialogOpen(false)
   }
 
+  // 详情
+  const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
+  const [detail, setDetail] = useState<IWmsItem>()
+  const [detailDrawerFields, setDetailDrawerFields] = useState(getDetailDrawerFieldsFromTableFields(wmsMissionfields))
+
   return (
     <div>
       <MwSearchTable
@@ -325,6 +353,30 @@ const WmsMission: FC = () => {
           }}
         ></MissionDialog>
       )}
+
+      <Drawer title="任务详情" width={520} open={detailDrawerOpen} onClose={() => setDetailDrawerOpen(false)}>
+        {detailDrawerOpen &&
+          detailDrawerFields.map((f) => {
+            const value = detail?.[f.key as keyof IWmsItem]
+            if (f.key === 'extraProperties') {
+              f.render = (value) => {
+                return (
+                  <JsonEditor
+                    defaultHeight={'300px'}
+                    value={value as Record<string, any>}
+                    options={{ readOnly: true }}
+                  ></JsonEditor>
+                )
+              }
+            }
+            return (
+              <div className="flex items-center my-2 pt-1 text-sm min-h-[42px]" key={f.key}>
+                <span className="w-[100px]">{f.title}：</span>
+                <div className="flex-1">{f.render ? f.render(value, detail ?? {}, 0) : <span>{value}</span>}</div>
+              </div>
+            )
+          })}
+      </Drawer>
     </div>
   )
 }

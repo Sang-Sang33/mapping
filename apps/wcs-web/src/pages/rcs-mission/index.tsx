@@ -1,10 +1,10 @@
-import React, { ElementRef, useEffect, useMemo, useRef, useState } from 'react'
+import React, { ElementRef, memo, useEffect, useMemo, useRef, useState } from 'react'
 import type { FC } from 'react'
-import { Button, List, Switch, Tooltip } from 'antd'
-import { observer } from 'mobx-react-lite'
+import { Button, Drawer, List, Switch, Tooltip } from 'antd'
 import { AnyKeyProps, MwButton, MwSearchTable, MwSearchTableField, MwTableCtrlField } from 'multiway'
 import { type IRcsItem, type IListParams, useWcsRequest } from '@packages/services'
 import { IMwTableRef } from '@packages/multiway-config'
+import JsonEditor from '@packages/ui/components/workflow-engine/components/debug-dialog/JsonEditor'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import RcsSubMission from './RcsSubMission'
@@ -14,6 +14,13 @@ import './index.less'
 
 const getFormFieldsFromTableFields = (tableFields: MwSearchTableField[]) =>
   tableFields.filter((f) => f.dialog).map((f) => (typeof f.dialog === 'object' ? { ...f, ...f.dialog } : f))
+
+const getDetailDrawerFieldsFromTableFields = (tableFields: MwSearchTableField[]) =>
+  tableFields.map((f) => ({
+    key: f.key,
+    title: f.title,
+    render: f.render
+  }))
 
 const RcsMission: FC = () => {
   const {
@@ -108,6 +115,11 @@ const RcsMission: FC = () => {
             Promise.resolve().then(() => setInitialValues(subMissionRecord))
           }}
           onCancel={cancelRcsSubMission}
+          onView={(subRecord) => {
+            setDetail(subRecord as IRcsItem)
+            setDetailDrawerFields(getDetailDrawerFieldsFromTableFields(rcsSubMissionFields))
+            setDetailDrawerOpen(true)
+          }}
         ></RcsSubMission>
       ),
       onExpand: handleExpand,
@@ -146,6 +158,17 @@ const RcsMission: FC = () => {
           }}
         >
           编辑
+        </MwButton>
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            setDetail(record as IRcsItem)
+            setDetailDrawerFields(getDetailDrawerFieldsFromTableFields(rcsMissionfields))
+            setDetailDrawerOpen(true)
+          }}
+        >
+          详情
         </MwButton>
         <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
@@ -209,6 +232,11 @@ const RcsMission: FC = () => {
     setMissionDialogOpen(false)
   }
 
+  // 详情
+  const [detailDrawerOpen, setDetailDrawerOpen] = useState(false)
+  const [detail, setDetail] = useState<IRcsItem>()
+  const [detailDrawerFields, setDetailDrawerFields] = useState(getDetailDrawerFieldsFromTableFields(rcsMissionfields))
+
   return (
     <div>
       <MwSearchTable
@@ -259,8 +287,32 @@ const RcsMission: FC = () => {
           }}
         ></MissionDialog>
       )}
+
+      <Drawer title="任务详情" width={520} open={detailDrawerOpen} onClose={() => setDetailDrawerOpen(false)}>
+        {detailDrawerOpen &&
+          detailDrawerFields.map((f) => {
+            const value = detail?.[f.key as keyof IRcsItem]
+            if (f.key === 'extraProperties') {
+              f.render = (value) => {
+                return (
+                  <JsonEditor
+                    defaultHeight={'300px'}
+                    value={value as Record<string, any>}
+                    options={{ readOnly: true }}
+                  ></JsonEditor>
+                )
+              }
+            }
+            return (
+              <div className="flex items-center my-2 pt-1 text-sm min-h-[42px]" key={f.key}>
+                <span className="w-[100px]">{f.title}：</span>
+                <div className="flex-1">{f.render ? f.render(value, detail ?? {}, 0) : <span>{value}</span>}</div>
+              </div>
+            )
+          })}
+      </Drawer>
     </div>
   )
 }
 
-export default observer(RcsMission)
+export default memo(RcsMission)

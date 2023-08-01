@@ -1,6 +1,6 @@
 import React, { ElementRef, memo, useRef } from 'react'
 import type { FC } from 'react'
-import { MwButton, MwSearchTable, MwSearchTableField, MwTableCtrlField } from 'multiway'
+import { MwButton, MwSearchTable, MwTableCtrlField } from 'multiway'
 import { List, Tooltip } from 'antd'
 import { IMwTableRef } from '@packages/multiway-config'
 import { type IWmsItem, useWcsRequest } from '@packages/services'
@@ -13,11 +13,12 @@ interface IProps {
   isDebugging: boolean
   onUpdate?: (data: Record<string, any>) => void
   onCancel?: (id: string) => void
+  onView?: (data: Record<string, any>) => void
 }
 
 const itemHeight = 113
 const WmsSubMission: FC<IProps> = (props) => {
-  const { wmsMissionId, isDebugging = false, onUpdate, onCancel } = props
+  const { wmsMissionId, isDebugging = false, onUpdate, onCancel, onView } = props
   const { getWmsSubMissionList } = useWcsRequest()
   const wmsSubMissionTableRef = useRef<ElementRef<typeof MwSearchTable> & IMwTableRef<IWmsItem>>(null)
   useTableAutoRefresh(wmsSubMissionTableRef)
@@ -69,6 +70,15 @@ const WmsSubMission: FC<IProps> = (props) => {
           disabled={!record.isUpdatable}
         >
           编辑
+        </MwButton>
+        <MwButton
+          className="!px-1"
+          type="link"
+          onClick={() => {
+            onView?.(record)
+          }}
+        >
+          详情
         </MwButton>
         <MwButton
           danger
