@@ -3,14 +3,16 @@ import { MwSearchTableField, MwTableField } from 'multiway'
 const useToggleDebuggingField = (
   fields: MwSearchTableField[],
   isDebugging: boolean,
-  fieldRender: MwTableField['render']
+  fieldRender: MwTableField['render'],
+  width = 250
 ) => {
   const debuggingFieldIndex = fields.findIndex((field) => field.key === 'handler')
   const debuggingField: MwSearchTableField = {
     title: '操作',
-    width: 250,
+    width,
     key: 'handler',
-    render: fieldRender
+    render: fieldRender,
+    fixed: 'right'
   }
   if (debuggingFieldIndex === -1) {
     // 不存在

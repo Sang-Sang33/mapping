@@ -1,12 +1,11 @@
 import React, { ElementRef, memo, useRef } from 'react'
 import type { FC } from 'react'
-import { MwButton, MwSearchTable, MwSearchTableField } from 'multiway'
+import { MwButton, MwSearchTable, MwSearchTableField, MwTableCtrlField } from 'multiway'
 import { List, Tooltip } from 'antd'
 import { IMwTableRef } from '@packages/multiway-config'
 import { type IWmsItem, useWcsRequest } from '@packages/services'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
-import useToggleDebuggingField from '@/hooks/useToggleDebuggingField'
 import { ColorBox, wmsSubMissionFields } from './fields'
 
 interface IProps {
@@ -57,32 +56,36 @@ const WmsSubMission: FC<IProps> = (props) => {
       }
     }
   })
-  useToggleDebuggingField(wmsSubMissionFields, isDebugging, (_, record) => (
-    <div className="flex gap-2">
-      <MwButton
-        className="!px-1"
-        type="link"
-        onClick={() => {
-          onUpdate?.(record)
-        }}
-      >
-        编辑
-      </MwButton>
-      <MwButton
-        danger
-        className="!px-1"
-        type="link"
-        onClick={() => {
-          onCancel?.(record.id)
-        }}
-      >
-        取消
-      </MwButton>
-    </div>
-  ))
+  const ctrl: MwTableCtrlField = {
+    width: 180,
+    render: (_, record) => (
+      <div className="flex gap-2">
+        <MwButton
+          className="!px-1"
+          type="link"
+          onClick={() => {
+            onUpdate?.(record)
+          }}
+        >
+          编辑
+        </MwButton>
+        <MwButton
+          danger
+          className="!px-1"
+          type="link"
+          onClick={() => {
+            onCancel?.(record.id)
+          }}
+        >
+          取消
+        </MwButton>
+      </div>
+    ),
+    fixed: 'right'
+  }
 
   return (
-    <div className="p-2">
+    <div className="py-2">
       <MwSearchTable
         key={wmsSubMissionFields.length}
         ref={wmsSubMissionTableRef}
@@ -101,6 +104,7 @@ const WmsSubMission: FC<IProps> = (props) => {
         rowKey="id"
         pagination={false}
         tableExtend={tableExtend}
+        ctrl={isDebugging ? ctrl : undefined}
         height={itemHeight * 4}
       ></MwSearchTable>
     </div>

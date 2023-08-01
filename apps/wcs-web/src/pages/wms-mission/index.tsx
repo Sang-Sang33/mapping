@@ -2,13 +2,12 @@ import React, { ElementRef, memo, useMemo, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { Button, List, Switch, Tooltip, message } from 'antd'
 import { debounce } from 'lodash'
-import { AnyKeyProps, MwSearchTable, MwButton, MwSearchTableField } from 'multiway'
+import { AnyKeyProps, MwSearchTable, MwButton, MwSearchTableField, MwAction, MwTableCtrlField } from 'multiway'
 import { IMwTableRef } from '@packages/multiway-config'
 import { type IListParams, type IWmsItem, useWcsRequest } from '@packages/services'
 import { generateUUID } from '@packages/utils'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
-import useToggleDebuggingField from '@/hooks/useToggleDebuggingField'
 import MissionDialog from '@/components/mission-dialog'
 import WmsSubMission from './WmsSubMission'
 import { ColorBox, wmsMissionfields, wmsSubMissionFields } from './fields'
@@ -185,59 +184,66 @@ const WmsMission: FC = () => {
   const [parentMissionId, setParentMissionId] = useState('')
 
   const [isDebugging, setIsDebugging] = useState(false)
-  useToggleDebuggingField(wmsMissionfields, isDebugging, (_, record) => (
-    <div className="flex gap-2">
-      <MwButton
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={async () => {
-          setIsSub(false)
-          setMode('update')
-          setDialogFormFields(getFormFieldsFromTableFields(wmsMissionfields))
-          setMissionDialogOpen(true)
-          Promise.resolve().then(() => setInitialValues(record))
-        }}
-      >
-        编辑
-      </MwButton>
-      <MwButton
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={() => {
-          completeWmsMission(record.id).then(() => {
-            message.success('任务已完成')
-          })
-        }}
-      >
-        完成
-      </MwButton>
-      <MwButton
-        danger
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={() => {
-          cancelWmsMission(record.id).then(() => {
-            message.success('任务已取消')
-          })
-        }}
-      >
-        取消
-      </MwButton>
-      <MwButton
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={async () => {
-          setIsSub(true)
-          setMode('create')
-          setDialogFormFields(getFormFieldsFromTableFields(wmsSubMissionFields))
-          setParentMissionId(record.id)
-          setMissionDialogOpen(true)
-        }}
-      >
-        添加子任务
-      </MwButton>
-    </div>
-  ))
+  const ctrl: MwTableCtrlField = {
+    width: 300,
+    render: (_, record) => (
+      <div className="flex gap-2">
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={async () => {
+            setIsSub(false)
+            setMode('update')
+            setDialogFormFields(getFormFieldsFromTableFields(wmsMissionfields))
+            setMissionDialogOpen(true)
+            Promise.resolve().then(() => setInitialValues(record))
+          }}
+        >
+          编辑
+        </MwButton>
+        <MwAction className="!px-1 !py-0 !h-[17px] !leading-[17px]" type="link" action="view">
+          详情
+        </MwAction>
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            completeWmsMission(record.id).then(() => {
+              message.success('任务已完成')
+            })
+          }}
+        >
+          完成
+        </MwButton>
+        <MwButton
+          danger
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            cancelWmsMission(record.id).then(() => {
+              message.success('任务已取消')
+            })
+          }}
+        >
+          取消
+        </MwButton>
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={async () => {
+            setIsSub(true)
+            setMode('create')
+            setDialogFormFields(getFormFieldsFromTableFields(wmsSubMissionFields))
+            setParentMissionId(record.id)
+            setMissionDialogOpen(true)
+          }}
+        >
+          添加子任务
+        </MwButton>
+      </div>
+    ),
+    fixed: 'right'
+  }
 
   const [missionDialogOpen, setMissionDialogOpen] = useState(false)
   const [mode, setMode] = useState<'create' | 'update'>('create')
@@ -280,6 +286,7 @@ const WmsMission: FC = () => {
         fields={wmsMissionfields}
         api={getWmsMissionList}
         tableExtend={tableExtend}
+        ctrl={isDebugging ? ctrl : undefined}
         pagination={{
           onChange: () => {
             setMissionId('')

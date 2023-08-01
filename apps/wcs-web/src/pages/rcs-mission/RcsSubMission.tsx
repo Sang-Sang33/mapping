@@ -1,14 +1,11 @@
 import React, { ElementRef, memo, useRef } from 'react'
 import type { FC } from 'react'
-import { MwButton, MwSearchTable, MwSearchTableField } from 'multiway'
-import { Badge, Descriptions, List, Tooltip } from 'antd'
-import { RCS_SUB_MISSION_STATUS_ENUM } from './interface.d'
-import { formatDate } from '@packages/utils'
+import { MwButton, MwSearchTable, MwTableCtrlField } from 'multiway'
+import { List, Tooltip } from 'antd'
 import { IMwTableRef } from '@packages/multiway-config'
 import { type IRcsSubItem, useWcsRequest } from '@packages/services'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
-import useToggleDebuggingField from '@/hooks/useToggleDebuggingField'
 import { ColorBox, rcsSubMissionFields } from './fields'
 
 interface IProps {
@@ -59,29 +56,33 @@ const RcsSubMission: FC<IProps> = (props) => {
       }
     }
   })
-  useToggleDebuggingField(rcsSubMissionFields, isDebugging, (_, record) => (
-    <div className="flex gap-2">
-      <MwButton
-        className="!px-1"
-        type="link"
-        onClick={() => {
-          onUpdate?.(record)
-        }}
-      >
-        编辑
-      </MwButton>
-      <MwButton
-        danger
-        className="!px-1"
-        type="link"
-        onClick={() => {
-          onCancel?.(record.id)
-        }}
-      >
-        取消
-      </MwButton>
-    </div>
-  ))
+  const ctrl: MwTableCtrlField = {
+    width: 180,
+    render: (_, record) => (
+      <div className="flex gap-2">
+        <MwButton
+          className="!px-1"
+          type="link"
+          onClick={() => {
+            onUpdate?.(record)
+          }}
+        >
+          编辑
+        </MwButton>
+        <MwButton
+          danger
+          className="!px-1"
+          type="link"
+          onClick={() => {
+            onCancel?.(record.id)
+          }}
+        >
+          取消
+        </MwButton>
+      </div>
+    ),
+    fixed: 'right'
+  }
 
   return (
     <div className="p-2">
@@ -102,6 +103,7 @@ const RcsSubMission: FC<IProps> = (props) => {
         rowKey="id"
         pagination={false}
         tableExtend={tableExtend}
+        ctrl={isDebugging ? ctrl : undefined}
         height={itemHeight * 4}
       />
     </div>

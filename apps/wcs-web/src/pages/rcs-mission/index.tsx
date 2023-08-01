@@ -2,12 +2,11 @@ import React, { ElementRef, useEffect, useMemo, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { Button, List, Switch, Tooltip } from 'antd'
 import { observer } from 'mobx-react-lite'
-import { AnyKeyProps, MwButton, MwSearchTable, MwSearchTableField } from 'multiway'
+import { AnyKeyProps, MwButton, MwSearchTable, MwSearchTableField, MwTableCtrlField } from 'multiway'
 import { type IRcsItem, type IListParams, useWcsRequest } from '@packages/services'
 import { IMwTableRef } from '@packages/multiway-config'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
-import useToggleDebuggingField from '@/hooks/useToggleDebuggingField'
 import RcsSubMission from './RcsSubMission'
 import MissionDialog from '@/components/mission-dialog'
 import { ColorBox, rcsMissionfields, rcsSubMissionFields } from './fields'
@@ -131,53 +130,57 @@ const RcsMission: FC = () => {
   let [dialogFormFields, setDialogFormFields] = useState(getFormFieldsFromTableFields(rcsMissionfields))
 
   const [isDebugging, setIsDebugging] = useState(false)
-  useToggleDebuggingField(rcsMissionfields, isDebugging, (_, record) => (
-    <div className="flex gap-2 ">
-      <MwButton
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={() => {
-          setIsSub(false)
-          setMode('update')
-          setDialogFormFields(getFormFieldsFromTableFields(rcsMissionfields))
-          setMissionDialogOpen(true)
-          Promise.resolve().then(() => setInitialValues(record))
-        }}
-      >
-        编辑
-      </MwButton>
-      <MwButton
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={() => {
-          completeRcsMission(record.id)
-        }}
-      >
-        完成
-      </MwButton>
-      <MwButton
-        danger
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={() => {
-          cancelRcsMission(record.id)
-        }}
-      >
-        取消
-      </MwButton>
-      <MwButton
-        className="!px-1 !py-0 !h-[17px] !leading-[17px]"
-        type="link"
-        onClick={() => {
-          setIsSub(true)
-          setDialogFormFields(getFormFieldsFromTableFields(rcsSubMissionFields))
-          setMissionDialogOpen(true)
-        }}
-      >
-        添加子任务
-      </MwButton>
-    </div>
-  ))
+  const ctrl: MwTableCtrlField = {
+    width: 300,
+    render: (_, record) => (
+      <div className="flex gap-2 ">
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            setIsSub(false)
+            setMode('update')
+            setDialogFormFields(getFormFieldsFromTableFields(rcsMissionfields))
+            setMissionDialogOpen(true)
+            Promise.resolve().then(() => setInitialValues(record))
+          }}
+        >
+          编辑
+        </MwButton>
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            completeRcsMission(record.id)
+          }}
+        >
+          完成
+        </MwButton>
+        <MwButton
+          danger
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            cancelRcsMission(record.id)
+          }}
+        >
+          取消
+        </MwButton>
+        <MwButton
+          className="!px-1 !py-0 !h-[17px] !leading-[17px]"
+          type="link"
+          onClick={() => {
+            setIsSub(true)
+            setDialogFormFields(getFormFieldsFromTableFields(rcsSubMissionFields))
+            setMissionDialogOpen(true)
+          }}
+        >
+          添加子任务
+        </MwButton>
+      </div>
+    ),
+    fixed: 'right'
+  }
 
   useEffect(() => {
     setDialogFormFields(getFormFieldsFromTableFields(rcsMissionfields))
@@ -220,6 +223,7 @@ const RcsMission: FC = () => {
         fields={rcsMissionfields}
         api={getRcsMissionList}
         tableExtend={tableExtend}
+        ctrl={isDebugging ? ctrl : undefined}
         pagination={{
           onChange: () => {
             setMissionId('')
