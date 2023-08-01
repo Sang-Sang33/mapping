@@ -152,7 +152,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
       renderContent: (_: any, record: any) => (
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoRun} />
       ),
-      defaultValue: false
+      defaultValue: true
     }
   },
   {
@@ -168,7 +168,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
       renderContent: (_: any, record: any) => (
         <Switch checkedChildren={<CheckOutlined />} unCheckedChildren={<CloseOutlined />} checked={record.autoAbort} />
       ),
-      defaultValue: false
+      defaultValue: true
     }
   },
   {
