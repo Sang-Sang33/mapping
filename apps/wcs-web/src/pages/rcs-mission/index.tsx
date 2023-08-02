@@ -277,6 +277,7 @@ const RcsMission: FC = () => {
       {missionDialogOpen && (
         <MissionDialog
           open={missionDialogOpen}
+          mode={mode}
           title={missionDialogTitle}
           fields={dialogFormFields}
           initialValues={initialValues}
