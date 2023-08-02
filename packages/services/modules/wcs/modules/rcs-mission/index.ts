@@ -14,9 +14,9 @@ const useWcsRcsMissionRequest = (mwRequest: MWRequest) => {
 
   const getRcsMissionList = async (params: IListParams, showProgress = false) => {
     const Sorting: string =
-      params.Sorting?.map(
-        ({ key, order }) => key.charAt(0).toUpperCase() + key.slice(1) + (order ? ' ' + order.slice(0, -3) : '')
-      ).join(',') || ''
+      params.Sorting?.filter(({ order }) => !!order)
+        .map(({ key, order }) => key.charAt(0).toUpperCase() + key.slice(1) + (' ' + order.slice(0, -3)))
+        .join(',') || ''
 
     return get<IListResult<IRcsItem>>(
       `/rcs-mission?Sorting=${Sorting}`,
