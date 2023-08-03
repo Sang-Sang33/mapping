@@ -65,12 +65,14 @@ const en_US = {
     priority: 'Priority',
     to: 'To',
     vehicles: 'Calling Vehicles',
+    height: 'Height',
+    declineHeight: 'Decline Height',
+    liftHeight: 'Lift Height',
     creationTime: 'Creation Time',
     lastModificationTime: 'Last Modification Time',
     extraProperties: 'Extra Properties',
-    height: 'Height',
-    declineHeight: 'Decline Height',
-    liftHeight: 'Lift Height'
+    action: 'Action',
+    detail: 'Detail'
   },
   missionProcess: {
     title: 'Mission Process',

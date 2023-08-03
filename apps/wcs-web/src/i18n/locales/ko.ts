@@ -65,12 +65,14 @@ const ko = {
     priority: '우선순위',
     to: '도착지',
     vehicles: '호출 차량',
+    height: '높이',
+    declineHeight: '하강 높이',
+    liftHeight: '상승 높이',
     creationTime: '생성 시간',
     lastModificationTime: '최종 수정 시간',
     extraProperties: '추가 속성',
-    height: '높이',
-    declineHeight: '하강 높이',
-    liftHeight: '상승 높이'
+    action: '액션',
+    detail: '세부 정보'
   },
   missionProcess: {
     title: '미션 처리',

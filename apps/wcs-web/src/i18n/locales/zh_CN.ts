@@ -41,7 +41,7 @@ const zh_CN = {
     creationTime: '创建时间',
     lastModificationTime: '更新时间',
     extraProperties: '额外信息',
-    action: '动作',
+    action: '操作',
     debugMode: '调试模式',
     open: '开启',
     close: '关闭',
@@ -65,12 +65,14 @@ const zh_CN = {
     priority: '优先级',
     to: '到',
     vehicles: '调用车辆',
+    height: '高度',
+    declineHeight: '举升高度',
+    liftHeight: '下降高度',
     creationTime: '创建时间',
     lastModificationTime: '更新时间',
     extraProperties: '额外信息',
-    height: '高度',
-    declineHeight: '举升高度',
-    liftHeight: '下降高度'
+    action: '操作',
+    detail: '详情'
   },
   missionProcess: {
     title: '任务处理',

@@ -65,12 +65,14 @@ const ja = {
     priority: '優先順位',
     to: '宛先',
     vehicles: '呼び出し車両',
+    height: '高さ',
+    declineHeight: '下降高さ',
+    liftHeight: '持ち上げ高さ',
     creationTime: '作成時間',
     lastModificationTime: '最終変更時間',
     extraProperties: '追加プロパティ',
-    height: '高さ',
-    declineHeight: '下降高さ',
-    liftHeight: '持ち上げ高さ'
+    action: 'アクション',
+    detail: '詳細'
   },
   missionProcess: {
     title: 'ミッション処理',
