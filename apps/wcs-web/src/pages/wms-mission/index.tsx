@@ -297,6 +297,7 @@ const WmsMission: FC = () => {
     }
 
     setMissionDialogOpen(false)
+    wmsMissionTableRef.current?.refresh()
   }
 
   // 详情
