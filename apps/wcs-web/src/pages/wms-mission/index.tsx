@@ -196,6 +196,7 @@ const WmsMission: FC = () => {
   }
 
   const [dialogFormFields, setDialogFormFields] = useState(getFormFieldsFromTableFields(wmsMissionfields))
+
   const [parentMissionId, setParentMissionId] = useState('')
 
   const [isDebugging, setIsDebugging] = useState(false)
@@ -343,11 +344,11 @@ const WmsMission: FC = () => {
       {missionDialogOpen && (
         <MissionDialog
           open={missionDialogOpen}
-          mode={mode}
           title={missionDialogTitle}
           fields={dialogFormFields}
           initialValues={initialValues}
           onConfirm={onMissionDialogConfirm}
+          configurationMode={mode === 'create' ? 'KeyValuePairs' : 'None'}
           onCancel={() => {
             setInitialValues({})
             setMissionDialogOpen(false)
