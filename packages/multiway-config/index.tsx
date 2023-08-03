@@ -69,4 +69,5 @@ export interface IMwTableRef<T = any> {
   setTableData: (data: T[]) => void
   getApiParams: () => AnyKeyProps
   setPaginitionValue(paginition: LoadParams['pagination']): void
+  refresh: () => void
 }
