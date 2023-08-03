@@ -6,8 +6,10 @@ import { IMwTableRef } from '@packages/multiway-config'
 import { type IWmsItem, useWcsRequest } from '@packages/services'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
+import i18n from '@/i18n'
 import { ColorBox, wmsSubMissionFields } from './fields'
 
+const t = (key: string) => i18n.t(key)
 interface IProps {
   wmsMissionId: string
   isDebugging: boolean
@@ -52,13 +54,14 @@ const WmsSubMission: FC<IProps> = (props) => {
             )}
           />
         ) : (
-          '无'
+          t('empty')
         )
       }
     }
   })
   const ctrl: MwTableCtrlField = {
     width: 180,
+    title: t('wmsMission.action'),
     render: (_, record) => (
       <div className="flex gap-2">
         <MwButton
@@ -69,7 +72,7 @@ const WmsSubMission: FC<IProps> = (props) => {
           }}
           disabled={!record.isUpdatable}
         >
-          编辑
+          {t('wmsMission.edit')}
         </MwButton>
         <MwButton
           className="!px-1"
@@ -78,7 +81,7 @@ const WmsSubMission: FC<IProps> = (props) => {
             onView?.(record)
           }}
         >
-          详情
+          {t('wmsMission.detail')}
         </MwButton>
         <MwButton
           danger
@@ -89,7 +92,7 @@ const WmsSubMission: FC<IProps> = (props) => {
           }}
           disabled={!record.isCancelable}
         >
-          取消
+          {t('wmsMission.cancel')}
         </MwButton>
       </div>
     ),

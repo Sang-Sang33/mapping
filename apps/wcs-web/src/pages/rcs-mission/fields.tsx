@@ -73,7 +73,7 @@ export const rcsMissionfields: Array<MwSearchTableField> = [
     key: 'vehicles',
     align: 'center',
     render: (_, record) =>
-      record.vehicles.length > 0 ? record.vehicles.map((v: any) => <p className="block">{v.tag}</p>) : '无',
+      record.vehicles.length > 0 ? record.vehicles.map((v: any) => <p className="block">{v.tag}</p>) : t('empty'),
     dialog: true
   },
   {
@@ -95,7 +95,7 @@ export const rcsMissionfields: Array<MwSearchTableField> = [
     align: 'center',
     render: (text) => {
       const formatString = formatDate(text as string)
-      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : '无'
+      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : t('empty')
     },
     ellipsis: true,
     sort: true
@@ -108,7 +108,7 @@ export const rcsMissionfields: Array<MwSearchTableField> = [
     align: 'center',
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
-      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
+      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : t('empty')
     },
     hidden: true
   }
@@ -125,7 +125,7 @@ const RcsSubMissionColorStrategy = {
 }
 export const rcsSubMissionFields: Array<MwSearchTableField> = [
   {
-    title: '状态',
+    title: t('rcsMission.status'),
     width: 150,
     key: 'status',
     align: 'center',
@@ -144,19 +144,19 @@ export const rcsSubMissionFields: Array<MwSearchTableField> = [
     }
   },
   {
-    title: 'ID',
+    title: t('rcsMission.id'),
     key: 'id',
     width: 270,
     ellipsis: true
   },
   {
-    title: '前置任务',
+    title: t('rcsMission.predecessorIds'),
     width: 250,
     key: 'predecessorIds',
     align: 'center'
   },
   {
-    title: '优先级',
+    title: t('rcsMission.priority'),
     width: 150,
     key: 'priority',
     align: 'center',
@@ -166,33 +166,33 @@ export const rcsSubMissionFields: Array<MwSearchTableField> = [
     hidden: true
   },
   {
-    title: '到',
+    title: t('rcsMission.To'),
     width: 150,
     key: 'to',
     align: 'center'
   },
   {
-    title: '调用车辆',
+    title: t('rcsMission.vehicles'),
     width: 150,
     key: 'vehicle',
     align: 'center',
-    render: (vehicle: string[]) => vehicle || '无'
+    render: (vehicle: string[]) => vehicle || t('empty')
   },
   {
-    title: '高度',
+    title: t('rcsMission.height'),
     width: 150,
     key: 'forkArm',
     align: 'center',
     render: (_, record) => (
       <Descriptions column={1}>
-        <Descriptions.Item label="举升高度">{record.forkArm?.liftHeight}</Descriptions.Item>
-        <Descriptions.Item label="下降高度">{record.forkArm?.declineHeight}</Descriptions.Item>
+        <Descriptions.Item label={t('rcsMission.declineHeight')}>{record.forkArm?.liftHeight}</Descriptions.Item>
+        <Descriptions.Item label={t('rcsMission.liftHeight')}>{record.forkArm?.declineHeight}</Descriptions.Item>
       </Descriptions>
     ),
     hidden: true
   },
   {
-    title: '创建时间',
+    title: t('rcsMission.creationTime'),
     width: 150,
     key: 'creationTime',
     align: 'center',
@@ -203,25 +203,25 @@ export const rcsSubMissionFields: Array<MwSearchTableField> = [
     ellipsis: true
   },
   {
-    title: '更新时间',
+    title: t('rcsMission.lastModificationTime'),
     width: 150,
     key: 'lastModificationTime',
     align: 'center',
     render: (text) => {
       const formatString = formatDate(text as string)
-      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : '无'
+      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : t('empty')
     },
     ellipsis: true
   },
 
   {
-    title: '额外信息',
+    title: t('rcsMission.extraProperties'),
     width: 250,
     key: 'extraProperties',
     align: 'center',
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
-      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
+      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : t('empty')
     },
     hidden: true
   }

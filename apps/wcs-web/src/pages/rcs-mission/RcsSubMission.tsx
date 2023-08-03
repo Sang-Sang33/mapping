@@ -6,8 +6,10 @@ import { IMwTableRef } from '@packages/multiway-config'
 import { type IRcsSubItem, useWcsRequest } from '@packages/services'
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
+import i18n from '@/i18n'
 import { ColorBox, rcsSubMissionFields } from './fields'
 
+const t = (key: string) => i18n.t(key)
 interface IProps {
   rcsSubMissionId: string
   isDebugging: boolean
@@ -52,7 +54,7 @@ const RcsSubMission: FC<IProps> = (props) => {
             )}
           />
         ) : (
-          '无'
+          t('empty')
         )
       }
     }

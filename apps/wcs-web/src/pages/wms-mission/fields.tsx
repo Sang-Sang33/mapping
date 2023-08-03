@@ -72,7 +72,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.from'),
-    width: 200,
+    width: 190,
     key: 'from',
     align: 'center',
     render: (values: string[]) => {
@@ -96,7 +96,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
           )}
         />
       ) : (
-        '无'
+        t('empty')
       )
     },
     type: 'select',
@@ -107,7 +107,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.to'),
-    width: 200,
+    width: 190,
     key: 'to',
     align: 'center',
     render: (values: string[]) => {
@@ -131,7 +131,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
           )}
         />
       ) : (
-        '无'
+        t('empty')
       )
     },
     type: 'select',
@@ -176,7 +176,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.creationTime'),
-    width: 160,
+    width: 200,
     key: 'creationTime',
     align: 'center',
     render: (text) => {
@@ -188,12 +188,12 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.lastModificationTime'),
-    width: 160,
+    width: 200,
     key: 'lastModificationTime',
     align: 'center',
     render: (text) => {
       const formatString = formatDate(text as string)
-      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : '无'
+      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : t('empty')
     },
     ellipsis: true,
     sort: true
@@ -206,7 +206,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
     align: 'center',
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
-      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
+      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : t('empty')
     },
     hidden: true
     // dialog: true
@@ -228,7 +228,7 @@ const WmsSubMissionColorStrategy = {
 }
 export const wmsSubMissionFields: Array<MwSearchTableField> = [
   {
-    title: '状态',
+    title: t('wmsMission.status'),
     width: 150,
     key: 'status',
     align: 'center',
@@ -247,13 +247,13 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     }
   },
   {
-    title: '任务ID',
+    title: t('wmsMission.id'),
     key: 'id',
     width: 320,
     ellipsis: true
   },
   {
-    title: '前置任务',
+    title: t('wmsMission.predecessorIds'),
     width: 360,
     key: 'predecessorIds',
     align: 'center',
@@ -264,7 +264,7 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     }
   },
   {
-    title: '优先级',
+    title: t('wmsMission.priority'),
     width: 100,
     key: 'priority',
     align: 'center',
@@ -278,7 +278,7 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     hidden: true
   },
   {
-    title: '到',
+    title: t('wmsMission.to'),
     width: 200,
     key: 'to',
     align: 'center',
@@ -303,7 +303,7 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
           )}
         />
       ) : (
-        '无'
+        t('empty')
       )
     },
     type: 'select',
@@ -313,7 +313,7 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     }
   },
   {
-    title: '动作',
+    title: t('wmsMission.action'),
     width: 80,
     key: 'action',
     align: 'left',
@@ -335,8 +335,8 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     ]
   },
   {
-    title: '创建时间',
-    width: 150,
+    title: t('wmsMission.creationTime'),
+    width: 200,
     key: 'creationTime',
     align: 'center',
     render: (text) => {
@@ -346,25 +346,25 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     ellipsis: true
   },
   {
-    title: '更新时间',
-    width: 150,
+    title: t('wmsMission.lastModificationTime'),
+    width: 200,
     key: 'lastModificationTime',
     align: 'center',
     render: (text) => {
       const formatString = formatDate(text as string)
-      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : '无'
+      return text ? <Tooltip title={formatString}>{formatString}</Tooltip> : t('empty')
     },
     ellipsis: true
   },
 
   {
-    title: '额外信息',
+    title: t('wmsMission.extraProperties'),
     width: 250,
     key: 'extraProperties',
     align: 'center',
     render: (extraProperties: any) => {
       const keys = Object.keys(extraProperties)
-      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
+      return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : t('empty')
     },
     hidden: true
   }

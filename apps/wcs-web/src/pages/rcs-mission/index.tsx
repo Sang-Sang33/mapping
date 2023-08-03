@@ -9,8 +9,11 @@ import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import RcsSubMission from './RcsSubMission'
 import MissionDialog from '@/components/mission-dialog'
+import i18n from '@/i18n'
 import { ColorBox, rcsMissionfields, rcsSubMissionFields } from './fields'
 import './index.less'
+
+const t = (key: string) => i18n.t(key)
 
 const getFormFieldsFromTableFields = (tableFields: MwSearchTableField[]) =>
   tableFields.filter((f) => f.dialog).map((f) => (typeof f.dialog === 'object' ? { ...f, ...f.dialog } : f))
@@ -86,7 +89,7 @@ const RcsMission: FC = () => {
             )}
           />
         ) : (
-          '无'
+          t('empty')
         )
       }
       field.options = rcsMissionTableRef.current?.getTableData().map((d) => ({ label: d.id, value: d.id }))

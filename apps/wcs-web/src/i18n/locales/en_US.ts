@@ -22,6 +22,9 @@ const en_US = {
     event: {
       nav: 'Event'
     },
+    instanceList: {
+      nav: 'Running History'
+    },
     logs: {
       nav: 'Logs'
     }
@@ -37,24 +40,45 @@ const en_US = {
     autoAbort: 'Auto Abort',
     creationTime: 'Creation Time',
     lastModificationTime: 'Last Modification Time',
-    extraProperties: 'Extra Properties'
+    extraProperties: 'Extra Properties',
+    action: 'Action',
+    debugMode: 'Debug Mode',
+    open: 'Open',
+    close: 'Close',
+    create: 'Create',
+    edit: 'Edit',
+    detail: 'Detail',
+    complete: 'Complete',
+    cancel: 'Cancel',
+    createSubMission: 'Create Subtask',
+    createMissionSuccess: 'Create mission successfully',
+    editMissionSuccess: 'Edit mission successfully',
+    createSubMissionSuccess: 'Create subtask successfully',
+    editSubMissionSuccess: 'Edit subtask successfully',
+    completeMissionSuccess: 'Mission successfully completed',
+    cancelMissionSuccess: 'Mission successfully cancelled'
   },
   rcsMission: {
     status: 'Status',
     id: 'Mission ID',
     predecessorIds: 'Predecessor Missions',
     priority: 'Priority',
+    to: 'To',
     vehicles: 'Calling Vehicles',
     creationTime: 'Creation Time',
     lastModificationTime: 'Last Modification Time',
-    extraProperties: 'Extra Properties'
+    extraProperties: 'Extra Properties',
+    height: 'Height',
+    declineHeight: 'Decline Height',
+    liftHeight: 'Lift Height'
   },
   missionProcess: {
     title: 'Mission Process',
     addDialog: {
       name: 'Mission Name'
     }
-  }
+  },
+  empty: 'No data'
 }
 
 export default en_US

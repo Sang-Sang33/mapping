@@ -10,9 +10,12 @@ import JsonEditor from '@packages/ui/components/workflow-engine/components/debug
 import useTableAutoRefresh from '@/hooks/useTableAutoRefresh'
 import useTableFocusRow from '@/hooks/useTableFocusRow'
 import MissionDialog from '@/components/mission-dialog'
+import i18n from '@/i18n'
 import WmsSubMission from './WmsSubMission'
 import { ColorBox, wmsMissionfields, wmsSubMissionFields } from './fields'
 import './index.less'
+
+const t = (key: string) => i18n.t(key)
 
 const getFormFieldsFromTableFields = (tableFields: MwSearchTableField[]) =>
   tableFields
@@ -125,7 +128,7 @@ const WmsMission: FC = () => {
             )}
           />
         ) : (
-          '无'
+          t('empty')
         )
       }
       initPredecessorIds(field)
@@ -168,7 +171,7 @@ const WmsMission: FC = () => {
               subMissionId,
               missionId: record.id
             }).then(() => {
-              message.success('任务已取消')
+              message.success(t('wmsMission.cancelMissionSuccess'))
             })
           }
           onView={(subRecord) => {
@@ -201,7 +204,8 @@ const WmsMission: FC = () => {
 
   const [isDebugging, setIsDebugging] = useState(false)
   const ctrl: MwTableCtrlField = {
-    width: 275,
+    width: 360,
+    title: t('wmsMission.action'),
     render: (_, record) => (
       <div className="flex gap-2">
         <MwButton
@@ -216,7 +220,7 @@ const WmsMission: FC = () => {
           }}
           disabled={!record.isUpdatable}
         >
-          编辑
+          {t('wmsMission.edit')}
         </MwButton>
         <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
@@ -227,19 +231,19 @@ const WmsMission: FC = () => {
             setDetailDrawerOpen(true)
           }}
         >
-          详情
+          {t('wmsMission.detail')}
         </MwButton>
         <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
           type="link"
           onClick={() => {
             completeWmsMission(record.id).then(() => {
-              message.success('任务已完成')
+              message.success(t('wmsMission.completeMissionSuccess'))
             })
           }}
           disabled={!record.isCompletable}
         >
-          完成
+          {t('wmsMission.complete')}
         </MwButton>
         <MwButton
           danger
@@ -247,12 +251,12 @@ const WmsMission: FC = () => {
           type="link"
           onClick={() => {
             cancelWmsMission(record.id).then(() => {
-              message.success('任务已取消')
+              message.success(t('wmsMission.cancelMissionSuccess'))
             })
           }}
           disabled={!record.isCancelable}
         >
-          取消
+          {t('wmsMission.cancel')}
         </MwButton>
         <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
@@ -265,7 +269,7 @@ const WmsMission: FC = () => {
             setMissionDialogOpen(true)
           }}
         >
-          添加子任务
+          {t('wmsMission.createSubMission')}
         </MwButton>
       </div>
     ),
@@ -275,24 +279,24 @@ const WmsMission: FC = () => {
   const [missionDialogOpen, setMissionDialogOpen] = useState(false)
   const [mode, setMode] = useState<'create' | 'update'>('create')
   const [isSub, setIsSub] = useState(false)
-  const missionDialogTitle = useMemo(() => (mode === 'create' ? '添加' : '编辑'), [mode])
+  const missionDialogTitle = useMemo(() => (mode === 'create' ? t('wmsMission.create') : t('wmsMission.edit')), [mode])
   const [initialValues, setInitialValues] = useState<Record<string, any>>({})
   const onMissionDialogConfirm = async (data: any) => {
     if (!isSub) {
       if (mode === 'create') {
         await createWmsMission({ missionId: generateUUID(), ...data })
-        message.success('创建WMS任务成功')
+        message.success(t('wmsMission.createMissionSuccess'))
       } else {
         await updateWmsMission({ missionId: initialValues.id, ...data })
-        message.success('编辑WMS任务成功')
+        message.success(t('wmsMission.editMissionSuccess'))
       }
     } else {
       if (mode === 'create') {
         await createWmsSubMission({ missionId: parentMissionId, subMissionId: generateUUID(), ...data })
-        message.success('创建WMS子任务成功')
+        message.success(t('wmsMission.createSubMissionSuccess'))
       } else {
         await updateWmsSubMission({ missionId: parentMissionId, subMissionId: initialValues.id, ...data })
-        message.success('编辑WMS子任务成功')
+        message.success(t('wmsMission.editSubMissionSuccess'))
       }
     }
 
@@ -310,8 +314,13 @@ const WmsMission: FC = () => {
       <MwSearchTable
         title={
           <div className="flex items-center py-2">
-            调试模式：
-            <Switch checkedChildren="开启" unCheckedChildren="关闭" checked={isDebugging} onChange={setIsDebugging} />
+            {t('wmsMission.debugMode')}：
+            <Switch
+              checkedChildren={t('wmsMission.open')}
+              unCheckedChildren={t('wmsMission.close')}
+              checked={isDebugging}
+              onChange={setIsDebugging}
+            />
           </div>
         }
         ref={wmsMissionTableRef}
@@ -337,7 +346,7 @@ const WmsMission: FC = () => {
               setMissionDialogOpen(true)
             }}
           >
-            添加
+            {t('wmsMission.create')}
           </Button>
         )}
       </MwSearchTable>
@@ -357,7 +366,12 @@ const WmsMission: FC = () => {
         ></MissionDialog>
       )}
 
-      <Drawer title="任务详情" width={520} open={detailDrawerOpen} onClose={() => setDetailDrawerOpen(false)}>
+      <Drawer
+        title={t('wmsMission.detail')}
+        width={520}
+        open={detailDrawerOpen}
+        onClose={() => setDetailDrawerOpen(false)}
+      >
         {detailDrawerOpen &&
           detailDrawerFields.map((f) => {
             const value = detail?.[f.key as keyof IWmsItem]
