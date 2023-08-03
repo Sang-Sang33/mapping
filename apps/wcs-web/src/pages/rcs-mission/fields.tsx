@@ -166,7 +166,7 @@ export const rcsSubMissionFields: Array<MwSearchTableField> = [
     hidden: true
   },
   {
-    title: t('rcsMission.To'),
+    title: t('rcsMission.to'),
     width: 150,
     key: 'to',
     align: 'center'
