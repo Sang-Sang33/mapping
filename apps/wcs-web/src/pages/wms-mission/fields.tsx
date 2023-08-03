@@ -44,7 +44,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.predecessorIds'),
-    width: 150,
+    width: 360,
     key: 'predecessorIds',
     align: 'center',
     // dialog: true,
@@ -72,7 +72,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.from'),
-    width: 180,
+    width: 200,
     key: 'from',
     align: 'center',
     render: (values: string[]) => {
@@ -107,7 +107,7 @@ export const wmsMissionfields: Array<MwSearchTableField> = [
   },
   {
     title: t('wmsMission.to'),
-    width: 180,
+    width: 200,
     key: 'to',
     align: 'center',
     render: (values: string[]) => {
@@ -247,14 +247,14 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
     }
   },
   {
-    title: 'ID',
+    title: '任务ID',
     key: 'id',
-    width: 270,
+    width: 320,
     ellipsis: true
   },
   {
     title: '前置任务',
-    width: 250,
+    width: 360,
     key: 'predecessorIds',
     align: 'center',
     type: 'select',
@@ -279,7 +279,7 @@ export const wmsSubMissionFields: Array<MwSearchTableField> = [
   },
   {
     title: '到',
-    width: 150,
+    width: 200,
     key: 'to',
     align: 'center',
     render: (values: string[]) => {

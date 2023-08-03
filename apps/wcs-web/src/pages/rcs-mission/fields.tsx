@@ -1,5 +1,5 @@
 import { MwSearchTableField } from 'multiway'
-import { Badge, Descriptions, List, Tooltip } from 'antd'
+import { Badge, Descriptions, Tooltip } from 'antd'
 import { formatDate } from '@packages/utils'
 import i18n from '@/i18n'
 import { RCS_MISSION_STATUS_ENUM, RCS_SUB_MISSION_STATUS_ENUM } from './interface.d'
@@ -36,13 +36,13 @@ export const rcsMissionfields: Array<MwSearchTableField> = [
   {
     title: t('rcsMission.id'),
     key: 'id',
-    width: 270,
+    width: 320,
     ellipsis: true
     // search: true
   },
   {
     title: t('rcsMission.predecessorIds'),
-    width: 150,
+    width: 360,
     key: 'predecessorIds',
     align: 'center',
     type: 'select',
@@ -111,7 +111,7 @@ export const rcsMissionfields: Array<MwSearchTableField> = [
       return keys.length > 0 ? keys.map((label) => <p key={label}>{label}</p>) : '无'
     },
     hidden: true
-  },
+  }
 ]
 
 const RcsSubMissionColorStrategy = {
