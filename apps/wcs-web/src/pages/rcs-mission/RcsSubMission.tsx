@@ -12,7 +12,7 @@ import { ColorBox, rcsSubMissionFields } from './fields'
 const t = (key: string) => i18n.t(key)
 interface IProps {
   rcsSubMissionId: string
-  isDebugging: boolean
+  // isDebugging: boolean
   onUpdate?: (data: Record<string, any>) => void
   onCancel?: (id: string) => void
   onView?: (data: Record<string, any>) => void
@@ -20,7 +20,7 @@ interface IProps {
 
 const itemHeight = 113
 const RcsSubMission: FC<IProps> = (props) => {
-  const { rcsSubMissionId, isDebugging = false, onUpdate, onCancel, onView } = props
+  const { rcsSubMissionId, onUpdate, onCancel, onView } = props
   const { getRcsSubMissionList } = useWcsRequest()
   const rcsSubMissionTableRef = useRef<ElementRef<typeof MwSearchTable> & IMwTableRef<IRcsSubItem>>(null)
   useTableAutoRefresh(rcsSubMissionTableRef)
@@ -60,10 +60,11 @@ const RcsSubMission: FC<IProps> = (props) => {
     }
   })
   const ctrl: MwTableCtrlField = {
-    width: 180,
+    width: 60,
+    title: t('rcsMission.action'),
     render: (_, record) => (
       <div className="flex gap-2">
-        <MwButton
+        {/* <MwButton
           className="!px-1"
           type="link"
           onClick={() => {
@@ -71,7 +72,7 @@ const RcsSubMission: FC<IProps> = (props) => {
           }}
         >
           编辑
-        </MwButton>
+        </MwButton> */}
         <MwButton
           className="!px-1"
           type="link"
@@ -79,9 +80,9 @@ const RcsSubMission: FC<IProps> = (props) => {
             onView?.(record)
           }}
         >
-          详情
+          {t('rcsMission.detail')}
         </MwButton>
-        <MwButton
+        {/* <MwButton
           danger
           className="!px-1"
           type="link"
@@ -90,7 +91,7 @@ const RcsSubMission: FC<IProps> = (props) => {
           }}
         >
           取消
-        </MwButton>
+        </MwButton> */}
       </div>
     ),
     fixed: 'right'
@@ -115,7 +116,7 @@ const RcsSubMission: FC<IProps> = (props) => {
         rowKey="id"
         pagination={false}
         tableExtend={tableExtend}
-        ctrl={isDebugging ? ctrl : undefined}
+        ctrl={ctrl}
         height={itemHeight * 4}
       />
     </div>

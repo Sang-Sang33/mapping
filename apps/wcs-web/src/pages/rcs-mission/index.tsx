@@ -109,7 +109,7 @@ const RcsMission: FC = () => {
       expandedRowRender: (record: AnyKeyProps) => (
         <RcsSubMission
           rcsSubMissionId={record.id}
-          isDebugging={isDebugging}
+          // isDebugging={isDebugging}
           onUpdate={(subMissionRecord) => {
             setIsSub(true)
             setMode('update')
@@ -144,12 +144,13 @@ const RcsMission: FC = () => {
 
   let [dialogFormFields, setDialogFormFields] = useState(getFormFieldsFromTableFields(rcsMissionfields))
 
-  const [isDebugging, setIsDebugging] = useState(false)
+  // const [isDebugging, setIsDebugging] = useState(false)
   const ctrl: MwTableCtrlField = {
-    width: 300,
+    width: 80,
+    title: t('rcsMission.action'),
     render: (_, record) => (
       <div className="flex gap-2 ">
-        <MwButton
+        {/* <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
           type="link"
           onClick={() => {
@@ -161,7 +162,7 @@ const RcsMission: FC = () => {
           }}
         >
           编辑
-        </MwButton>
+        </MwButton> */}
         <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
           type="link"
@@ -171,9 +172,9 @@ const RcsMission: FC = () => {
             setDetailDrawerOpen(true)
           }}
         >
-          详情
+          {t('rcsMission.detail')}
         </MwButton>
-        <MwButton
+        {/* <MwButton
           className="!px-1 !py-0 !h-[17px] !leading-[17px]"
           type="link"
           onClick={() => {
@@ -202,15 +203,15 @@ const RcsMission: FC = () => {
           }}
         >
           添加子任务
-        </MwButton>
+        </MwButton> */}
       </div>
     ),
     fixed: 'right'
   }
 
-  useEffect(() => {
-    setDialogFormFields(getFormFieldsFromTableFields(rcsMissionfields))
-  }, [isDebugging])
+  // useEffect(() => {
+  //   setDialogFormFields(getFormFieldsFromTableFields(rcsMissionfields))
+  // }, [isDebugging])
 
   const [missionDialogOpen, setMissionDialogOpen] = useState(false)
   const [mode, setMode] = useState<'create' | 'update'>('create')
@@ -243,18 +244,18 @@ const RcsMission: FC = () => {
   return (
     <div>
       <MwSearchTable
-        title={
-          <div className="flex items-center py-2">
-            调试模式：
-            <Switch checkedChildren="开启" unCheckedChildren="关闭" checked={isDebugging} onChange={setIsDebugging} />
-          </div>
-        }
+        // title={
+        //   <div className="flex items-center py-2">
+        //     调试模式：
+        //     <Switch checkedChildren="开启" unCheckedChildren="关闭" checked={isDebugging} onChange={setIsDebugging} />
+        //   </div>
+        // }
         ref={rcsMissionTableRef}
         rowKey="id"
         fields={rcsMissionfields}
         api={getRcsMissionList}
         tableExtend={tableExtend}
-        ctrl={isDebugging ? ctrl : undefined}
+        ctrl={ctrl}
         pagination={{
           onChange: () => {
             setMissionId('')
@@ -262,7 +263,7 @@ const RcsMission: FC = () => {
         }}
         onLoad={handleLoad}
       >
-        {isDebugging && (
+        {/* {isDebugging && (
           <Button
             type="primary"
             size="middle"
@@ -275,7 +276,7 @@ const RcsMission: FC = () => {
           >
             添加
           </Button>
-        )}
+        )} */}
       </MwSearchTable>
       {missionDialogOpen && (
         <MissionDialog
@@ -291,7 +292,12 @@ const RcsMission: FC = () => {
         ></MissionDialog>
       )}
 
-      <Drawer title="任务详情" width={520} open={detailDrawerOpen} onClose={() => setDetailDrawerOpen(false)}>
+      <Drawer
+        title={t('rcsMission.detail')}
+        width={520}
+        open={detailDrawerOpen}
+        onClose={() => setDetailDrawerOpen(false)}
+      >
         {detailDrawerOpen &&
           detailDrawerFields.map((f) => {
             const value = detail?.[f.key as keyof IRcsItem]
