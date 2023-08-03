@@ -21,7 +21,7 @@ const WmsMissionColorStrategy = {
 export const wmsMissionfields: Array<MwSearchTableField> = [
   {
     title: t('wmsMission.status'),
-    width: 100,
+    width: 105,
     key: 'status',
     align: 'center',
     render: (_, record) => {
