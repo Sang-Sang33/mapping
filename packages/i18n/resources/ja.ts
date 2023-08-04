@@ -90,6 +90,18 @@ const ja = {
       selectAll: 'すべて選択'
     }
   },
+  missionProcess: {
+    title: 'ミッション処理',
+    id: 'ID',
+    name: '名前',
+    workflowStatus: 'ステータス',
+    createdAt: '作成された時間',
+    lastExecutedAt: '最終実行時間',
+    finishedAt: '完了時間',
+    faultedAt: '障害発生時間',
+    action: 'アクション',
+    view: '表示'
+  },
   device: {
     title: 'デバイス',
     edit: 'デバイスの編集',

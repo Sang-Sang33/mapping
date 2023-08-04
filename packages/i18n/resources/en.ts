@@ -90,6 +90,18 @@ const en = {
       selectAll: 'Select all'
     }
   },
+  missionProcess: {
+    title: 'Mission Process',
+    id: 'ID',
+    name: 'Name',
+    workflowStatus: 'Status',
+    createdAt: 'Created Time',
+    lastExecutedAt: 'Last Execution Time',
+    finishedAt: 'Finished Time',
+    faultedAt: 'Faulted Time',
+    action: 'Action',
+    view: 'View'
+  },
   device: {
     title: 'Device',
     edit: 'Edit Device',

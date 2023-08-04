@@ -90,6 +90,18 @@ const ko = {
       selectAll: '전체 선택'
     }
   },
+  missionProcess: {
+    title: '미션 처리',
+    id: 'ID',
+    name: '이름',
+    workflowStatus: '상태',
+    createdAt: '생성 시간',
+    lastExecutedAt: '최종 실행 시간',
+    finishedAt: '완료 시간',
+    faultedAt: '오류 발생 시간',
+    action: '액션',
+    view: '보기'
+  },
   device: {
     title: '장치',
     edit: '장치 편집',

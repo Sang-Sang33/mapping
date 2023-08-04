@@ -3,12 +3,15 @@ import type { FC } from 'react'
 import { LeftOutlined } from '@ant-design/icons'
 import { MwSearchTable, MwSearchTableField } from 'multiway'
 import { Button, Card } from 'antd'
+import { TOptions } from 'i18next'
 import { formatDate, getLocalLibLocale } from '@packages/utils'
 import { useWcsRequest } from '@packages/services'
+import { i18n } from '@packages/i18n'
 import WorkflowIframeBase, {
   type TMessageEffectItem
 } from '@packages/ui/components/workflow-engine/components/workflow-iframe/WorkflowIframeBase'
 
+const t = (key: string, options: TOptions = { ns: 'missionProcess' }) => i18n.t(key, options)
 interface IProps {
   workflowEngineUrl: string
 }
@@ -21,7 +24,7 @@ enum ETabKey {
 
 const fields: Array<MwSearchTableField> = [
   {
-    title: 'ID',
+    title: t('id'),
     key: 'id',
     search: {
       type: 'search',
@@ -30,11 +33,11 @@ const fields: Array<MwSearchTableField> = [
     }
   },
   {
-    title: '名称',
+    title: t('name'),
     key: 'name'
   },
   {
-    title: '状态',
+    title: t('workflowStatus'),
     key: 'workflowStatus',
     type: 'select',
     options: [
@@ -48,28 +51,28 @@ const fields: Array<MwSearchTableField> = [
     filter: true
   },
   {
-    title: '创建时间',
+    title: t('createdAt'),
     key: 'createdAt',
     render: (_, record) => record.createdAt && formatDate(record.createdAt),
     sort: true,
     sortDirections: ['descend']
   },
   {
-    title: '最后执行时间',
+    title: t('lastExecutedAt'),
     key: 'lastExecutedAt',
     render: (_, record) => record.lastExecutedAt && formatDate(record.lastExecutedAt),
     sort: true,
     sortDirections: ['descend']
   },
   {
-    title: '完成时间',
+    title: t('finishedAt'),
     key: 'finishedAt',
     render: (_, record) => record.finishedAt && formatDate(record.finishedAt),
     sort: true,
     sortDirections: ['descend']
   },
   {
-    title: '故障时间',
+    title: t('faultedAt'),
     key: 'faultedAt',
     render: (_, record) => record.faultedAt && formatDate(record.faultedAt)
   }
@@ -84,15 +87,15 @@ const orderByKeyMap: Record<string, string> = {
 const tabList = [
   {
     key: ETabKey.MISSION_PROCESS,
-    tab: '任务处理'
+    tab: t('title', { ns: 'missionProcess' })
   },
   {
     key: ETabKey.FUNCTION,
-    tab: '设备'
+    tab: t('title', { ns: 'device' })
   },
   {
     key: ETabKey.EVENT,
-    tab: '事件'
+    tab: t('title', { ns: 'event' })
   }
 ]
 
@@ -104,7 +107,7 @@ const Instance: FC<IProps> = (props) => {
   const mergeFields: MwSearchTableField[] = [
     ...fields,
     {
-      title: '操作',
+      title: t('action'),
       key: 'aciton',
       render: (_, record) => {
         return (
@@ -114,7 +117,7 @@ const Instance: FC<IProps> = (props) => {
               setWorkflowInstanceId(record.id)
             }}
           >
-            查看
+            {t('view')}
           </Button>
         )
       }

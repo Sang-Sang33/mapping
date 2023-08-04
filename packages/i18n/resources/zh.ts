@@ -90,6 +90,18 @@ const zh = {
       selectAll: '全选'
     }
   },
+  missionProcess: {
+    title: '任务处理',
+    id: 'ID',
+    name: '名称',
+    workflowStatus: '状态',
+    createdAt: '创建时间',
+    lastExecutedAt: '最后执行时间',
+    finishedAt: '完成时间',
+    faultedAt: '故障时间',
+    action: '操作',
+    view: '查看'
+  },
   device: {
     title: '设备',
     edit: '编辑设备',
