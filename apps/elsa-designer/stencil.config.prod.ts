@@ -56,5 +56,8 @@ export const config: Config = {
     postcss({
       plugins: [postcssImport, tailwindcss, purgecss, cssnano]
     })
-  ]
+  ],
+  env: {
+    serverUrl: process.env.NODE_ENV === 'development' ? 'http://dev.multiway-cloud.com:25001' : '/proxy'
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Listen, Method, Prop, State } from '@stencil/core'
+import { Component, Env, Event, EventEmitter, h, Listen, Method, Prop, State } from '@stencil/core'
 import Tunnel, { DashboardState } from '../../../../data/dashboard'
 import { ElsaStudio, WorkflowModel } from '../../../../models'
 import {
@@ -73,7 +73,8 @@ export class ElsaStudioRoot {
 
   async componentWillLoad() {
     state.useX6Graphs = this.useX6Graphs
-    const serverUrl = window.__SERVER_URL__ || this.serverUrl
+    const serverUrl = Env.serverUrl || this.serverUrl
+    console.log('env:', Env)
 
     const elsaClientFactory: () => Promise<ElsaClient> = () => createElsaClient(serverUrl)
     const httpClientFactory: () => Promise<AxiosInstance> = () => createHttpClient(serverUrl)
@@ -137,7 +138,7 @@ export class ElsaStudioRoot {
 
   render() {
     const culture = this.culture
-    const serverUrl = window.__SERVER_URL__ || this.serverUrl
+    const serverUrl = Env.serverUrl || this.serverUrl
 
     const tunnelState: DashboardState = {
       serverUrl,
