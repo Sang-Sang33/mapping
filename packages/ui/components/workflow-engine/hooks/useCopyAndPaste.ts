@@ -1,7 +1,7 @@
 import { useLocalStorageState } from 'ahooks'
 import { cloneDeep } from 'lodash'
 
-const useCopyAndPaste = <T = any>(key = 'use-copy-and-paste', defaultValue: any = '') => {
+const useCopyAndPaste = <T = any>(key = 'use-copy-and-paste', defaultValue: any = '', autoClear = false) => {
   const [content, setContent] = useLocalStorageState<T>(key, {
     defaultValue
   })
@@ -20,7 +20,7 @@ const useCopyAndPaste = <T = any>(key = 'use-copy-and-paste', defaultValue: any 
    * @return {*} 粘贴的内容
    */
   const paste = () => {
-    setContent(defaultValue)
+    autoClear && setContent(defaultValue)
     return content
   }
 
