@@ -1,5 +1,6 @@
 import { i18n } from '@packages/i18n'
 import { message } from 'antd'
+import { TOptions } from 'i18next'
 import { MwDialogFormField } from 'multiway'
 
 export interface IDefaultDialogFormProps {
@@ -30,7 +31,7 @@ export enum WorkflowTypeEnum {
 }
 
 const { error, success, warn } = message
-const t = (key: string) => i18n.t(key, { ns: 'workflowEngine' })
+const t = (key: string, options: TOptions = { ns: 'workflowEngine' }) => i18n.t(key, options)
 
 class MessageManager {
   messageMap = {
@@ -40,9 +41,9 @@ class MessageManager {
     copy_success: (message: string) => success(t('action.copySuccess') + message),
     paste_null: () => warn(t('action.pasteNull')),
     paste_invalid: (from: string, to: string) =>
-      warn(`"${t(from + '.title')}"${t('action.pasteInvalid')}"${t(to + '.title')}"`),
+      warn(`"${t('title', { ns: from })}"${t('action.pasteInvalid')}"${t('title', { ns: to })}"`),
     import_invalid: (from: string, to: string) =>
-      warn(`"${t(from + '.title')}"${t('action.importInvalid')}"${t(to + '.title')}"`),
+      warn(`"${t('title', { ns: from })}"${t('action.importInvalid')}"${t('title', { ns: to })}"`),
     delete_cancel: () => warn(t('action.deleteCancel')),
     file_invalid: () => error(t('action.fileInvalid')),
     paste_success: () => success(t('action.pasteSuccess')),
