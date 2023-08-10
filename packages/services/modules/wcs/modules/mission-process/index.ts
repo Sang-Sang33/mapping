@@ -9,7 +9,7 @@ const useWcsMissionProcessRequest = (mwRequest: MWRequest) => {
   const fetchMissionProcessAvailableNames = () => get<string[]>('/mission-process/available-names')
   const fetchMissionProcessWorkflowDefinition = (ids: string[]) => {
     const queryString = ids.map((id) => `ids=${id}`).join('&')
-    return get<any[]>(`/event?${queryString}`)
+    return get<any[]>(`/mission-process?${queryString}`)
   }
   const deleteMissionProcess = (id: string) => del(`/mission-process/${id}`)
   const createMissionProcess = (data: ICreateMissionData[]) => post('/mission-process', data)

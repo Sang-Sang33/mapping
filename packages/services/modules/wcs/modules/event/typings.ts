@@ -1,3 +1,5 @@
+import { EWorkflowPersistenceBehavior, IActivityDefinition, IConnectionDefinition } from '../../typings'
+
 /**
  * 事件列表子项
  */
@@ -11,8 +13,8 @@ export interface IEventItem {
  */
 export interface ICreateEventData {
   name: string
-  activities: []
-  connections: []
-  persistenceBehavior: string
+  activities: IActivityDefinition[]
+  connections: IConnectionDefinition[]
+  persistenceBehavior?: EWorkflowPersistenceBehavior
   publish: false
 }

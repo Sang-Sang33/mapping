@@ -1,5 +1,11 @@
 import type MWRequest from '../../../../request'
-import type { IDebugWorkflow, IListResult, IWorkflowInstanceItem, IWorkflowInstanceListParams } from '../../typings'
+import type {
+  IDebugWorkflow,
+  IListResult,
+  IWorkflowDefinition,
+  IWorkflowInstanceItem,
+  IWorkflowInstanceListParams
+} from '../../typings'
 import type { ICreateDeviceFunctionData, IDeviceItem, TDeviceStatus } from './typings'
 
 const useWcsDeviceRequest = (mwRequest: MWRequest) => {
@@ -12,7 +18,7 @@ const useWcsDeviceRequest = (mwRequest: MWRequest) => {
     })
   const fetchDeviceFunction = (ids: string[]) => {
     const queryString = ids.map((id) => `ids=${id}`).join('&')
-    return get<any[]>(`/function?${queryString}`)
+    return get<IWorkflowDefinition[]>(`/function?${queryString}`)
   }
   const deleteDeviceFunction = (id: string) => del(`/function/${id}`)
   const createDeviceFunction = (data: ICreateDeviceFunctionData[]) => post('/function', data)

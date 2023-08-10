@@ -1,3 +1,5 @@
+import { EWorkflowPersistenceBehavior, IActivityDefinition, IConnectionDefinition } from '../../typings'
+
 /**
  * 任务处理列表子项
  */
@@ -11,8 +13,8 @@ export interface IMissionItem {
  */
 export interface ICreateMissionData {
   name: string
-  activities: []
-  connections: []
-  persistenceBehavior: string
+  activities: IActivityDefinition[]
+  connections: IConnectionDefinition[]
+  persistenceBehavior?: EWorkflowPersistenceBehavior
   publish: false
 }

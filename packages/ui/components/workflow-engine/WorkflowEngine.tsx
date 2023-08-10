@@ -26,6 +26,7 @@ export type TUpdate = (data: any, menuItem: IMenuItem) => Promise<any>
 export type TBatchCreate = (menu: IMenuItem[], parentMenu?: IMenuItem) => Promise<any>
 export type GetFormInitialValueFn = (menuItem: IMenuItem) => Promise<any>
 export type TNotEditWorkflow = (menuItem: IMenuItem) => void
+export type TBeforeCopy = (copyContent: IMenuItem[], parentMenu?: IMenuItem) => void
 
 interface IProps {
   title: string
@@ -47,6 +48,7 @@ interface IProps {
   debuggingHistory?: Record<string, any>
   beforeDialogOpen?: (formFields: MwDialogFormField[]) => Promise<MwDialogFormField[]> // 新增编辑弹窗打开之前(可用于修改formField配置)
   debug?: (workflowDefinitionId: string, data: any) => Promise<any>
+  beforeCopy?: TBeforeCopy
 }
 
 export interface IWorkflowEngineComponentRef {
@@ -70,7 +72,8 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     onNotEditWorkflow,
     debuggingHistory,
     beforeDialogOpen,
-    debug
+    debug,
+    beforeCopy
   } = props
   useImperativeHandle(ref, () => ({
     loadData
@@ -188,7 +191,8 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
 
   /** 复制 */
   const { copy, paste } = useCopyAndPaste<IMenuItem[]>()
-  const handleCopy = (menuItem: IMenuItem) => {
+  const handleCopy = async (menuItem: IMenuItem) => {
+    beforeCopy?.([menuItem], selectedMenuItem)
     copy([menuItem])
     // message.success(`已复制"${menuItem.label}"`)
     showMessage('copy_success')(menuItem.label)
@@ -275,6 +279,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
 
   /** 复制多个 */
   const handleCopyMultiple = (data: IMenuItem[]) => {
+    beforeCopy?.(data, selectedMenuItem)
     copy(data)
     const content = data
       .slice(0, 3)

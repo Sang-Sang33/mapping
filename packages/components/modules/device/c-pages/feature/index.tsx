@@ -2,6 +2,7 @@ import React, { memo, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { message } from 'antd'
 import { MwDialogForm, MwDialogFormField } from 'multiway'
+import { useTranslation } from 'react-i18next'
 import { WorkflowEngine, WorkflowTypeEnum, defaultDialogProps } from '@packages/ui'
 import type {
   TCreate,
@@ -12,12 +13,13 @@ import type {
   TNotEditWorkflow,
   TUpdate,
   IDefaultDialogFormProps,
-  IMenuItem
+  IMenuItem,
+  TBeforeCopy
 } from '@packages/ui'
-import { useWcsRequest } from '@packages/services'
+import { EWorkflowPersistenceBehavior, IWorkflowDefinition, useWcsRequest } from '@packages/services'
 import { i18n } from '@packages/i18n'
 import { useStorage } from '@packages/hooks'
-import { useTranslation } from 'react-i18next'
+import useCopyAndPaste from '@packages/ui/components/workflow-engine/hooks/useCopyAndPaste'
 import workflowApi from './config/workflowApi'
 import fields from './config/formFields'
 interface IFeatureProps {
@@ -45,6 +47,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     debugDeviceFunction
   } = useWcsRequest(baseUrl)
   const storage = useStorage()
+  const { copy, paste } = useCopyAndPaste<IWorkflowDefinition[]>('copied-workflow-definitions')
 
   // 获取数据
   const onFetch: TFetch = () =>
@@ -124,7 +127,7 @@ const Feature: FC<IFeatureProps> = (props) => {
         name,
         activities: [],
         connections: [],
-        persistenceBehavior: 'WorkflowBurst',
+        persistenceBehavior: EWorkflowPersistenceBehavior.WorkflowBurst,
         publish: false
       }
     ])
@@ -141,14 +144,27 @@ const Feature: FC<IFeatureProps> = (props) => {
       publish: isPublished
     })
   }
-  // 复制或导入
-  const onBatchCreate = async (menu: IMenuItem[], parentMenu?: IMenuItem) => {
+  // 存储复制的工作流定义
+  const beforeCopy: TBeforeCopy = async (menu) => {
     let definitionIds: string[] = []
-    let idNameMap: Record<string, string> = {}
     const type = menu[0].type
     if (type === WorkflowTypeEnum.DEVICE) {
       // 复制或导入设备
       definitionIds = menu.flatMap((menuItem) => menuItem.children?.map((x) => x.definitionId as string) || [])
+    } else {
+      // 复制或导入功能
+      definitionIds = menu.map((menuItem) => menuItem.definitionId as string)
+    }
+
+    const workflowDefinitionList = await fetchDeviceFunction(definitionIds)
+    copy(workflowDefinitionList)
+  }
+  // 复制或导入
+  const onBatchCreate = async (menu: IMenuItem[], parentMenu?: IMenuItem) => {
+    let idNameMap: Record<string, string> = {}
+    const type = menu[0].type
+    if (type === WorkflowTypeEnum.DEVICE) {
+      // 复制或导入设备
       idNameMap = Object.fromEntries(
         menu.flatMap((menuItem) => {
           const deviceName = menuItem.label
@@ -163,7 +179,6 @@ const Feature: FC<IFeatureProps> = (props) => {
       )
     } else {
       // 复制或导入功能
-      definitionIds = menu.map((menuItem) => menuItem.definitionId as string)
       idNameMap = Object.fromEntries(
         menu.map(({ definitionId, label: funtionName }) => [
           definitionId,
@@ -172,10 +187,10 @@ const Feature: FC<IFeatureProps> = (props) => {
       )
     }
 
-    const workflowDefinitionList = await fetchDeviceFunction(definitionIds)
+    const workflowDefinitionList = paste()
     return createDeviceFunction(
       workflowDefinitionList.map(({ definitionId, activities, connections, persistenceBehavior }) => ({
-        name: idNameMap[definitionId],
+        name: idNameMap[definitionId!],
         activities,
         connections,
         persistenceBehavior,
@@ -189,7 +204,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     let name
     if (menuItem.definitionId) {
       const [deviceFunction] = await fetchDeviceFunction([menuItem.definitionId!])
-      name = deviceFunction.name
+      name = deviceFunction.name!
     } else {
       name = menuItem.label
     }
@@ -272,6 +287,7 @@ const Feature: FC<IFeatureProps> = (props) => {
         onNotEditWorkflow={handleNotEditWorkflow}
         debug={debug}
         debuggingHistory={featureDebugHistory}
+        beforeCopy={beforeCopy}
       ></WorkflowEngine>
       <MwDialogForm
         formExtend={{

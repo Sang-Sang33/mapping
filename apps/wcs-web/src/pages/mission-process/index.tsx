@@ -1,9 +1,10 @@
 import React, { memo, useState } from 'react'
 import type { FC } from 'react'
-import { useWcsRequest } from '@packages/services'
+import { EWorkflowPersistenceBehavior, IWorkflowDefinition, useWcsRequest } from '@packages/services'
 import { WorkflowEngine, WorkflowTypeEnum } from '@packages/ui'
-import type { TCreate, TDelete, TFetch, TUpdate, IMenuItem } from '@packages/ui'
+import type { TCreate, TDelete, TFetch, TUpdate, IMenuItem, TBeforeCopy } from '@packages/ui'
 import { useStorage } from '@packages/hooks'
+import useCopyAndPaste from '@/components/workflow-engine/hooks/useCopyAndPaste'
 import i18n from '@/i18n'
 import { MwDialogFormField } from 'multiway'
 import { IconFont } from '@/components/Icon'
@@ -25,6 +26,7 @@ const Event: FC = () => {
     debugMissionProcess
   } = useWcsRequest()
   const storage = useStorage()
+  const { copy, paste } = useCopyAndPaste<IWorkflowDefinition[]>('copied-workflow-definitions')
 
   // 获取事件工作流数据
   const onFetch: TFetch = () =>
@@ -46,7 +48,7 @@ const Event: FC = () => {
         name,
         activities: [],
         connections: [],
-        persistenceBehavior: 'WorkflowBurst',
+        persistenceBehavior: EWorkflowPersistenceBehavior.WorkflowBurst,
         publish: false
       }
     ])
@@ -61,15 +63,21 @@ const Event: FC = () => {
       publish: isPublished
     })
   }
-  // 复制或导入
-  const onBatchCreate = async (menu: IMenuItem[]) => {
+  // 存储复制的工作流定义
+  const beforeCopy: TBeforeCopy = async (menu) => {
     const definitionIds = menu.map((menuItem) => menuItem.definitionId as string)
-    const idNameMap = Object.fromEntries(menu.map(({ definitionId, label }) => [definitionId, label]))
 
     const workflowDefinitionList = await fetchMissionProcessWorkflowDefinition(definitionIds)
+    copy(workflowDefinitionList)
+  }
+  // 复制或导入
+  const onBatchCreate = async (menu: IMenuItem[]) => {
+    const idNameMap = Object.fromEntries(menu.map(({ definitionId, label }) => [definitionId, label]))
+
+    const workflowDefinitionList = paste()
     return createMissionProcess(
       workflowDefinitionList.map(({ definitionId, activities, connections, persistenceBehavior }) => ({
-        name: idNameMap[definitionId],
+        name: idNameMap[definitionId!],
         activities,
         connections,
         persistenceBehavior,
@@ -121,6 +129,7 @@ const Event: FC = () => {
       beforeDialogOpen={handleBeforeDialogOpen}
       debug={debug}
       debuggingHistory={missionProcessDebugHistory}
+      beforeCopy={beforeCopy}
     ></WorkflowEngine>
   )
 }

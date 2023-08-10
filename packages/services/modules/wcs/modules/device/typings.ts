@@ -1,3 +1,5 @@
+import { EWorkflowPersistenceBehavior, IActivityDefinition, IConnectionDefinition } from '../../typings'
+
 /**
  * 设备列表子项类型
  */
@@ -20,9 +22,9 @@ export interface IFunction {
  */
 export interface ICreateDeviceFunctionData {
   name: string
-  activities: []
-  connections: []
-  persistenceBehavior: string
+  activities: IActivityDefinition[]
+  connections: IConnectionDefinition[]
+  persistenceBehavior?: EWorkflowPersistenceBehavior
   publish: false
 }
 

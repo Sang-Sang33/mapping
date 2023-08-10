@@ -1,5 +1,11 @@
 import type MWRequest from '../../../../request'
-import type { IDebugWorkflow, IListResult, IWorkflowInstanceItem, IWorkflowInstanceListParams } from '../../typings'
+import type {
+  IDebugWorkflow,
+  IListResult,
+  IWorkflowDefinition,
+  IWorkflowInstanceItem,
+  IWorkflowInstanceListParams
+} from '../../typings'
 import type { ICreateEventData, IEventItem } from './typings'
 
 const useWcsEventRequest = (mwRequest: MWRequest) => {
@@ -8,7 +14,7 @@ const useWcsEventRequest = (mwRequest: MWRequest) => {
   const fetchEvent = () => get<IEventItem[]>('/event/names')
   const fetchEventWorkflowDefinition = (ids: string[]) => {
     const queryString = ids.map((id) => `ids=${id}`).join('&')
-    return get<any[]>(`/event?${queryString}`)
+    return get<IWorkflowDefinition[]>(`/event?${queryString}`)
   }
   const deleteEvent = (id: string) => del(`/event/${id}`)
   const createEvent = (data: ICreateEventData[]) => post('/event', data)

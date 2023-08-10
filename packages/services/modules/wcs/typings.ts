@@ -50,3 +50,72 @@ export interface IWorkflowInstanceListParams {
   orderBy: string | null
   // searchTerm: string
 }
+
+export interface IWorkflowDefinition {
+  id?: string
+  definitionId?: string
+  tenantId?: string
+  name?: string
+  displayName?: string
+  description?: string
+  version: number
+  variables?: string
+  customAttributes?: Record<string, any>
+  contextOptions?: IWorkflowContextOptions
+  isSingleton?: boolean
+  persistenceBehavior?: EWorkflowPersistenceBehavior
+  deleteCompletedInstances?: boolean
+  isPublished: boolean
+  isLatest: boolean
+  activities: Array<IActivityDefinition>
+  connections: Array<IConnectionDefinition>
+  tag?: string
+  channel?: string
+}
+
+export interface IWorkflowContextOptions {
+  contextType: string
+  contextFidelity: WorkflowContextFidelity
+}
+
+export enum WorkflowContextFidelity {
+  Burst = 'Burst',
+  Activity = 'Activity'
+}
+
+export enum EWorkflowPersistenceBehavior {
+  Suspended = 'Suspended',
+  WorkflowBurst = ' WorkflowBurst',
+  WorkflowPassCompleted = 'WorkflowPassCompleted',
+  ActivityExecuted = 'ActivityExecuted'
+}
+
+export interface IActivityDefinition {
+  activityId: string
+  type: string
+  name: string
+  displayName: string
+  description: string
+  top?: number
+  left?: number
+  x?: number
+  y?: number
+  persistWorkflow: boolean
+  loadWorkflowContext: boolean
+  saveWorkflowContext: boolean
+  properties: Array<IActivityDefinitionProperty>
+  propertyStorageProviders: Record<string, any>
+}
+
+export interface IActivityDefinitionProperty {
+  name: string
+  syntax?: string
+  expressions: Record<string, any>
+  value?: any
+}
+
+export interface IConnectionDefinition {
+  sourceActivityId?: string
+  targetActivityId?: string
+  outcome?: string
+}
