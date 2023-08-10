@@ -38,7 +38,7 @@ class MessageManager {
     delete_success: () => success(t('action.deleteSuccess')),
     add_success: () => success(t('action.addSuccess')),
     update_success: () => success(t('action.updateSuccess')),
-    copy_success: (message: string) => success(t('action.copySuccess') + message),
+    copy_success: (message: string) => success(t('action.copySuccess') + `"${message}"`),
     paste_null: () => warn(t('action.pasteNull')),
     paste_invalid: (from: string, to: string) =>
       warn(`"${t('title', { ns: from })}"${t('action.pasteInvalid')}"${t('title', { ns: to })}"`),
