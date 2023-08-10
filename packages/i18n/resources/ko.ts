@@ -125,6 +125,9 @@ const ko = {
       value: '값'
     }
   },
+  function: {
+    title: '기능'
+  },
   event: {
     title: '이벤트',
     addDialog: {

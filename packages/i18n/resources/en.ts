@@ -125,6 +125,9 @@ const en = {
       value: 'Value'
     }
   },
+  function: {
+    title: 'Function'
+  },
   event: {
     title: 'Event',
     addDialog: {

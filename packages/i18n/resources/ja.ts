@@ -125,6 +125,9 @@ const ja = {
       value: '値'
     }
   },
+  function: {
+    title: '機能'
+  },
   event: {
     title: 'イベント',
     addDialog: {

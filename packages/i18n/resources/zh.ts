@@ -125,6 +125,9 @@ const zh = {
       value: '值'
     }
   },
+  function: {
+    title: '功能'
+  },
   event: {
     title: '事件',
     addDialog: {
