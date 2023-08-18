@@ -33,6 +33,7 @@ interface IProps {
   type: WorkflowTypeEnum
   workflowEngineUrl: string
   formFields: MwDialogFormField[]
+  editable?: boolean
   onFetch: TFetch // 获取菜单数据
   onDelete: TDelete // 删除工作流
   onCreate: TCreate // 创建工作流
@@ -61,6 +62,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     type,
     workflowEngineUrl,
     formFields,
+    editable = true,
     onFetch,
     onDelete,
     onCreate,
@@ -389,7 +391,7 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
           >
             {t('action.add')}
           </Button>
-          {selectedWorkflowDefinitionId && (
+          {selectedWorkflowDefinitionId && editable && (
             <Button
               shape="round"
               icon={<EditFilled className="align-middle" />}
@@ -460,7 +462,8 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
           setCanInteract,
           menuListDesignHeight: 886,
           menuItemHeight: 50,
-          workflowEngineUrl
+          workflowEngineUrl,
+          editable
         }}
       >
         <Aside

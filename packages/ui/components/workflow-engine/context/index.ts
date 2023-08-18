@@ -7,6 +7,7 @@ interface IWorkflowConfig {
   menuListDesignHeight: number
   menuItemHeight: number
   workflowEngineUrl: string
+  editable: boolean
 }
 
 const WorkflowConfigContext = createContext<Partial<IWorkflowConfig>>({

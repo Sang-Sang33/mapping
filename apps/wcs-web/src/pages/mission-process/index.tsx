@@ -120,6 +120,7 @@ const Event: FC = () => {
       type={WorkflowTypeEnum.MISSION_PROCESS}
       workflowEngineUrl={import.meta.env.VITE_WORKFLOW_ENGINE_URL || 'http://120.79.85.168:6034'}
       formFields={fields}
+      editable={false}
       onFetch={onFetch}
       onDelete={onDelete}
       onCreate={onCreate}

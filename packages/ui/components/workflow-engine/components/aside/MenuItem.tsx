@@ -51,7 +51,8 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
   const menuItemContainerRef = useRef<HTMLDivElement>(null)
   const menuItemContentRef = useRef<HTMLDivElement>(null)
   const nodeRef = useRef<HTMLDivElement>(null)
-  const { canInteract, setCanInteract, menuListDesignHeight, menuItemHeight } = useContext(WorkflowConfigContext)
+  const { canInteract, setCanInteract, menuListDesignHeight, menuItemHeight, editable } =
+    useContext(WorkflowConfigContext)
   const [isOpenPopConfirm, setIsOpenPopConfirm] = useState(false)
   const menuListHeight = useMenuListHeight(menuItem.children?.length || 0, menuListDesignHeight, menuItemHeight, true)
 
@@ -64,11 +65,6 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
   }
 
   const items: MenuProps['items'] = [
-    {
-      label: <a onClick={() => onEdit?.(menuItem)}>{t('action.edit')}</a>,
-      key: 'edit',
-      icon: <EditOutlined />
-    },
     {
       label: (
         <a
@@ -90,6 +86,13 @@ const MenuItem = forwardRef<IMenuItemComponentRef, IDragItemProps>((props, ref) 
       icon: <CopyOutlined />
     }
   ]
+
+  const editMenu = {
+    label: <a onClick={() => onEdit?.(menuItem)}>{t('action.edit')}</a>,
+    key: 'edit',
+    icon: <EditOutlined />
+  }
+  editable && items.unshift(editMenu)
 
   const isSelected = (menuItem: IMenuItem) => selectedNodeFields.includes(menuItem.field)
   const getSelectedItemClass = (menuItem: IMenuItem) => (isSelected(menuItem) ? '' : '')
