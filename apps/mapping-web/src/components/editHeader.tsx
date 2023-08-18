@@ -1,6 +1,7 @@
 import { Layout, Menu, Col, Row, Button, Space, Select, message, Dropdown, Avatar } from 'antd'
 import { useStore } from '../store/index'
 import { observer } from 'mobx-react-lite'
+import { redirectToSSO } from '@packages/utils'
 import type { MenuProps } from 'antd'
 import { isPointInRect } from '../utils'
 import UploadJson from './uploadJson'
@@ -11,7 +12,6 @@ import { saveSlot, saveTransferPosition, saveTempSlot, getTempSlot, getRcspoint 
 import type { IEditedShapeItem, ISelectedRect, menuType, shapeItem } from '@/types'
 import { getTenant } from '@/utils/auth'
 import { PoweroffOutlined, ImportOutlined } from '@ant-design/icons';
-import { redirectToSso } from '@/utils/auth'
 import { clearAccessToken, getCookieByName, setCookie, removeCookieByName } from '@/utils/auth'
 import user from "@/assets/icons/user.svg";
 import UploadBackground from '@/components/uploadBackground'
@@ -276,7 +276,7 @@ function EditHeader() {
     clearAccessToken()
     removeCookieByName(WAREHOUSE_COOKIE)
     removeCookieByName(TANENT_COOKIE)
-    redirectToSso()
+    redirectToSSO()
   }
 
   const userMenu = (
