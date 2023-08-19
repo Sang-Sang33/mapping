@@ -1,5 +1,11 @@
 import type MWRequest from '../../../../request'
-import type { IDebugWorkflow, IListResult, IWorkflowInstanceItem, IWorkflowInstanceListParams } from '../../typings'
+import type {
+  IDebugWorkflow,
+  IListResult,
+  IWorkflowDefinition,
+  IWorkflowInstanceItem,
+  IWorkflowInstanceListParams
+} from '../../typings'
 import type { ICreateMissionData, IMissionItem } from './typings'
 
 const useWcsMissionProcessRequest = (mwRequest: MWRequest) => {
@@ -9,7 +15,7 @@ const useWcsMissionProcessRequest = (mwRequest: MWRequest) => {
   const fetchMissionProcessAvailableNames = () => get<string[]>('/mission-process/available-names')
   const fetchMissionProcessWorkflowDefinition = (ids: string[]) => {
     const queryString = ids.map((id) => `ids=${id}`).join('&')
-    return get<any[]>(`/mission-process?${queryString}`)
+    return get<IWorkflowDefinition[]>(`/mission-process?${queryString}`)
   }
   const deleteMissionProcess = (id: string) => del(`/mission-process/${id}`)
   const createMissionProcess = (data: ICreateMissionData[]) => post('/mission-process', data)

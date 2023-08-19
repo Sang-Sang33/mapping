@@ -1,11 +1,10 @@
 import React, { memo, useState } from 'react'
 import type { FC } from 'react'
-import { EWorkflowPersistenceBehavior, type IWorkflowDefinition, useWcsRequest } from '@packages/services'
+import { EWorkflowPersistenceBehavior, useWcsRequest } from '@packages/services'
 import { WorkflowEngine, WorkflowTypeEnum } from '@packages/ui'
-import type { TCreate, TDelete, TFetch, TUpdate, IMenuItem, TBeforeCopy } from '@packages/ui'
+import type { TCreate, TDelete, TFetch, TUpdate, IMenuItem, TBatchCreate } from '@packages/ui'
 import { i18n } from '@packages/i18n'
 import { useStorage } from '@packages/hooks'
-import useCopyAndPaste from '@packages/ui/components/workflow-engine/hooks/useCopyAndPaste'
 import fields from './config/formFields'
 import workflowApi from './config/workflowApi'
 
@@ -23,7 +22,6 @@ const Event: FC<IEventProps> = (props) => {
   const { fetchEvent, deleteEvent, createEvent, fetchEventWorkflowDefinition, updateEvent, debugEvent } =
     useWcsRequest(baseUrl)
   const storage = useStorage()
-  const { copy, paste } = useCopyAndPaste<IWorkflowDefinition[]>('copied-workflow-definitions')
 
   // 获取事件工作流数据
   const onFetch: TFetch = () =>
@@ -80,22 +78,15 @@ const Event: FC<IEventProps> = (props) => {
       publish: isPublished
     })
   }
-  // 存储复制的工作流定义
-  const beforeCopy: TBeforeCopy = async (menu) => {
-    const definitionIds = menu.map((menuItem) => menuItem.definitionId as string)
 
-    const workflowDefinitionList = await fetchEventWorkflowDefinition(definitionIds)
-    copy(workflowDefinitionList)
-  }
   // 复制或导入
-  const onBatchCreate = async (menu: IMenuItem[]) => {
+  const onBatchCreate: TBatchCreate = async (menu: IMenuItem[], workflowDefinitions) => {
     const idNameMap: Record<string, string> = Object.fromEntries(
       menu.map(({ definitionId, label }) => [definitionId, label])
     )
 
-    const workflowDefinitionList = paste()
     return createEvent(
-      workflowDefinitionList.map(({ definitionId, activities, connections, persistenceBehavior }) => ({
+      workflowDefinitions.map(({ definitionId, activities, connections, persistenceBehavior }) => ({
         name: idNameMap[definitionId!],
         activities,
         connections,
@@ -132,7 +123,7 @@ const Event: FC<IEventProps> = (props) => {
       debug={debug}
       workflowApi={workflowApi}
       debuggingHistory={eventDebugHistory}
-      beforeCopy={beforeCopy}
+      onFetchWorkflowDefinitions={fetchEventWorkflowDefinition}
     ></WorkflowEngine>
   )
 }

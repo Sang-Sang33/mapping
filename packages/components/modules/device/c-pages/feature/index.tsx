@@ -14,12 +14,11 @@ import type {
   TUpdate,
   IDefaultDialogFormProps,
   IMenuItem,
-  TBeforeCopy
+  TBatchCreate
 } from '@packages/ui'
-import { EWorkflowPersistenceBehavior, IWorkflowDefinition, useWcsRequest } from '@packages/services'
+import { EWorkflowPersistenceBehavior, useWcsRequest } from '@packages/services'
 import { i18n } from '@packages/i18n'
 import { useStorage } from '@packages/hooks'
-import useCopyAndPaste from '@packages/ui/components/workflow-engine/hooks/useCopyAndPaste'
 import workflowApi from './config/workflowApi'
 import fields from './config/formFields'
 interface IFeatureProps {
@@ -47,7 +46,6 @@ const Feature: FC<IFeatureProps> = (props) => {
     debugDeviceFunction
   } = useWcsRequest(baseUrl)
   const storage = useStorage()
-  const { copy, paste } = useCopyAndPaste<IWorkflowDefinition[]>('copied-workflow-definitions')
 
   // 获取数据
   const onFetch: TFetch = () =>
@@ -144,23 +142,8 @@ const Feature: FC<IFeatureProps> = (props) => {
       publish: isPublished
     })
   }
-  // 存储复制的工作流定义
-  const beforeCopy: TBeforeCopy = async (menu) => {
-    let definitionIds: string[] = []
-    const type = menu[0].type
-    if (type === WorkflowTypeEnum.DEVICE) {
-      // 复制或导入设备
-      definitionIds = menu.flatMap((menuItem) => menuItem.children?.map((x) => x.definitionId as string) || [])
-    } else {
-      // 复制或导入功能
-      definitionIds = menu.map((menuItem) => menuItem.definitionId as string)
-    }
-
-    const workflowDefinitionList = await fetchDeviceFunction(definitionIds)
-    copy(workflowDefinitionList)
-  }
   // 复制或导入
-  const onBatchCreate = async (menu: IMenuItem[], parentMenu?: IMenuItem) => {
+  const onBatchCreate: TBatchCreate = async (menu: IMenuItem[], workflowDefinitions, parentMenu?: IMenuItem) => {
     let idNameMap: Record<string, string> = {}
     const type = menu[0].type
     if (type === WorkflowTypeEnum.DEVICE) {
@@ -187,9 +170,8 @@ const Feature: FC<IFeatureProps> = (props) => {
       )
     }
 
-    const workflowDefinitionList = paste()
     return createDeviceFunction(
-      workflowDefinitionList.map(({ definitionId, activities, connections, persistenceBehavior }) => ({
+      workflowDefinitions.map(({ definitionId, activities, connections, persistenceBehavior }) => ({
         name: idNameMap[definitionId!],
         activities,
         connections,
@@ -287,7 +269,7 @@ const Feature: FC<IFeatureProps> = (props) => {
         onNotEditWorkflow={handleNotEditWorkflow}
         debug={debug}
         debuggingHistory={featureDebugHistory}
-        beforeCopy={beforeCopy}
+        onFetchWorkflowDefinitions={fetchDeviceFunction}
       ></WorkflowEngine>
       <MwDialogForm
         formExtend={{

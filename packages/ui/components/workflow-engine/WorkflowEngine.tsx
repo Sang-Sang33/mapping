@@ -3,7 +3,7 @@ import { Breadcrumb, Button, Empty, message, Popconfirm } from 'antd'
 import { EditFilled, DeleteFilled, AppstoreAddOutlined, SettingFilled } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { MwDialogForm, MwDialogFormField } from 'multiway'
-import { MWAxiosRequestConfig } from '@packages/services'
+import { IWorkflowDefinition, MWAxiosRequestConfig } from '@packages/services'
 import { downloadJSON, getLocalLibLocale } from '@packages/utils'
 import { I18nextPackagesProvider } from '@packages/i18n'
 
@@ -23,10 +23,15 @@ export type TFetch = () => Promise<IMenuItem[]>
 export type TDelete = (menuItem: IMenuItem) => Promise<any>
 export type TCreate = (data: any) => Promise<any>
 export type TUpdate = (data: any, menuItem: IMenuItem) => Promise<any>
-export type TBatchCreate = (menu: IMenuItem[], parentMenu?: IMenuItem) => Promise<any>
+export type TBatchCreate = (
+  menu: IMenuItem[],
+  workflowDefinitions: IWorkflowDefinition[],
+  parentMenu?: IMenuItem
+) => Promise<any>
 export type GetFormInitialValueFn = (menuItem: IMenuItem) => Promise<any>
 export type TNotEditWorkflow = (menuItem: IMenuItem) => void
 export type TBeforeCopy = (copyContent: IMenuItem[], parentMenu?: IMenuItem) => void
+export type TFetchWorkflowDefinitions = (ids: string[]) => Promise<IWorkflowDefinition[]>
 
 interface IProps {
   title: string
@@ -50,11 +55,14 @@ interface IProps {
   beforeDialogOpen?: (formFields: MwDialogFormField[]) => Promise<MwDialogFormField[]> // 新增编辑弹窗打开之前(可用于修改formField配置)
   debug?: (workflowDefinitionId: string, data: any) => Promise<any>
   beforeCopy?: TBeforeCopy
+  onFetchWorkflowDefinitions: TFetchWorkflowDefinitions
 }
 
 export interface IWorkflowEngineComponentRef {
   loadData: () => void
 }
+
+type TBatchCreateContent = { menu: IMenuItem[]; workflowDefinitions: IWorkflowDefinition[] }
 
 const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, ref) => {
   const {
@@ -75,7 +83,8 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     debuggingHistory,
     beforeDialogOpen,
     debug,
-    beforeCopy
+    beforeCopy,
+    onFetchWorkflowDefinitions
   } = props
   useImperativeHandle(ref, () => ({
     loadData
@@ -192,10 +201,14 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
   }
 
   /** 复制 */
-  const { copy, paste } = useCopyAndPaste<IMenuItem[]>()
+  const { copy, paste } = useCopyAndPaste<TBatchCreateContent>()
   const handleCopy = async (menuItem: IMenuItem) => {
     beforeCopy?.([menuItem], selectedMenuItem)
-    copy([menuItem])
+    const definitionIds =
+      menuItem.type === WorkflowTypeEnum.DEVICE
+        ? menuItem.children?.map((x) => x.definitionId as string) || []
+        : [menuItem.definitionId as string]
+    copy({ menu: [menuItem], workflowDefinitions: await onFetchWorkflowDefinitions(definitionIds) })
     // message.success(`已复制"${menuItem.label}"`)
     showMessage('copy_success')(menuItem.label)
   }
@@ -230,22 +243,22 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     return result
   }
   const handlePaste = async (pasteToType: WorkflowTypeEnum = type, pastedTo: IMenuItem[] = menu) => {
-    const pastedContent = paste()
-    if (!pastedContent || !pastedContent.length) {
+    const { menu, workflowDefinitions } = paste()
+    if (!menu || !menu.length) {
       // message.warn('请先复制数据')
       showMessage('paste_null')()
       return false
     }
-    const pastedContentType = pastedContent[0].type
-    if (pastedContentType !== pasteToType) {
+    const menuType = menu[0].type
+    if (menuType !== pasteToType) {
       // 类型不同不能粘贴
-      // message.error(`"${i18n.t(pastedContentType + '.title')}"不能粘贴到"${i18n.t(pasteToType + '.title')}"`)
-      showMessage('paste_invalid')(pastedContentType, pasteToType)
+      // message.error(`"${i18n.t(menuType + '.title')}"不能粘贴到"${i18n.t(pasteToType + '.title')}"`)
+      showMessage('paste_invalid')(menuType, pasteToType)
       return
     }
 
-    const result = batchCheckDulplicate(pastedContent, pastedTo)
-    await onBatchCreate(result, selectedMenuItem)
+    const result = batchCheckDulplicate(menu, pastedTo)
+    await onBatchCreate(result, workflowDefinitions, selectedMenuItem)
     await loadData()
     showMessage('paste_success')()
   }
@@ -257,8 +270,9 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
     setImportDialogVisible(true)
     setImportTo(to)
   }
-  const handleUpload = async (data: IMenuItem[]) => {
-    const importDataType = data[0].type
+  const handleUpload = async (data: TBatchCreateContent) => {
+    const { menu, workflowDefinitions } = data
+    const importDataType = menu[0].type
     const importToType = importTo[0].type
     if (importDataType !== importToType) {
       // 类型不同不能导入
@@ -267,27 +281,44 @@ const WorkflowEngine = forwardRef<IWorkflowEngineComponentRef, IProps>((props, r
       return
     }
 
-    const result = batchCheckDulplicate(data, importTo)
+    const result = batchCheckDulplicate(menu, importTo)
     setImportDialogVisible(false)
-    await onBatchCreate(result, selectedMenuItem)
+    await onBatchCreate(result, workflowDefinitions, selectedMenuItem)
     await loadData()
     showMessage('import_success')()
   }
 
   /** 导出 */
-  const handleExport = (data: IMenuItem[], fileName = `${title}数据`) => {
-    downloadJSON(data, fileName)
+  const handleExport = async (menu: IMenuItem[], fileName = `${title}数据`) => {
+    const definitionIds =
+      menu[0].type === WorkflowTypeEnum.DEVICE
+        ? menu.flatMap((menuItem) => menuItem.children?.map((x) => x.definitionId as string) || [])
+        : menu.map((menuItem) => menuItem.definitionId as string)
+    downloadJSON(
+      {
+        menu,
+        workflowDefinitions: await onFetchWorkflowDefinitions(definitionIds)
+      },
+      fileName
+    )
   }
 
   /** 复制多个 */
-  const handleCopyMultiple = (data: IMenuItem[]) => {
-    beforeCopy?.(data, selectedMenuItem)
-    copy(data)
-    const content = data
+  const handleCopyMultiple = async (menu: IMenuItem[]) => {
+    beforeCopy?.(menu, selectedMenuItem)
+    const definitionIds =
+      menu[0].type === WorkflowTypeEnum.DEVICE
+        ? menu.flatMap((menuItem) => menuItem.children?.map((x) => x.definitionId as string) || [])
+        : menu.map((menuItem) => menuItem.definitionId as string)
+    copy({
+      menu,
+      workflowDefinitions: await onFetchWorkflowDefinitions(definitionIds)
+    })
+    const content = menu
       .slice(0, 3)
       .map((x) => x.label)
       .join('、')
-    const suffix = data.length > 3 ? '等' : ''
+    const suffix = menu.length > 3 ? '等' : ''
     // message.success(`已复制"${content}${suffix}"`)
     showMessage('copy_success')(content + suffix)
   }
