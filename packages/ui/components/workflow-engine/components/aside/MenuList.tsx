@@ -204,7 +204,10 @@ const MenuList = forwardRef<IMenuListRef, IMenuListProps>((props, ref) => {
     <Popconfirm
       placement={'top'}
       title={popConfirmTitle}
-      onConfirm={() => handleConfirmDelete(menuItemWillDelete)}
+      onConfirm={() => {
+        dropRef.current?.classList.remove('bg-red-500', 'text-white')
+        handleConfirmDelete(menuItemWillDelete)
+      }}
       onCancel={handleCancelDelete}
       open={isOpenPopConfirm}
     >
