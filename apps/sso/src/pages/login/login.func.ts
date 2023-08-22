@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { ComputedValue } from "mobx/dist/internal";
 
-export const ipReg = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,}$/;
+export const ipReg = /^(\d{1,3}\.){3}\d{1,3}(:\d{1,5})?$/;
 export const isIp =
   ipReg.test(window.location.host) ||
   window.location.host.includes("localhost");
