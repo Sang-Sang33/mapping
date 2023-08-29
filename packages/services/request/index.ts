@@ -33,7 +33,7 @@ class MWRequest {
           const token = getTokenIC() ?? ''
           const tenantId = getTenantIdIC() ?? ''
           const warehouseId = getWarehouseIdIC() ?? ''
-          config.headers.Authorization = token
+          if (config.withToken !== false) config.headers.Authorization = token
           config.headers.tenantId = tenantId
           config.headers.warehouseId = warehouseId
         }

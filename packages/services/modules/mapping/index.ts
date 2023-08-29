@@ -7,7 +7,8 @@ export * from './modules/warehouse'
 
 export const useMappingRequest = (baseURL = '/api/mapping') => {
   const mwRequest = new MWRequest({
-    baseURL
+    baseURL,
+    withToken: false
   })
 
   return {
