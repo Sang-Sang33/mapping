@@ -2,7 +2,6 @@ import React, { memo, useRef, useState } from 'react'
 import type { FC } from 'react'
 import { message } from 'antd'
 import { MwDialogForm, MwDialogFormField } from 'multiway'
-import { useTranslation } from 'react-i18next'
 import { WorkflowEngine, WorkflowTypeEnum, defaultDialogProps } from '@packages/ui'
 import type {
   TCreate,
@@ -32,9 +31,10 @@ interface FormData {
   behaviour: string
 }
 
+const t = (key: string) => i18n.t(key, { ns: 'device' })
+
 const Feature: FC<IFeatureProps> = (props) => {
   const { workflowEngineUrl, baseUrl } = props
-  const { t } = useTranslation('device')
   const {
     fetchDevice,
     deleteDeviceFunction,
@@ -233,7 +233,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     })
   }
   const handleSuccess = () => {
-    message.success('编辑成功')
+    message.success(i18n.t('action.updateSuccess', { ns: 'workflowEngine' }))
     workflowEngineRef.current?.loadData()
   }
 
@@ -255,7 +255,7 @@ const Feature: FC<IFeatureProps> = (props) => {
     <>
       <WorkflowEngine
         ref={workflowEngineRef}
-        title={i18n.t(`title`, { ns: 'device' })}
+        title={t(`title`)}
         type={WorkflowTypeEnum.DEVICE}
         workflowEngineUrl={workflowEngineUrl}
         formFields={fields}
