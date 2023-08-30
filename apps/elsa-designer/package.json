@@ -31,7 +31,8 @@
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
     "build:tailwind:dev": "cross-env NODE_ENV=development tailwind build -i ./tailwind.css -o ./src/globals/tailwind.css --watch",
-    "build:tailwind:prod": "cross-env NODE_ENV=production tailwind build -i ./tailwind.css -o ./src/globals/tailwind.css"
+    "build:tailwind:prod": "cross-env NODE_ENV=production tailwind build -i ./tailwind.css -o ./src/globals/tailwind.css",
+    "collect": "node ./scripts/i18n-tool/collect.js"
   },
   "lint-staged": {
     "*.{js,tsx,ts,jsx}": [
@@ -94,6 +95,7 @@
     "cssnano": "^5.1.4",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.11.0",
+    "json2csv": "^6.0.0-alpha.2",
     "postcss": "^8.4.8",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^7.4.2",
