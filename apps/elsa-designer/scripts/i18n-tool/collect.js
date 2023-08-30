@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { FilePattern, RootFolderPath, DirPattern } = require('./common')
+const { FilePattern, RootFolderPath, DirPattern, OutputFileName } = require('./common')
 const { parseTSJsonFromFile, flattenLanguageJSON } = require('./utils/json')
 const json2csv = require('json2csv').parse
 
@@ -32,6 +32,6 @@ findFilesInDirectory(RootFolderPath, FilePattern)
 const csvData = json2csv(collectedData, { fields: Object.keys(collectedData[0]) })
 
 // 将CSV数据写入文件
-fs.writeFileSync(path.join(__dirname, 'languageData.csv'), csvData, 'utf-8')
+fs.writeFileSync(path.join(__dirname, OutputFileName), csvData, 'utf-8')
 
 console.log('Language data collected and saved to languageData.csv')

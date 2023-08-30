@@ -14,6 +14,7 @@ module.exports = {
   test: '(zh_CN|en_US|ja|ko).ts$',
   exclude: ['node_modules'],
   outFileExtName: 'ts',
+  bbtExcelPath: './wcs-web-languages.csv',
   plugins: {
     parser: {
       parse: (content) => {

@@ -15,6 +15,7 @@ module.exports = {
   exclude: ['node_modules'],
   outFileExtName: 'ts',
   src: './resources',
+  bbtExcelPath: './packages-languages.csv',
   plugins: {
     parser: {
       parse: (content) => {

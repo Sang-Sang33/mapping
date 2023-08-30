@@ -18,4 +18,7 @@ const DirPattern = [
 // 遍历的根文件夹路径
 const RootFolderPath = './src/components'
 
-module.exports = { FilePattern, DirPattern, RootFolderPath }
+// 生成csv名称
+const OutputFileName = 'elsa-designer-languages.csv'
+
+module.exports = { FilePattern, DirPattern, RootFolderPath, OutputFileName }
