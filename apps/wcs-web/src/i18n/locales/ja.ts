@@ -1,86 +1,85 @@
-const ja = {
-  system: 'WCS インテリジェント倉庫制御システム',
-  aside: {
-    wmsMission: {
-      nav: 'WMS ミッション'
-    },
-    rcsMission: {
-      nav: 'RCS ミッション'
-    },
-    missionProcess: {
-      nav: 'ミッション処理'
-    },
-    device: {
-      nav: 'デバイス',
-      feature: {
-        nav: '機能'
+const resource = {
+  "aside": {
+    "device": {
+      "feature": {
+        "nav": "機能"
       },
-      status: {
-        nav: 'ステータス'
+      "nav": "デバイス",
+      "status": {
+        "nav": "ステータス"
       }
     },
-    event: {
-      nav: 'イベント'
+    "event": {
+      "nav": "イベント"
     },
-    instanceList: {
-      nav: '実行履歴'
+    "instanceList": {
+      "nav": "実行履歴"
     },
-    logs: {
-      nav: 'ログ'
+    "logs": {
+      "nav": "ログ"
+    },
+    "missionProcess": {
+      "nav": "ミッション処理"
+    },
+    "rcsMission": {
+      "nav": "RCS ミッション"
+    },
+    "wmsMission": {
+      "nav": "WMS ミッション"
     }
   },
-  wmsMission: {
-    status: 'ステータス',
-    id: 'ミッション ID',
-    predecessorIds: '前任ミッション',
-    priority: '優先度',
-    from: '出荷元',
-    to: '出荷先',
-    autoRun: '自動実行',
-    autoAbort: '自動中止',
-    creationTime: '作成日時',
-    lastModificationTime: '最終変更日時',
-    extraProperties: 'その他のプロパティ',
-    action: 'アクション',
-    debugMode: 'デバッグモード',
-    open: 'オープン',
-    close: 'クローズ',
-    create: '作成',
-    edit: '編集',
-    detail: '詳細',
-    complete: '完了',
-    cancel: 'キャンセル',
-    createSubMission: 'サブタスク作成',
-    createMissionSuccess: 'ミッションの作成に成功しました',
-    editMissionSuccess: 'ミッションの編集に成功しました',
-    createSubMissionSuccess: 'サブタスクの作成に成功しました',
-    editSubMissionSuccess: 'サブタスクの編集に成功しました',
-    completeMissionSuccess: 'ミッションが正常に完了しました',
-    cancelMissionSuccess: 'ミッションが正常にキャンセルされました'
+  "empty": "データがありません",
+  "missionProcess": {
+    "addDialog": {
+      "name": "ミッション名"
+    },
+    "title": "ミッション処理"
   },
-  rcsMission: {
-    status: 'ステータス',
-    id: 'ミッションID',
-    predecessorIds: '前のミッション',
-    priority: '優先順位',
-    to: '宛先',
-    vehicles: '呼び出し車両',
-    height: '高さ',
-    declineHeight: '下降高さ',
-    liftHeight: '持ち上げ高さ',
-    creationTime: '作成時間',
-    lastModificationTime: '最終変更時間',
-    extraProperties: '追加プロパティ',
-    action: 'アクション',
-    detail: '詳細'
+  "rcsMission": {
+    "action": "アクション",
+    "creationTime": "作成時間",
+    "declineHeight": "下降高さ",
+    "detail": "詳細",
+    "extraProperties": "追加プロパティ",
+    "height": "高さ",
+    "id": "ミッションID",
+    "lastModificationTime": "最終変更時間",
+    "liftHeight": "持ち上げ高さ",
+    "predecessorIds": "前のミッション",
+    "priority": "優先順位",
+    "status": "ステータス",
+    "to": "宛先",
+    "vehicles": "呼び出し車両"
   },
-  missionProcess: {
-    title: 'ミッション処理',
-    addDialog: {
-      name: 'ミッション名'
-    }
-  },
-  empty: 'データがありません'
+  "system": "WCS インテリジェント倉庫制御システム",
+  "wmsMission": {
+    "action": "アクション",
+    "autoAbort": "自動中止",
+    "autoRun": "自動実行",
+    "cancel": "キャンセル",
+    "cancelMissionSuccess": "ミッションが正常にキャンセルされました",
+    "close": "クローズ",
+    "complete": "完了",
+    "completeMissionSuccess": "ミッションが正常に完了しました",
+    "create": "作成",
+    "createMissionSuccess": "ミッションの作成に成功しました",
+    "createSubMission": "サブタスク作成",
+    "createSubMissionSuccess": "サブタスクの作成に成功しました",
+    "creationTime": "作成日時",
+    "debugMode": "デバッグモード",
+    "detail": "詳細",
+    "edit": "編集",
+    "editMissionSuccess": "ミッションの編集に成功しました",
+    "editSubMissionSuccess": "サブタスクの編集に成功しました",
+    "extraProperties": "その他のプロパティ",
+    "from": "出荷元",
+    "id": "ミッション ID",
+    "lastModificationTime": "最終変更日時",
+    "open": "オープン",
+    "predecessorIds": "前任ミッション",
+    "priority": "優先度",
+    "status": "ステータス",
+    "to": "出荷先"
+  }
 }
-
-export default ja
+export default resource
