@@ -5,7 +5,12 @@ import type { TLayoutAction } from './store'
 export interface IHeaderNavProps {
   systemName?: string
   ssoUrl?: string
-  headerToolBarRender?: (defaultDoms: { locale: ReactNode; setting: ReactNode; user: ReactNode }) => ReactNode[]
+  headerToolBarRender?: (defaultDoms: {
+    locale: ReactNode
+    setting: ReactNode
+    user: ReactNode
+    appList: ReactNode
+  }) => ReactNode[]
 }
 
 export interface ILayoutProps {
