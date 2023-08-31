@@ -11,7 +11,6 @@ import {
   getShelfLabel,
   getTunnelLabel,
   LOCATION_NAME_PREFIX,
-  LOCATION_POINTS_GROUP,
   POINT_NAME_PREFIX,
   RECT_NAME_PREFIX,
   ROUTE_NAME_PREFIX,
@@ -24,7 +23,7 @@ import {
 
 import { EOperationMode, ETabKey } from "@/typings";
 import { getTenantIdIC, getWarehouseIdIC, getWmsWarehouseIdIC, setTenantIdIC, setWarehouseIdIC, setWmsWarehouseIdIC } from "@packages/utils";
-import { getChildrenByGroupName, getIntersectionByGroups } from "@/utils";
+import { getIntersectionByGroups } from "@/utils";
 import { generateUUID } from "@packages/utils"
 export const TOP_HEIGHT = 56;
 export const ASIDE_WIDTH = 72;
@@ -507,32 +506,10 @@ export default class EditorStore {
     });
   }
 
-  setLocations() {
-    const allLocations = getChildrenByGroupName(this.stageRef?.current!, LOCATION_POINTS_GROUP);
-    const includingLocations = this.paintedRects.reduce<Konva.Shape[]>((acc, cur) => {
-      const locations = allLocations.reduce<Konva.Shape[]>((a, c) => {
-        const circleRect = {
-          x: c.x(),
-          y: c.y(),
-          width: 1,
-          height: 1
-        }
-        if(Konva.Util.haveIntersection(cur as Required<Konva.RectConfig>, circleRect)) {
-          a.push(c as Konva.Shape);
-          (c as Konva.Shape).fill(this.groupColor);
-        }
-        return a;
-      }, [])
-      return [...acc, ...locations]
-    }, []) 
-    this.inGroupLocations = includingLocations;
-  }
-
   onAddLocationGroup() {
     this.hideMenu();
     this.setCurrentTab(ETabKey.LocationGroup);
     this.setDrawerType(EDrawerType.LocationGroup);
-    this.setLocations();
   }
 
   onDeleteLocation(l: Editor.Location) {
@@ -607,7 +584,6 @@ export default class EditorStore {
   }
 
   appendPaintedRect(rect: Konva.RectConfig) {
-    console.log('rect: ', rect);
     this.paintedRects.push(rect);
   }
 
