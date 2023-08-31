@@ -87,7 +87,8 @@ export default function useStageEvents() {
   const trRef = useRef<Konva.Transformer>(null);
 
   const { editorStore } = useStore();
-  const { activeMode, currentTab, isDrawingTunnel } = editorStore;
+  const { activeMode, currentTab, isDrawingTunnel, isLocationGroupTab } =
+    editorStore;
 
   const [rectParams, setRectParams] = useState(defaultRectParams);
   const [isPainting, setIsPainting] = useState(false);
@@ -156,7 +157,9 @@ export default function useStageEvents() {
         setTimeout(() => {
           const paintedRect = stage.findOne("." + name);
           if (!paintedRect) return;
-          trRef.current?.nodes([paintedRect]);
+          if (!isLocationGroupTab) {
+            trRef.current?.nodes([paintedRect]);
+          }
           editorStore.setActiveShape(paintedRect as Konva.Shape);
         }, 0);
         switch (currentTab) {
@@ -175,6 +178,9 @@ export default function useStageEvents() {
             break;
           case ETabKey.Shelf:
             editorStore.onAddShelf(ETabKey.Shelf);
+            break;
+          case ETabKey.LocationGroup:
+            editorStore.setLocations();
             break;
           default:
             break;

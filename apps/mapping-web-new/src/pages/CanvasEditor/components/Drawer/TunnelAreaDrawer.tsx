@@ -46,6 +46,7 @@ const TunnelAreaDrawer = ({ fetchAll }: IProps) => {
     canvasLayouts,
     tunnelInfos,
     paintingStatus,
+    isDrawingTunnel,
   } = editorStore;
 
   const isEditing = !!editTunnelAreaInfo;
@@ -138,36 +139,19 @@ const TunnelAreaDrawer = ({ fetchAll }: IProps) => {
   ];
 
   const onDrawerSave = async () => {
-    const values = await form.validateFields();
-    const id = TUNNELAREA_NAME_PREFIX + generateUUID();
-    const tunnelArea: Editor.TunnelArea = {
-      ...values,
-      id,
-      tab: "tunnelArea",
-      konvaAttrs: {
-        ...editorStore.getCanvasPosition(activePosition),
-        name: id,
-        id,
-      },
-    };
-    const body: Editor.IPaintingStatus = {
-      ...paintingStatus,
-      tunnelAreas: [...paintingStatus.tunnelAreas, tunnelArea],
-    };
-    console.log("body: ", body);
-    // await savePaintingStatus({ items: JSON.stringify(body) });
+    await savePaintingStatus({ items: JSON.stringify(paintingStatus) });
     const tableValues = await tableForm.validateFields();
     const tunnelBody = tunnelInfos.map((item, index) => ({
       ...item,
       ...tableValues[index],
     }));
-    console.log("tunnelBody: ", tunnelBody);
-    // for (const b of tunnelBody) {
-    //   const data = omit(b, "id");
-    //   await postApiTunnelAdd(data);
-    // }
+    for (const b of tunnelBody) {
+      const data = omit(b, "id");
+      await postApiTunnelAdd(data);
+    }
     // savePaintingStatus({ items: JSON.stringify(body) });
-    // onClose();
+    onClose();
+    fetchAll([ETabKey.Tunnel], canvasLayouts);
   };
 
   const onClose = () => {
@@ -178,21 +162,23 @@ const TunnelAreaDrawer = ({ fetchAll }: IProps) => {
   const onStartAddTunnel = async () => {
     const values = await form.validateFields();
     const id = TUNNELAREA_NAME_PREFIX + generateUUID();
-    const tunnelArea: Editor.TunnelArea = {
-      ...values,
-      id,
-      tab: "tunnelArea",
-      konvaAttrs: {
-        ...editorStore.getCanvasPosition(activePosition),
-        name: id,
+    if (!isDrawingTunnel) {
+      const tunnelArea: Editor.TunnelArea = {
+        ...values,
         id,
-      },
-    };
-    const body: Editor.IPaintingStatus = {
-      ...paintingStatus,
-      tunnelAreas: [...paintingStatus.tunnelAreas, tunnelArea],
-    };
-    editorStore.setPaintingStatus(body);
+        tab: "tunnelArea",
+        konvaAttrs: {
+          ...editorStore.getCanvasPosition(activePosition),
+          name: id,
+          id,
+        },
+      };
+      const body: Editor.IPaintingStatus = {
+        ...paintingStatus,
+        tunnelAreas: [...paintingStatus.tunnelAreas, tunnelArea],
+      };
+      editorStore.setPaintingStatus(body);
+    }
     editorStore.onStartAddTunnel();
   };
 
@@ -203,15 +189,9 @@ const TunnelAreaDrawer = ({ fetchAll }: IProps) => {
   }, [editTunnelAreaInfo]);
 
   useEffect(() => {
-    console.log("tunnelInfos: ", toJS(tunnelInfos));
     if (isEmpty(tunnelInfos)) return;
-    console.log("tunnelInfos: ", toJS(tunnelInfos));
     setDataSource(cloneDeep(tunnelInfos));
   }, [tunnelInfos.length]);
-
-  useEffect(() => {
-    console.log("dataSource: ", dataSource);
-  }, [dataSource.length]);
 
   return (
     <Drawer

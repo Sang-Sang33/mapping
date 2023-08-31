@@ -68,6 +68,7 @@ import {
   getSlot,
   getApiRouting,
   savePaintingStatus,
+  getApiLocationGroup,
 } from "@/services";
 
 const defaultTootipProps = {
@@ -150,6 +151,15 @@ function CanvasEditor() {
     if (!res) return [];
     return mapRoutingList(res, areas);
   };
+  const fetchLocationGroups = async () => {
+    const res = await getApiLocationGroup();
+    if (!res) return [];
+    return res.map<Editor.ILocationGroup>((item) => ({
+      ...item,
+      tab: ETabKey.LocationGroup,
+      label: item.groupCode,
+    }));
+  };
 
   const fetchAll = async (keys: ETabKey[], layouts: ILayouts) => {
     let newWarehouseData: any = {};
@@ -173,6 +183,9 @@ function CanvasEditor() {
             newWarehouseData?.[ETabKey.Area] ?? warehouseData[ETabKey.Area]
           );
           break;
+        case ETabKey.LocationGroup:
+          data = await fetchLocationGroups();
+          break;
         default:
           break;
       }
@@ -183,6 +196,10 @@ function CanvasEditor() {
       ...newWarehouseData,
     });
   };
+
+  useEffect(() => {
+    console.log("warehouseData: ", warehouseData);
+  }, [warehouseData]);
 
   const fetchPaintingStatus = async () => {
     const res = await getPaintingStatus();
@@ -270,6 +287,7 @@ function CanvasEditor() {
         ETabKey.Shelf,
         ETabKey.Location,
         ETabKey.Route,
+        ETabKey.LocationGroup,
       ],
       layouts
     );
@@ -362,6 +380,7 @@ function CanvasEditor() {
 
   useEffect(() => {
     initData();
+    fetchLocationGroups();
   }, []);
 
   return (

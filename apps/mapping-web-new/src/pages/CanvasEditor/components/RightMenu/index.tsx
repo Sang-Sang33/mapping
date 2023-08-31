@@ -39,6 +39,7 @@ import { getInitialValuesFromShape } from "../../store";
 import { toJS } from "mobx";
 import TunnelAreaDrawer from "../Drawer/TunnelAreaDrawer";
 import RouteDrawer from "../Drawer/RouteDrawer";
+import LocationGroupDrawer from "../Drawer/LocationGroupDrawer";
 
 interface IProps {
   warehouseData: Editor.IWarehouseData;
@@ -416,6 +417,7 @@ function RightMenu({ warehouseData, fetchAll }: IProps) {
       <TunnelDrawer fetchAll={fetchAll} />
       <RouteDrawer fetchAll={fetchAll} />
       <ShelfDrawer fetchAll={fetchAll} />
+      <LocationGroupDrawer />
     </>
   );
 }
