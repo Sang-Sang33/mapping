@@ -11,6 +11,7 @@ export interface IHeaderNavProps {
     user: ReactNode
     appList: ReactNode
   }) => ReactNode[]
+  appList?: { label: string; link: string }[]
 }
 
 export interface ILayoutProps {
@@ -19,6 +20,9 @@ export interface ILayoutProps {
   headerToolBarRender?: IHeaderNavProps['headerToolBarRender']
   systemName?: IHeaderNavProps['systemName']
   ssoUrl?: IHeaderNavProps['ssoUrl']
+  appList?: IHeaderNavProps['appList']
+  customLogoUrl?: string
+  customMiniLogoUrl?: string
 }
 export interface ILayoutRef {
   updateLayoutContentKey: TLayoutAction['updateLayoutContentKey']

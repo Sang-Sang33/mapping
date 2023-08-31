@@ -47,5 +47,6 @@ declare module 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 
 // window global varaibles
 declare interface Window {
+  __DOCUMENT_TITLE__: string
   __APP_LIST__: { label: string; link: string }[]
 }

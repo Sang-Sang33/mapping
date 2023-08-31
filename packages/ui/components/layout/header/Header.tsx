@@ -10,7 +10,7 @@ import { IHeaderNavProps } from '../typings'
 import { I18nextPackagesProvider } from '@packages/i18n'
 
 const HeaderNav: FC<IHeaderNavProps> = (props) => {
-  const { systemName, headerToolBarRender, ssoUrl } = props
+  const { systemName, headerToolBarRender, ssoUrl, appList } = props
   const { routeIdPath, permissionRoutes } = useLayoutStore((state) => ({
     routeIdPath: state.routeIdPath,
     permissionRoutes: state.permissionRoutes
@@ -24,7 +24,7 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
       {/* 设置 */}
       <Setting />
       {/* 网站列表 */}
-      {<AppList />}
+      {appList?.length && <AppList appList={appList} />}
       {/* 用户信息  */}
       <User ssoUrl={ssoUrl} />
     </>
@@ -50,7 +50,7 @@ const HeaderNav: FC<IHeaderNavProps> = (props) => {
             ? headerToolBarRender({
                 locale: <Locale key="locale" />,
                 setting: <Setting key="setting" />,
-                appList: <AppList key="appList" />,
+                appList: appList?.length && <AppList key="appList" appList={appList} />,
                 user: <User key="user" ssoUrl={ssoUrl} />
               })
             : headerToolBarDefaultRender()}
