@@ -158,6 +158,8 @@ const BatchLocationsDrawer = ({ fetchAll }: IProps) => {
     const body: API.BatchLocationInfoDTO = {
       ...pick(values, Pick_Keys),
       shelfId,
+      areaId,
+      tunnelCode,
       locations,
     };
     await postApiLocations(body);

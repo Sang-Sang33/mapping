@@ -300,8 +300,8 @@ declare namespace API {
     height: number;
     /** 所属货架ID */
     shelfId: string;
-    // areaId: string;
-    // tunnelCode: string
+    areaId: string;
+    tunnelCode: string
     /** 布局属性 */
     locations: LocationLayoutDTO[];
   };
@@ -2161,18 +2161,19 @@ declare namespace API {
   };
 
   type GroupLocationDTO = {
-    x: number;
-    y: number;
-    z: number;
-    length: number;
-    width: number;
-    height: number;
+    x?: number;
+    y?: number;
+    z?: number;
+    length?: number;
+    width?: number;
+    height?: number;
+    warehouseId?: number;
     /** 货位ID */
-    id: number;
+    id?: number;
     /** 货位编号 */
-    locationCode: string;
+    locationCode?: string;
     /** 货位编号（自定义） */
-    customCode: string;
+    customCode?: string;
   };
 
   type Int32SelectItem = {
@@ -2367,37 +2368,22 @@ declare namespace API {
     statusCode?: EnumStatusCode;
   };
 
-  type PostLocationGroupInfoDTO = {
-    /** 主键，雪花ID */
-    id: string;
-    /** 货位分组编号 */
-    groupCode: string;
-    /** 描述 */
-    description: string;
-    /** 货位分组颜色 */
-    groupColor: string;
-    /** 启用状态 */
-    isEnable: boolean;
-    /** 分组货位总数 */
-    /** 货位分组矩形范围内货位 */
-    locationIds: string[];
-  }
-
   type LocationGroupInfoDTO = {
+    warehouseId?: number;
     /** 主键，雪花ID */
-    id: string;
+    id?: number;
     /** 货位分组编号 */
-    groupCode: string;
+    groupCode?: string;
     /** 描述 */
-    description: string;
+    description?: string;
     /** 货位分组颜色 */
-    groupColor: string;
+    groupColor?: string;
     /** 启用状态 */
-    isEnable: boolean;
+    isEnable?: boolean;
     /** 分组货位总数 */
     locationCount?: number;
     /** 货位分组矩形范围内货位 */
-    locations: GroupLocationDTO[];
+    locationList?: GroupLocationDTO[];
   };
 
   type LocationGroupInfoDTOPageResult = {
