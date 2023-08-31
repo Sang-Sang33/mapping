@@ -1,0 +1,26 @@
+.editorHeader {
+  @apply h-14 bg-[#1e1f22] text-white flex items-center pr-16;
+  .editorHeaderDivider {
+    @apply mx-4;
+    border-color: #f5f6f7;
+  }
+  .editorHeaderBox {
+    @apply flex items-center;
+    & > * + * {
+      @apply ml-3;
+    }
+
+    :global(.ant-btn-default) {
+      @apply text-[rgba(255,255,255,0.8)];
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .canvasOperations {
+    @apply flex items-center flex-1;
+  }
+
+  .canvasIcon {
+    @apply text-[rgba(255,255,255,0.8)] hover:text-white cursor-pointer text-xl hover:scale-125 transition-transform;
+  }
+}

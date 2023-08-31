@@ -1,0 +1,54 @@
+.canvasEditorSection {
+  @apply w-60 bg-[#2b2c2f] px-4 py-3 overflow-y-auto h-full;
+
+  .sectionItem {
+    @apply text-[#bec0c8] h-10 flex items-center cursor-pointer rounded p-2;
+    font-size: 14px;
+
+    .delete {
+      @apply text-red-400;
+      display: none;
+    }
+
+    &:hover {
+      color: #fff;
+      background: hsla(0, 0%, 100%, 0.04) !important;
+
+      .delete {
+        display: inline-block;
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.canvasEditorHidden {
+  position: absolute;
+  width: 14px;
+  height: 80px;
+  left: 238px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 200;
+  .wrapper {
+    transform: rotate(180deg);
+  }
+  .direction {
+    position: absolute;
+    color: #9da2ad;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%) rotate(0);
+    &.collapse {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+
+  &:hover {
+    .direction {
+      color: #5a5f69;
+      transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+    }
+  }
+}

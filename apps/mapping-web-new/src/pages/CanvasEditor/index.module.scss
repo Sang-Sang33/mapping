@@ -1,0 +1,100 @@
+.canvasEditor {
+  @apply flex flex-col text-white h-full relative;
+
+  .canvasEditorHeader {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    background-color: #1e1f22;
+  }
+
+  .canvasEditoAside {
+    @apply w-[72px] bg-[#1e1f22] cursor-pointer relative z-50;
+
+    .canvasEditoAsideItem {
+      @apply h-[72px] w-[72px] flex flex-col items-center justify-center text-[#9da2ad];
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        color: #fff;
+      }
+    }
+
+    .canvasEditoAsideActionItem {
+      position: absolute;
+      z-index: 1;
+      width: 72px;
+      height: 72px;
+      background: #2b2c2f;
+      transform: translateY(0px);
+      transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+    }
+  }
+
+  .canvasEditorAsideMain {
+    @apply flex-1 text-black bg-[#f6f6f6] flex flex-row relative overflow-hidden;
+  }
+
+  .canvasEditorCard {
+    @apply absolute left-[300px] top-[100px] text-black p-1 flex rounded-xl bg-white items-center;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+
+    .canvasEditorButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 38px;
+      width: 38px;
+      border-radius: 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: #edf6ff;
+      }
+
+      .canvasEditorIcon {
+        color: #007aff;
+        font-size: 24px;
+      }
+    }
+  }
+
+  .rightMenu {
+    @apply absolute left-[300px] top-[100px] text-black flex flex-col rounded-xl bg-white py-3;
+    pointer-events: auto;
+    min-width: 200px;
+    max-width: 300px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    background-color: #fff;
+    z-index: 5001;
+
+    .menuItem {
+      @apply flex items-center pr-3 cursor-pointer;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      .iconWrapper {
+        @apply flex items-center justify-center;
+        width: 44px;
+        height: 36px;
+        .iconSty {
+          font-size: 20px;
+          font-weight: 400;
+        }
+      }
+      .text {
+        line-height: 36px;
+      }
+      .hint {
+      }
+    }
+  }
+}

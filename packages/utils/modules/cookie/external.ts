@@ -16,6 +16,11 @@ export const getWarehouseIdIC = () => AppCookie.get('WAREHOUSE_ID')
 export const setWarehouseIdIC = (warehouseId: string) => AppCookie.set('WAREHOUSE_ID', warehouseId)
 export const removeWarehouseIdIC = () => AppCookie.remove('WAREHOUSE_ID')
 
+/** WmsWarehouseId */
+export const getWmsWarehouseIdIC = () => AppCookie.get('WMS_WAREHOUSE_ID')
+export const setWmsWarehouseIdIC = (warehouseId: string) => AppCookie.set('WMS_WAREHOUSE_ID', warehouseId)
+export const removeWmsWarehouseIdIC = () => AppCookie.remove('WMS_WAREHOUSE_ID')
+
 /** culture */
 export const getCultureIC = () => {
   const content = AppCookie.get('CULTURE')

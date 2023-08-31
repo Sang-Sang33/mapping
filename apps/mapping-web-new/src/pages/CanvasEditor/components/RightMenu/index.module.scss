@@ -1,0 +1,36 @@
+.rightMenu {
+	@apply absolute left-[300px] top-[100px] text-black flex flex-col rounded-xl bg-white py-3;
+	pointer-events: auto;
+	min-width: 200px;
+	max-width: 300px;
+	box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12);
+	border-radius: 10px;
+	background-color: #fff;
+	z-index: 5001;
+
+	.menuItem {
+		@apply flex items-center pr-3 cursor-pointer;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+		&:last-child {
+			border-bottom: none;
+		}
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.05);
+		}
+		.iconWrapper {
+			@apply flex items-center justify-center;
+			width: 44px;
+			height: 36px;
+			.iconSty {
+				font-size: 20px;
+				font-weight: 400;
+			}
+		}
+		.text {
+			line-height: 36px;
+		}
+		.hint {
+		}
+	}
+}

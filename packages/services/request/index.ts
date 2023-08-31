@@ -4,7 +4,7 @@ import { message } from 'antd'
 import NProgress from '../config/nprogress'
 import { checkStatus } from '../helper/checkStatus'
 import type { MWAxiosRequestConfig, MwInternalAxiosRequestConfig } from './typings'
-import { getTenantIdIC, getTokenIC, getWarehouseIdIC } from '@packages/utils'
+import { getTenantIdIC, getTokenIC, getWarehouseIdIC, getWmsWarehouseIdIC } from '@packages/utils'
 
 class MWRequest {
   protected instance: AxiosInstance | null = null
@@ -34,8 +34,10 @@ class MWRequest {
           const tenantId = getTenantIdIC() ?? ''
           const warehouseId = getWarehouseIdIC() ?? ''
           if (config.withToken !== false) config.headers.Authorization = token
+          const WmsWarehouseId = getWmsWarehouseIdIC() ?? '';
           config.headers.tenantId = tenantId
           config.headers.warehouseId = warehouseId
+          config.headers.WmsWarehouseId = WmsWarehouseId
         }
 
         return config

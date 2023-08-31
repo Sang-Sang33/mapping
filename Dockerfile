@@ -1,6 +1,6 @@
 FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/node:16.15.0 as base
 WORKDIR /source
-ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer,sso
+ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer,sso,mapping-web-new
 # init
 RUN npm install turbo@1.10.6 -g
 RUN npm install pnpm -g
@@ -12,14 +12,14 @@ COPY . .
 RUN scope_args=""
 RUN for app in $(echo $APPS | tr ',' ' '); do \
     if [ "$app" != "elsa-designer" ]; then \
-        scope_args="${scope_args} --scope=$app"; \
+    scope_args="${scope_args} --scope=$app"; \
     fi; \
-done && turbo prune $scope_args --docker
+    done && turbo prune $scope_args --docker
 
 FROM base as builder
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 WORKDIR /source
-ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer,sso
+ARG APPS=wcs-web,fcu-web,mapping-web,elsa-designer,sso,mapping-web-new
 # install 
 COPY .gitignore .gitignore
 COPY --from=base /source/out/json/ .
@@ -38,7 +38,7 @@ RUN for app in $(echo $APPS | tr ',' ' '); do filter_args="${filter_args} --filt
 COPY --from=base /source/apps/elsa-designer/ ./apps/elsa-designer/
 RUN if echo "$APPS" | grep -q "elsa-designer"; then \
     pnpm build:elsa; \
-fi
+    fi
 
 # 选择更小体积的基础镜像
 FROM registry.cn-shenzhen.aliyuncs.com/mwcloud/nginxwebui:latest

@@ -1,0 +1,16 @@
+.operation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 24%;
+    box-shadow: 2px 2px 4px rgba(0,0,0,.05);
+    color: #007aff;
+    background: hsla(0,0%,100%,.08);
+    
+    &.active {
+        color: #fff;
+        background-color: #3093ff;
+    }
+}
