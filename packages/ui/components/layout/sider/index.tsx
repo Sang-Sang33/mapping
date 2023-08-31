@@ -6,16 +6,18 @@ import { shallow } from 'zustand/shallow'
 import useLayoutStore from '../store'
 import logoMini from '../assets/logo.png'
 import logoOrigin from '../assets/logo_origin.png'
+import { ILayoutProps } from '../typings'
 import './index.less'
 
-interface ISiderMenu {
+interface ISiderMenu extends Pick<ILayoutProps, 'customLogoUrl' | 'customMiniLogoUrl'> {
   menus: MenuProps['items']
   collapsed?: boolean
   onMenuItemClick?: (info: any) => void
   onOpenChange?: (openKeys: string[]) => void
 }
 const SiderMenu: FC<ISiderMenu> = (props) => {
-  const { collapsed, menus, onMenuItemClick } = props
+  const { collapsed, menus, onMenuItemClick, customLogoUrl, customMiniLogoUrl } = props
+
   const { theme, routeIdPath } = useLayoutStore(
     (state) => ({
       theme: state.theme,
@@ -41,6 +43,9 @@ const SiderMenu: FC<ISiderMenu> = (props) => {
     onMenuItemClick?.(item)
   }
 
+  const miniLogo = customMiniLogoUrl || logoMini
+  const originLogo = customLogoUrl || logoOrigin
+
   return (
     <>
       <div
@@ -48,7 +53,7 @@ const SiderMenu: FC<ISiderMenu> = (props) => {
         onClick={backHome}
       >
         <div className="ilogo">
-          <img className={collapsed ? 'w-full' : 'w-full m-auto'} src={collapsed ? logoMini : logoOrigin} alt="" />
+          <img className={collapsed ? 'w-full' : 'w-full m-auto'} src={collapsed ? miniLogo : originLogo} alt="" />
         </div>
       </div>
       <Menu

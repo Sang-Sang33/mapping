@@ -38,8 +38,8 @@ export const resources = {
         },
         ConnectOutcomesToExistingActivity: {
           Label: 'Connect outcomes to existing activity',
-          Description: `Press and hold SHIFT while LEFT-clicking the outcome to connect. Release SHIFT and LEFT-click the
-          target activity.`
+          Description:
+            'Press and hold SHIFT while LEFT-clicking the outcome to connect. Release SHIFT and LEFT-click the target activity.'
         },
         Pan: {
           Label: 'Pan',

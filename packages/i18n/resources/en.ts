@@ -1,140 +1,139 @@
-const en = {
-  notFound: {
-    subTitle: 'Sorry, the page you visited does not exist.',
-    backHome: 'Back Home'
+const resource = {
+  "device": {
+    "addDialog": {
+      "behaviour": "Behavior",
+      "behaviourSwitchChecked": "Active",
+      "behaviourSwitchUnChecked": "Passive",
+      "cannotContainDecimalPoint": "Cannot contain a decimal point",
+      "deviceName": "Device Name",
+      "functionName": "Function"
+    },
+    "edit": "Edit Device",
+    "editDialog": {
+      "newName": "New Device Name",
+      "oldName": "Old Device Name"
+    },
+    "status": {
+      "connection": "Connection",
+      "key": "Key",
+      "name": "Device",
+      "updateTime": "Update Time",
+      "value": "Value"
+    },
+    "title": "Device"
   },
-  layout: {
-    header: {
-      setting: {
-        pageStyle: 'Page Style Setting',
-        themeColor: 'Theme Color',
-        themes: {
-          dark: 'Dark style',
-          light: 'Light style'
+  "event": {
+    "addDialog": {
+      "cannotContainDecimalPoint": "Cannot contain a decimal point",
+      "name": "Event Name"
+    },
+    "title": "Event"
+  },
+  "function": {
+    "title": "Function"
+  },
+  "layout": {
+    "header": {
+      "logout": "Logout",
+      "setting": {
+        "colors": {
+          "cyan": "Cyan",
+          "daybreakBlue": "Daybreak Blue",
+          "dustRed": "Dust Red",
+          "geekBlue": "Geek Glue",
+          "goldenPurple": "Golden Purple",
+          "polarGreen": "Polar Green",
+          "sunsetOrange": "Sunset Orange",
+          "volcano": "Volcano"
         },
-        colors: {
-          dustRed: 'Dust Red',
-          volcano: 'Volcano',
-          sunsetOrange: 'Sunset Orange',
-          cyan: 'Cyan',
-          polarGreen: 'Polar Green',
-          daybreakBlue: 'Daybreak Blue',
-          geekBlue: 'Geek Glue',
-          goldenPurple: 'Golden Purple'
+        "pageStyle": "Page Style Setting",
+        "themeColor": "Theme Color",
+        "themes": {
+          "dark": "Dark style",
+          "light": "Light style"
         }
-      },
-      logout: 'Logout'
+      }
     }
   },
-  workflowEngine: {
-    empty: {
-      goToCreate: 'Go to Create',
-      chooseWorkflow: 'Choose a Workflow'
-    },
-    action: {
-      title: 'Actions',
-      add: 'Add',
-      edit: 'Edit',
-      delete: 'Delete',
-      copy: 'Copy',
-      paste: 'Paste',
-      import: 'Import',
-      export: 'Export',
-      debug: 'Debug',
-      deletePopConfirmTitle: 'Confirm to delete ',
-      copyDialogTitle: 'Select data to copy',
-      exportDialogTitle: 'Select data to export',
-      deleteSuccess: 'Delete successfully',
-      addSuccess: 'Add successfully',
-      updateSuccess: 'Update successfully',
-      copySuccess: 'Copy successfully',
-      pasteNull: 'Please copy data first',
-      pasteInvalid: 'Cannot paste to',
-      importInvalid: 'Cannot import to',
-      deleteCancel: 'Cancel deletion',
-      fileInvalid: 'Please select a JSON file',
-      pasteSuccess: 'Paste successfully',
-      importSuccess: 'Import successfully',
-      selectNull: 'Please select data first'
-    },
-    debugDialog: {
-      title: 'Debug',
-      keyValuePair: 'Key-Value Pair',
-      key: 'Key',
-      valueType: 'Value Type',
-      value: 'Value',
-      add: 'Add',
-      jsonInvalid: 'Please input valid JSON data',
-      keyNull: 'Key cannot be empty',
-      keyPlaceholder: 'Input key',
-      valueTypeNull: 'Value type cannot be empty',
-      valueTypePlaceholder: 'Select value type',
-      valueTypeString: 'String',
-      valueTypeNumber: 'Number',
-      valueTypeBoolean: 'Boolean',
-      valueNull: 'Value cannot be empty',
-      valuePlaceholder: 'Input value'
-    },
-    importDialog: {
-      title: 'Import a JSON file',
-      importText: 'Click or drag a file to import',
-      importHint: 'Support single file import'
-    },
-    multiCheckDialog: {
-      selectAll: 'Select all',
-      deselectAll: 'Deselect all',
-      cancel: 'Close',
-      confirm: 'Confirm'
-    },
-    menuList: {
-      selectAll: 'Select all'
-    }
+  "missionProcess": {
+    "action": "Action",
+    "createdAt": "Created Time",
+    "faultedAt": "Faulted Time",
+    "finishedAt": "Finished Time",
+    "id": "ID",
+    "lastExecutedAt": "Last Execution Time",
+    "name": "Name",
+    "title": "Mission Process",
+    "view": "View",
+    "workflowStatus": "Status"
   },
-  missionProcess: {
-    title: 'Mission Process',
-    id: 'ID',
-    name: 'Name',
-    workflowStatus: 'Status',
-    createdAt: 'Created Time',
-    lastExecutedAt: 'Last Execution Time',
-    finishedAt: 'Finished Time',
-    faultedAt: 'Faulted Time',
-    action: 'Action',
-    view: 'View'
+  "notFound": {
+    "backHome": "Back Home",
+    "subTitle": "Sorry, the page you visited does not exist."
   },
-  device: {
-    title: 'Device',
-    edit: 'Edit Device',
-    addDialog: {
-      deviceName: 'Device Name',
-      functionName: 'Function',
-      behaviour: 'Behavior',
-      cannotContainDecimalPoint: 'Cannot contain a decimal point',
-      behaviourSwitchChecked: 'Active',
-      behaviourSwitchUnChecked: 'Passive'
+  "workflowEngine": {
+    "action": {
+      "add": "Add",
+      "addSuccess": "Add successfully",
+      "copy": "Copy",
+      "copyDialogTitle": "Select data to copy",
+      "copySuccess": "Copy successfully",
+      "debug": "Debug",
+      "delete": "Delete",
+      "deleteCancel": "Cancel deletion",
+      "deletePopConfirmTitle": "Confirm to delete ",
+      "deleteSuccess": "Delete successfully",
+      "edit": "Edit",
+      "export": "Export",
+      "exportDialogTitle": "Select data to export",
+      "fileInvalid": "Please select a JSON file",
+      "import": "Import",
+      "importInvalid": "Cannot import to",
+      "importSuccess": "Import successfully",
+      "paste": "Paste",
+      "pasteInvalid": "Cannot paste to",
+      "pasteNull": "Please copy data first",
+      "pasteSuccess": "Paste successfully",
+      "selectNull": "Please select data first",
+      "title": "Actions",
+      "updateSuccess": "Update successfully"
     },
-    editDialog: {
-      oldName: 'Old Device Name',
-      newName: 'New Device Name'
+    "debugDialog": {
+      "add": "Add",
+      "jsonInvalid": "Please input valid JSON data",
+      "key": "Key",
+      "keyNull": "Key cannot be empty",
+      "keyPlaceholder": "Input key",
+      "keyValuePair": "Key-Value Pair",
+      "title": "Debug",
+      "value": "Value",
+      "valueNull": "Value cannot be empty",
+      "valuePlaceholder": "Input value",
+      "valueType": "Value Type",
+      "valueTypeBoolean": "Boolean",
+      "valueTypeNull": "Value type cannot be empty",
+      "valueTypeNumber": "Number",
+      "valueTypePlaceholder": "Select value type",
+      "valueTypeString": "String"
     },
-    status: {
-      name: 'Device',
-      connection: 'Connection',
-      updateTime: 'Update Time',
-      key: 'Key',
-      value: 'Value'
-    }
-  },
-  function: {
-    title: 'Function'
-  },
-  event: {
-    title: 'Event',
-    addDialog: {
-      name: 'Event Name',
-      cannotContainDecimalPoint: 'Cannot contain a decimal point'
+    "empty": {
+      "chooseWorkflow": "Choose a Workflow",
+      "goToCreate": "Go to Create"
+    },
+    "importDialog": {
+      "importHint": "Support single file import",
+      "importText": "Click or drag a file to import",
+      "title": "Import a JSON file"
+    },
+    "menuList": {
+      "selectAll": "Select all"
+    },
+    "multiCheckDialog": {
+      "cancel": "Close",
+      "confirm": "Confirm",
+      "deselectAll": "Deselect all",
+      "selectAll": "Select all"
     }
   }
 }
-
-export default en
+export default resource

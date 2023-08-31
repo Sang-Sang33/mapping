@@ -1,86 +1,85 @@
-const en_US = {
-  system: 'WCS intelligent warehouse control system',
-  aside: {
-    wmsMission: {
-      nav: 'WMS Mission'
-    },
-    rcsMission: {
-      nav: 'RCS Mission'
-    },
-    missionProcess: {
-      nav: 'Mission Process'
-    },
-    device: {
-      nav: 'Device',
-      feature: {
-        nav: 'Feature'
+const resource = {
+  "aside": {
+    "device": {
+      "feature": {
+        "nav": "Feature"
       },
-      status: {
-        nav: 'Status'
+      "nav": "Device",
+      "status": {
+        "nav": "Status"
       }
     },
-    event: {
-      nav: 'Event'
+    "event": {
+      "nav": "Event"
     },
-    instanceList: {
-      nav: 'Running History'
+    "instanceList": {
+      "nav": "Running History"
     },
-    logs: {
-      nav: 'Logs'
+    "logs": {
+      "nav": "Logs"
+    },
+    "missionProcess": {
+      "nav": "Mission Process"
+    },
+    "rcsMission": {
+      "nav": "RCS Mission"
+    },
+    "wmsMission": {
+      "nav": "WMS Mission"
     }
   },
-  wmsMission: {
-    status: 'Status',
-    id: 'Mission ID',
-    predecessorIds: 'Predecessor Missions',
-    priority: 'Priority',
-    from: 'From',
-    to: 'To',
-    autoRun: 'Auto Run',
-    autoAbort: 'Auto Abort',
-    creationTime: 'Creation Time',
-    lastModificationTime: 'Last Modification Time',
-    extraProperties: 'Extra Properties',
-    action: 'Action',
-    debugMode: 'Debug Mode',
-    open: 'Open',
-    close: 'Close',
-    create: 'Create',
-    edit: 'Edit',
-    detail: 'Detail',
-    complete: 'Complete',
-    cancel: 'Cancel',
-    createSubMission: 'Create Subtask',
-    createMissionSuccess: 'Create mission successfully',
-    editMissionSuccess: 'Edit mission successfully',
-    createSubMissionSuccess: 'Create subtask successfully',
-    editSubMissionSuccess: 'Edit subtask successfully',
-    completeMissionSuccess: 'Mission successfully completed',
-    cancelMissionSuccess: 'Mission successfully cancelled'
+  "empty": "No data",
+  "missionProcess": {
+    "addDialog": {
+      "name": "Mission Name"
+    },
+    "title": "Mission Process"
   },
-  rcsMission: {
-    status: 'Status',
-    id: 'Mission ID',
-    predecessorIds: 'Predecessor Missions',
-    priority: 'Priority',
-    to: 'To',
-    vehicles: 'Calling Vehicles',
-    height: 'Height',
-    declineHeight: 'Decline Height',
-    liftHeight: 'Lift Height',
-    creationTime: 'Creation Time',
-    lastModificationTime: 'Last Modification Time',
-    extraProperties: 'Extra Properties',
-    action: 'Action',
-    detail: 'Detail'
+  "rcsMission": {
+    "action": "Action",
+    "creationTime": "Creation Time",
+    "declineHeight": "Decline Height",
+    "detail": "Detail",
+    "extraProperties": "Extra Properties",
+    "height": "Height",
+    "id": "Mission ID",
+    "lastModificationTime": "Last Modification Time",
+    "liftHeight": "Lift Height",
+    "predecessorIds": "Predecessor Missions",
+    "priority": "Priority",
+    "status": "Status",
+    "to": "To",
+    "vehicles": "Calling Vehicles"
   },
-  missionProcess: {
-    title: 'Mission Process',
-    addDialog: {
-      name: 'Mission Name'
-    }
-  },
-  empty: 'No data'
+  "system": "WCS intelligent warehouse control system",
+  "wmsMission": {
+    "action": "Action",
+    "autoAbort": "Auto Abort",
+    "autoRun": "Auto Run",
+    "cancel": "Cancel",
+    "cancelMissionSuccess": "Mission successfully cancelled",
+    "close": "Close",
+    "complete": "Complete",
+    "completeMissionSuccess": "Mission successfully completed",
+    "create": "Create",
+    "createMissionSuccess": "Create mission successfully",
+    "createSubMission": "Create Subtask",
+    "createSubMissionSuccess": "Create subtask successfully",
+    "creationTime": "Creation Time",
+    "debugMode": "Debug Mode",
+    "detail": "Detail",
+    "edit": "Edit",
+    "editMissionSuccess": "Edit mission successfully",
+    "editSubMissionSuccess": "Edit subtask successfully",
+    "extraProperties": "Extra Properties",
+    "from": "From",
+    "id": "Mission ID",
+    "lastModificationTime": "Last Modification Time",
+    "open": "Open",
+    "predecessorIds": "Predecessor Missions",
+    "priority": "Priority",
+    "status": "Status",
+    "to": "To"
+  }
 }
-
-export default en_US
+export default resource

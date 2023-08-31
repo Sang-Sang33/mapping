@@ -15,7 +15,8 @@ import './style.less'
 const { Header: AntdHeader, Content: AntdContent, Sider: AntdSider } = AntdLayout
 
 const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
-  const { routes, permission, headerToolBarRender, systemName, ssoUrl } = props
+  const { routes, permission, headerToolBarRender, systemName, ssoUrl, customLogoUrl, customMiniLogoUrl, appList } =
+    props
   const {
     collapsed,
     theme,
@@ -119,7 +120,12 @@ const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
             bodyStyle={{ padding: 0 }}
           >
             <AntdSider collapsedWidth={0} theme={theme} trigger={null} className="cs-aside !w-full h-full !max-w-none">
-              <SiderMenu menus={menus} onMenuItemClick={handleMenuClick} />
+              <SiderMenu
+                menus={menus}
+                onMenuItemClick={handleMenuClick}
+                customMiniLogoUrl={customMiniLogoUrl}
+                customLogoUrl={customLogoUrl}
+              />
             </AntdSider>
           </Drawer>
         ) : (
@@ -132,7 +138,13 @@ const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
             className="cs-aside"
             style={{ overflow: 'auto' }}
           >
-            <SiderMenu menus={menus} collapsed={collapsed} onMenuItemClick={handleMenuClick} />
+            <SiderMenu
+              menus={menus}
+              collapsed={collapsed}
+              onMenuItemClick={handleMenuClick}
+              customMiniLogoUrl={customMiniLogoUrl}
+              customLogoUrl={customLogoUrl}
+            />
           </AntdSider>
         )}
         <AntdLayout>
@@ -148,7 +160,12 @@ const Layout = forwardRef<ILayoutRef, ILayoutProps>((props, ref) => {
               onClick: () => (isMobile ? setDrawerVisible(!drawerVisible) : updateCollapsed(!collapsed))
             })}
             <I18nextPackagesProvider>
-              <HeaderNav systemName={systemName} headerToolBarRender={headerToolBarRender} ssoUrl={ssoUrl} />
+              <HeaderNav
+                systemName={systemName}
+                headerToolBarRender={headerToolBarRender}
+                ssoUrl={ssoUrl}
+                appList={appList}
+              />
             </I18nextPackagesProvider>
           </AntdHeader>
           {/* {configStore.multyTab ? (

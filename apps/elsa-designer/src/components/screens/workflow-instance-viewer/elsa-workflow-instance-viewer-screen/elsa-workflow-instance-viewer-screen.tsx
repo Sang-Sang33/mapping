@@ -28,6 +28,9 @@ import {
 import Tunnel from '../../../../data/dashboard'
 import { featuresDataManager } from '../../../../services'
 import { RouterHistory } from '@stencil/router'
+import { resources } from './localizations'
+import { loadTranslations } from '../../../i18n/i18n-loader'
+import { i18n } from 'i18next'
 
 @Component({
   tag: 'elsa-workflow-instance-viewer-screen',
@@ -54,7 +57,8 @@ export class ElsaWorkflowInstanceViewerScreen {
     y: 0,
     activity: null
   }
-
+  i18next: i18n
+  t = (key: string) => this.i18next.t(key)
   el: HTMLElement
   designer: HTMLElsaDesignerTreeElement
   journal: HTMLElsaWorkflowInstanceJournalElement
@@ -152,6 +156,7 @@ export class ElsaWorkflowInstanceViewerScreen {
   }
 
   async componentWillLoad() {
+    this.i18next = await loadTranslations(this.culture, resources)
     const layoutFeature = featuresDataManager.getFeatureConfig(featuresDataManager.supportedFeatures.workflowLayout)
 
     if (layoutFeature && layoutFeature.enabled) {
@@ -451,6 +456,8 @@ export class ElsaWorkflowInstanceViewerScreen {
   }
 
   renderActivityPerformanceMenu = () => {
+    const t = this.t
+
     const activityStats: ActivityStats = this.activityStats
 
     const renderFault = () => {
@@ -481,13 +488,13 @@ export class ElsaWorkflowInstanceViewerScreen {
                     scope="col"
                     class="elsa-px-6 elsa-py-3 elsa-text-left elsa-text-xs elsa-font-medium elsa-text-gray-500 elsa-text-right elsa-tracking-wider"
                   >
-                    Event
+                    {t('Stats.Event')}
                   </th>
                   <th
                     scope="col"
                     class="elsa-px-6 elsa-py-3 elsa-text-left elsa-text-xs elsa-font-medium elsa-text-gray-500 elsa-text-right elsa-tracking-wider"
                   >
-                    Count
+                    {t('Stats.Count')}
                   </th>
                 </tr>
               </thead>
@@ -509,7 +516,7 @@ export class ElsaWorkflowInstanceViewerScreen {
                       colSpan={2}
                       class="elsa-px-6 elsa-py-4 elsa-whitespace-nowrap elsa-text-sm elsa-font-medium elsa-text-gray-900"
                     >
-                      No events record for this activity.
+                      {t('Stats.Empty')}
                     </td>
                   </tr>
                 )}

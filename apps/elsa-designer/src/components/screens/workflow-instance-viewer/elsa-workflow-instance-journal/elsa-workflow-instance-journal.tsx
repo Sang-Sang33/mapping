@@ -15,6 +15,9 @@ import { activityIconProvider } from '../../../../services/activity-icon-provide
 import { createElsaClient, createHttpClient, CustomApi } from '../../../../services/elsa-client'
 import { clip, durationToString } from '../../../../utils/utils'
 import Tunnel from '../../../../data/dashboard'
+import { resources } from './localizations'
+import { i18n } from 'i18next'
+import { loadTranslations } from '../../../i18n/i18n-loader'
 
 interface Tab {
   id: string
@@ -30,6 +33,7 @@ export class ElsaWorkflowInstanceJournal {
   @Prop() workflowInstanceId: string
   @Prop() workflowInstance: WorkflowInstance
   @Prop() serverUrl: string
+  @Prop() culture: string
   @Prop() activityDescriptors: Array<ActivityDescriptor> = []
   @Prop() workflowBlueprint: WorkflowBlueprint
   @Prop() workflowModel: WorkflowModel
@@ -44,6 +48,8 @@ export class ElsaWorkflowInstanceJournal {
   @State() selectedActivityId?: string
   @State() selectedTabId = 'journal'
 
+  i18next: i18n
+  t = (key: string) => this.i18next.t(key)
   el: HTMLElement
   flyoutPanel: HTMLElsaFlyoutPanelElement
 
@@ -77,6 +83,7 @@ export class ElsaWorkflowInstanceJournal {
   }
 
   async componentWillLoad() {
+    this.i18next = await loadTranslations(this.culture, resources)
     await this.workflowInstanceIdChangedHandler(this.workflowInstanceId)
   }
 
@@ -136,28 +143,29 @@ export class ElsaWorkflowInstanceJournal {
   }
 
   renderPanel() {
+    const t = this.t
     return (
       <elsa-flyout-panel ref={(el) => (this.flyoutPanel = el)}>
         <elsa-tab-header tab="general" slot="header">
-          General
+          {t('InstancePanel.General.Title')}
         </elsa-tab-header>
         <elsa-tab-content tab="general" slot="content">
           {this.renderGeneralTab()}
         </elsa-tab-content>
         <elsa-tab-header tab="journal" slot="header">
-          Journal
+          {t('InstancePanel.Journal')}
         </elsa-tab-header>
         <elsa-tab-content tab="journal" slot="content">
           {this.renderJournalTab()}
         </elsa-tab-content>
         <elsa-tab-header tab="activityState" slot="header">
-          Activity State
+          {t('InstancePanel.ActivityState.Title')}
         </elsa-tab-header>
         <elsa-tab-content tab="activityState" slot="content">
           {this.renderActivityStateTab()}
         </elsa-tab-content>
         <elsa-tab-header tab="variables" slot="header">
-          Variables
+          {t('InstancePanel.Variables')}
         </elsa-tab-header>
         <elsa-tab-content tab="variables" slot="content">
           {this.renderVariablesTab()}
@@ -379,7 +387,8 @@ export class ElsaWorkflowInstanceJournal {
         ? this.workflowModel.activities.find((x) => x.activityId === this.selectedActivityId)
         : null
 
-    if (!activityModel) return <p class="elsa-mt-4">No activity selected</p>
+    if (!activityModel)
+      return <p class="elsa-mt-4">{this.t('InstancePanel.ActivityState.Content.NoActivitySelected')}</p>
 
     // Hide expressions field from properties so that we only display the evaluated value.
     const model = {
@@ -395,6 +404,7 @@ export class ElsaWorkflowInstanceJournal {
   }
 
   renderGeneralTab = () => {
+    const t = this.t
     const { workflowInstance, workflowBlueprint } = this
     const { finishedAt, lastExecutedAt, faultedAt } = workflowInstance
     const format = 'DD-MM-YYYY HH:mm:ss'
@@ -403,27 +413,27 @@ export class ElsaWorkflowInstanceJournal {
     return (
       <dl class="elsa-border-b elsa-border-gray-200 elsa-divide-y elsa-divide-gray-200">
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Workflow Name</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.WorkflowName')}</dt>
           <dd class="elsa-text-gray-900">{workflowBlueprint.name}</dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Instance Name</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.InstanceName')}</dt>
           <dd class="elsa-text-gray-900">{workflowInstance.name || '-'}</dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Id</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.Id')}</dt>
           <dd class="elsa-text-gray-900">{workflowInstance.id}</dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Correlation id</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.CorrelationId')}</dt>
           <dd class="elsa-text-gray-900">{workflowInstance.correlationId}</dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Version</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.Version')}</dt>
           <dd class="elsa-text-gray-900 elsa-break-all">{workflowInstance.version || '-'}</dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Workflow Status</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.WorkflowStatus')}</dt>
           <dd class="elsa-text-gray-900 elsa-break-all">
             <span class="elsa-relative elsa-inline-flex elsa-items-center elsa-rounded-full">
               <span class="elsa-flex-shrink-0 elsa-flex elsa-items-center elsa-justify-center">
@@ -434,21 +444,21 @@ export class ElsaWorkflowInstanceJournal {
           </dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Created</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.Created')}</dt>
           <dd class="elsa-text-gray-900 elsa-break-all">{moment(workflowInstance.createdAt).format(format) || '-'}</dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Finished</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.Finished')}</dt>
           <dd class="elsa-text-gray-900 elsa-break-all">{finishedAt ? moment(finishedAt).format(format) : '-'}</dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Last Executed</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.LastExecuted')}</dt>
           <dd class="elsa-text-gray-900 elsa-break-all">
             {lastExecutedAt ? moment(lastExecutedAt).format(format) : '-'}
           </dd>
         </div>
         <div class="elsa-py-3 elsa-flex elsa-justify-between elsa-text-sm elsa-font-medium">
-          <dt class="elsa-text-gray-500">Faulted</dt>
+          <dt class="elsa-text-gray-500">{t('InstancePanel.General.Content.Faulted')}</dt>
           <dd class="elsa-text-gray-900 elsa-break-all">{faultedAt ? moment(faultedAt).format(format) : '-'}</dd>
         </div>
       </dl>
@@ -469,4 +479,4 @@ export class ElsaWorkflowInstanceJournal {
   }
 }
 
-Tunnel.injectProps(ElsaWorkflowInstanceJournal, ['customApi', 'isCustomApi'])
+Tunnel.injectProps(ElsaWorkflowInstanceJournal, ['customApi', 'isCustomApi', 'culture'])

@@ -1,140 +1,139 @@
-const ja = {
-  notFound: {
-    subTitle: '申し訳ありませんが、アクセスしたページは存在しません。',
-    backHome: 'ホームに戻る'
+const resource = {
+  "device": {
+    "addDialog": {
+      "behaviour": "動作",
+      "behaviourSwitchChecked": "アクティブ",
+      "behaviourSwitchUnChecked": "パッシブ",
+      "cannotContainDecimalPoint": "小数点を含めることはできません",
+      "deviceName": "デバイス名",
+      "functionName": "機能"
+    },
+    "edit": "デバイスの編集",
+    "editDialog": {
+      "newName": "新しいデバイス名",
+      "oldName": "旧デバイス名"
+    },
+    "status": {
+      "connection": "接続",
+      "key": "キー",
+      "name": "デバイス",
+      "updateTime": "更新時間",
+      "value": "値"
+    },
+    "title": "デバイス"
   },
-  layout: {
-    header: {
-      setting: {
-        pageStyle: 'ページスタイル設定',
-        themeColor: 'テーマカラー',
-        themes: {
-          dark: 'ダークスタイル',
-          light: 'ライトスタイル'
+  "event": {
+    "addDialog": {
+      "cannotContainDecimalPoint": "小数点を含めることはできません",
+      "name": "イベント名"
+    },
+    "title": "イベント"
+  },
+  "function": {
+    "title": "機能"
+  },
+  "layout": {
+    "header": {
+      "logout": "ログアウト",
+      "setting": {
+        "colors": {
+          "cyan": "シアン",
+          "daybreakBlue": "デイブレイクブルー",
+          "dustRed": "ダストレッド",
+          "geekBlue": "ギークブルー",
+          "goldenPurple": "ゴールデンパープル",
+          "polarGreen": "ポーラーグリーン",
+          "sunsetOrange": "サンセットオレンジ",
+          "volcano": "ボルケーノ"
         },
-        colors: {
-          dustRed: 'ダストレッド',
-          volcano: 'ボルケーノ',
-          sunsetOrange: 'サンセットオレンジ',
-          cyan: 'シアン',
-          polarGreen: 'ポーラーグリーン',
-          daybreakBlue: 'デイブレイクブルー',
-          geekBlue: 'ギークブルー',
-          goldenPurple: 'ゴールデンパープル'
+        "pageStyle": "ページスタイル設定",
+        "themeColor": "テーマカラー",
+        "themes": {
+          "dark": "ダークスタイル",
+          "light": "ライトスタイル"
         }
-      },
-      logout: 'ログアウト'
+      }
     }
   },
-  workflowEngine: {
-    empty: {
-      goToCreate: '作成に進む',
-      chooseWorkflow: 'ワークフローを選択してください'
-    },
-    action: {
-      title: 'アクション',
-      add: '追加',
-      edit: '編集',
-      delete: '削除',
-      copy: 'コピー',
-      paste: '貼り付け',
-      import: 'インポート',
-      export: 'エクスポート',
-      debug: 'デバッグ',
-      deletePopConfirmTitle: '削除の確認',
-      copyDialogTitle: 'コピーするデータを選択してください',
-      exportDialogTitle: 'エクスポートするデータを選択してください',
-      deleteSuccess: '削除が成功しました',
-      addSuccess: '追加が成功しました',
-      updateSuccess: '編集が成功しました',
-      copySuccess: 'コピーが成功しました',
-      pasteNull: 'まずデータをコピーしてください',
-      pasteInvalid: '次に貼り付けることはできません',
-      importInvalid: '次にインポートすることはできません',
-      deleteCancel: '削除をキャンセル',
-      fileInvalid: 'JSON形式のファイルを選択してください',
-      pasteSuccess: '貼り付けが成功しました',
-      importSuccess: 'インポートが成功しました',
-      selectNull: 'まずデータを選択してください'
-    },
-    debugDialog: {
-      title: 'デバッグ',
-      keyValuePair: 'キーと値のペア',
-      key: 'キー',
-      valueType: '値のタイプ',
-      value: '値',
-      add: '追加',
-      jsonInvalid: '有効なJSONデータを入力してください',
-      keyNull: 'キーは空にできません',
-      keyPlaceholder: 'キーを入力してください',
-      valueTypeNull: '値のタイプは空にできません',
-      valueTypePlaceholder: '値のタイプを選択してください',
-      valueTypeString: '文字列',
-      valueTypeNumber: '数値',
-      valueTypeBoolean: 'ブール値',
-      valueNull: '値は空にできません',
-      valuePlaceholder: '値を入力してください'
-    },
-    importDialog: {
-      title: 'JSONファイルをインポート',
-      importText: 'ファイルをクリックまたはドラッグしてインポート',
-      importHint: '単一ファイルのインポートをサポート'
-    },
-    multiCheckDialog: {
-      selectAll: 'すべて選択',
-      deselectAll: 'すべて選択解除',
-      cancel: 'キャンセル',
-      confirm: '確認'
-    },
-    menuList: {
-      selectAll: 'すべて選択'
-    }
+  "missionProcess": {
+    "action": "アクション",
+    "createdAt": "作成された時間",
+    "faultedAt": "障害発生時間",
+    "finishedAt": "完了時間",
+    "id": "ID",
+    "lastExecutedAt": "最終実行時間",
+    "name": "名前",
+    "title": "ミッション処理",
+    "view": "表示",
+    "workflowStatus": "ステータス"
   },
-  missionProcess: {
-    title: 'ミッション処理',
-    id: 'ID',
-    name: '名前',
-    workflowStatus: 'ステータス',
-    createdAt: '作成された時間',
-    lastExecutedAt: '最終実行時間',
-    finishedAt: '完了時間',
-    faultedAt: '障害発生時間',
-    action: 'アクション',
-    view: '表示'
+  "notFound": {
+    "backHome": "ホームに戻る",
+    "subTitle": "申し訳ありませんが、アクセスしたページは存在しません。"
   },
-  device: {
-    title: 'デバイス',
-    edit: 'デバイスの編集',
-    addDialog: {
-      deviceName: 'デバイス名',
-      functionName: '機能',
-      behaviour: '動作',
-      cannotContainDecimalPoint: '小数点を含めることはできません',
-      behaviourSwitchChecked: 'アクティブ',
-      behaviourSwitchUnChecked: 'パッシブ'
+  "workflowEngine": {
+    "action": {
+      "add": "追加",
+      "addSuccess": "追加が成功しました",
+      "copy": "コピー",
+      "copyDialogTitle": "コピーするデータを選択してください",
+      "copySuccess": "コピーが成功しました",
+      "debug": "デバッグ",
+      "delete": "削除",
+      "deleteCancel": "削除をキャンセル",
+      "deletePopConfirmTitle": "削除の確認",
+      "deleteSuccess": "削除が成功しました",
+      "edit": "編集",
+      "export": "エクスポート",
+      "exportDialogTitle": "エクスポートするデータを選択してください",
+      "fileInvalid": "JSON形式のファイルを選択してください",
+      "import": "インポート",
+      "importInvalid": "次にインポートすることはできません",
+      "importSuccess": "インポートが成功しました",
+      "paste": "貼り付け",
+      "pasteInvalid": "次に貼り付けることはできません",
+      "pasteNull": "まずデータをコピーしてください",
+      "pasteSuccess": "貼り付けが成功しました",
+      "selectNull": "まずデータを選択してください",
+      "title": "アクション",
+      "updateSuccess": "編集が成功しました"
     },
-    editDialog: {
-      oldName: '旧デバイス名',
-      newName: '新しいデバイス名'
+    "debugDialog": {
+      "add": "追加",
+      "jsonInvalid": "有効なJSONデータを入力してください",
+      "key": "キー",
+      "keyNull": "キーは空にできません",
+      "keyPlaceholder": "キーを入力してください",
+      "keyValuePair": "キーと値のペア",
+      "title": "デバッグ",
+      "value": "値",
+      "valueNull": "値は空にできません",
+      "valuePlaceholder": "値を入力してください",
+      "valueType": "値のタイプ",
+      "valueTypeBoolean": "ブール値",
+      "valueTypeNull": "値のタイプは空にできません",
+      "valueTypeNumber": "数値",
+      "valueTypePlaceholder": "値のタイプを選択してください",
+      "valueTypeString": "文字列"
     },
-    status: {
-      name: 'デバイス',
-      connection: '接続',
-      updateTime: '更新時間',
-      key: 'キー',
-      value: '値'
-    }
-  },
-  function: {
-    title: '機能'
-  },
-  event: {
-    title: 'イベント',
-    addDialog: {
-      name: 'イベント名',
-      cannotContainDecimalPoint: '小数点を含めることはできません'
+    "empty": {
+      "chooseWorkflow": "ワークフローを選択してください",
+      "goToCreate": "作成に進む"
+    },
+    "importDialog": {
+      "importHint": "単一ファイルのインポートをサポート",
+      "importText": "ファイルをクリックまたはドラッグしてインポート",
+      "title": "JSONファイルをインポート"
+    },
+    "menuList": {
+      "selectAll": "すべて選択"
+    },
+    "multiCheckDialog": {
+      "cancel": "キャンセル",
+      "confirm": "確認",
+      "deselectAll": "すべて選択解除",
+      "selectAll": "すべて選択"
     }
   }
 }
-
-export default ja
+export default resource
