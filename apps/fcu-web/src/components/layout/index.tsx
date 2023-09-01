@@ -19,8 +19,11 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
       systemName="FCU"
       routes={routes}
       permission={permission}
-      headerToolBarRender={({ setting, user }) => [setting, user]}
+      headerToolBarRender={({ setting, user, appList }) => [setting, user, appList]}
       ssoUrl={ssoUrl}
+      customLogoUrl={import.meta.env.DEV ? '/shared/logo_origin.png' : '/wcs-web/shared/logo_origin.png'}
+      customMiniLogoUrl={import.meta.env.DEV ? '/shared/logo_mini.png' : '/wcs-web/shared/logo_mini.png'}
+      appList={window.__APP_LIST__}
     />
   )
 }
