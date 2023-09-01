@@ -1,4 +1,4 @@
-window.__DOCUMENT_TITLE__ = 'FCU管理系统' // 系统标题
+window.__DOCUMENT_TITLE_PRFIX__ = '' // 系统标题前缀
 window.__APP_LIST__ = [
   {
     label: 'WCS',
@@ -14,4 +14,4 @@ window.__APP_LIST__ = [
   }
 ] // 跳转系统列表
 
-document.title = window.__DOCUMENT_TITLE__ // 修改网站标题
+document.title = window.__DOCUMENT_TITLE_PRFIX__ + document.title // 修改网站标题前缀
