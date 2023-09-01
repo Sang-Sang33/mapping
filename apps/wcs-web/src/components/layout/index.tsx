@@ -126,8 +126,8 @@ const Layout: FC<Pick<ILayoutProps, 'routes' | 'permission'>> = (props) => {
         permission={permission}
         headerToolBarRender={(defaultDom) => [...renderSelect(), ...Object.values(defaultDom)]}
         ssoUrl={import.meta.env.VITE_SSO_URL}
-        customLogoUrl={import.meta.env.DEV ? '/logo_origin.png' : '/wcs-web/logo_origin.png'}
-        customMiniLogoUrl={import.meta.env.DEV ? '/logo_mini.png' : '/wcs-web/logo_mini.png'}
+        customLogoUrl={import.meta.env.DEV ? '/shared/logo_origin.png' : '/wcs-web/shared/logo_origin.png'}
+        customMiniLogoUrl={import.meta.env.DEV ? '/shared/logo_mini.png' : '/wcs-web/shared/logo_mini.png'}
         appList={window.__APP_LIST__}
       />
     </I18nextProvider>
